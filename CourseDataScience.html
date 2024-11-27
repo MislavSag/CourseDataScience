@@ -1,0 +1,2042 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<script src="CourseDataScience_files/libs/clipboard/clipboard.min.js"></script>
+<script src="CourseDataScience_files/libs/quarto-html/tabby.min.js"></script>
+<script src="CourseDataScience_files/libs/quarto-html/popper.min.js"></script>
+<script src="CourseDataScience_files/libs/quarto-html/tippy.umd.min.js"></script>
+<link href="CourseDataScience_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="CourseDataScience_files/libs/quarto-html/light-border.css" rel="stylesheet">
+<link href="CourseDataScience_files/libs/quarto-html/quarto-html.min.css" rel="stylesheet" data-mode="light">
+<link href="CourseDataScience_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles"><meta charset="utf-8">
+  <meta name="generator" content="quarto-1.5.57">
+
+  <meta name="author" content="Mislav Sagovac">
+  <title>Data Science</title>
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+  <link rel="stylesheet" href="CourseDataScience_files/libs/revealjs/dist/reset.css">
+  <link rel="stylesheet" href="CourseDataScience_files/libs/revealjs/dist/reveal.css">
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+      vertical-align: middle;
+    }
+    /* CSS for syntax highlighting */
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { line-height: 1.25; }
+    pre > code.sourceCode > span:empty { height: 1.2em; }
+    .sourceCode { overflow: visible; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen {
+    div.sourceCode { overflow: auto; }
+    }
+    @media print {
+    pre > code.sourceCode { white-space: pre-wrap; }
+    pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+    }
+    pre.numberSource code
+      { counter-reset: source-line 0; }
+    pre.numberSource code > span
+      { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before
+      { content: counter(source-line);
+        position: relative; left: -1em; text-align: right; vertical-align: baseline;
+        border: none; display: inline-block;
+        -webkit-touch-callout: none; -webkit-user-select: none;
+        -khtml-user-select: none; -moz-user-select: none;
+        -ms-user-select: none; user-select: none;
+        padding: 0 4px; width: 4em;
+        color: #aaaaaa;
+      }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+    div.sourceCode
+      { color: #003b4f; background-color: #f1f3f5; }
+    @media screen {
+    pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+    }
+    code span { color: #003b4f; } /* Normal */
+    code span.al { color: #ad0000; } /* Alert */
+    code span.an { color: #5e5e5e; } /* Annotation */
+    code span.at { color: #657422; } /* Attribute */
+    code span.bn { color: #ad0000; } /* BaseN */
+    code span.bu { } /* BuiltIn */
+    code span.cf { color: #003b4f; font-weight: bold; } /* ControlFlow */
+    code span.ch { color: #20794d; } /* Char */
+    code span.cn { color: #8f5902; } /* Constant */
+    code span.co { color: #5e5e5e; } /* Comment */
+    code span.cv { color: #5e5e5e; font-style: italic; } /* CommentVar */
+    code span.do { color: #5e5e5e; font-style: italic; } /* Documentation */
+    code span.dt { color: #ad0000; } /* DataType */
+    code span.dv { color: #ad0000; } /* DecVal */
+    code span.er { color: #ad0000; } /* Error */
+    code span.ex { } /* Extension */
+    code span.fl { color: #ad0000; } /* Float */
+    code span.fu { color: #4758ab; } /* Function */
+    code span.im { color: #00769e; } /* Import */
+    code span.in { color: #5e5e5e; } /* Information */
+    code span.kw { color: #003b4f; font-weight: bold; } /* Keyword */
+    code span.op { color: #5e5e5e; } /* Operator */
+    code span.ot { color: #003b4f; } /* Other */
+    code span.pp { color: #ad0000; } /* Preprocessor */
+    code span.sc { color: #5e5e5e; } /* SpecialChar */
+    code span.ss { color: #20794d; } /* SpecialString */
+    code span.st { color: #20794d; } /* String */
+    code span.va { color: #111111; } /* Variable */
+    code span.vs { color: #20794d; } /* VerbatimString */
+    code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
+  </style>
+  <link rel="stylesheet" href="CourseDataScience_files/libs/revealjs/dist/theme/quarto.css">
+  <link href="CourseDataScience_files/libs/revealjs/plugin/quarto-line-highlight/line-highlight.css" rel="stylesheet">
+  <link href="CourseDataScience_files/libs/revealjs/plugin/reveal-menu/menu.css" rel="stylesheet">
+  <link href="CourseDataScience_files/libs/revealjs/plugin/reveal-menu/quarto-menu.css" rel="stylesheet">
+  <link href="CourseDataScience_files/libs/revealjs/plugin/quarto-support/footer.css" rel="stylesheet">
+  <style type="text/css">
+
+  .callout {
+    margin-top: 1em;
+    margin-bottom: 1em;  
+    border-radius: .25rem;
+  }
+
+  .callout.callout-style-simple { 
+    padding: 0em 0.5em;
+    border-left: solid #acacac .3rem;
+    border-right: solid 1px silver;
+    border-top: solid 1px silver;
+    border-bottom: solid 1px silver;
+    display: flex;
+  }
+
+  .callout.callout-style-default {
+    border-left: solid #acacac .3rem;
+    border-right: solid 1px silver;
+    border-top: solid 1px silver;
+    border-bottom: solid 1px silver;
+  }
+
+  .callout .callout-body-container {
+    flex-grow: 1;
+  }
+
+  .callout.callout-style-simple .callout-body {
+    font-size: 1rem;
+    font-weight: 400;
+  }
+
+  .callout.callout-style-default .callout-body {
+    font-size: 0.9rem;
+    font-weight: 400;
+  }
+
+  .callout.callout-titled.callout-style-simple .callout-body {
+    margin-top: 0.2em;
+  }
+
+  .callout:not(.callout-titled) .callout-body {
+      display: flex;
+  }
+
+  .callout:not(.no-icon).callout-titled.callout-style-simple .callout-content {
+    padding-left: 1.6em;
+  }
+
+  .callout.callout-titled .callout-header {
+    padding-top: 0.2em;
+    margin-bottom: -0.2em;
+  }
+
+  .callout.callout-titled .callout-title  p {
+    margin-top: 0.5em;
+    margin-bottom: 0.5em;
+  }
+    
+  .callout.callout-titled.callout-style-simple .callout-content  p {
+    margin-top: 0;
+  }
+
+  .callout.callout-titled.callout-style-default .callout-content  p {
+    margin-top: 0.7em;
+  }
+
+  .callout.callout-style-simple div.callout-title {
+    border-bottom: none;
+    font-size: .9rem;
+    font-weight: 600;
+    opacity: 75%;
+  }
+
+  .callout.callout-style-default  div.callout-title {
+    border-bottom: none;
+    font-weight: 600;
+    opacity: 85%;
+    font-size: 0.9rem;
+    padding-left: 0.5em;
+    padding-right: 0.5em;
+  }
+
+  .callout.callout-style-default div.callout-content {
+    padding-left: 0.5em;
+    padding-right: 0.5em;
+  }
+
+  .callout.callout-style-simple .callout-icon::before {
+    height: 1rem;
+    width: 1rem;
+    display: inline-block;
+    content: "";
+    background-repeat: no-repeat;
+    background-size: 1rem 1rem;
+  }
+
+  .callout.callout-style-default .callout-icon::before {
+    height: 0.9rem;
+    width: 0.9rem;
+    display: inline-block;
+    content: "";
+    background-repeat: no-repeat;
+    background-size: 0.9rem 0.9rem;
+  }
+
+  .callout-title {
+    display: flex
+  }
+    
+  .callout-icon::before {
+    margin-top: 1rem;
+    padding-right: .5rem;
+  }
+
+  .callout.no-icon::before {
+    display: none !important;
+  }
+
+  .callout.callout-titled .callout-body > .callout-content > :last-child {
+    padding-bottom: 0.5rem;
+    margin-bottom: 0;
+  }
+
+  .callout.callout-titled .callout-icon::before {
+    margin-top: .5rem;
+    padding-right: .5rem;
+  }
+
+  .callout:not(.callout-titled) .callout-icon::before {
+    margin-top: 1rem;
+    padding-right: .5rem;
+  }
+
+  /* Callout Types */
+
+  div.callout-note {
+    border-left-color: #4582ec !important;
+  }
+
+  div.callout-note .callout-icon::before {
+    background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAAXNSR0IArs4c6QAAAERlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAA6ABAAMAAAABAAEAAKACAAQAAAABAAAAIKADAAQAAAABAAAAIAAAAACshmLzAAAEU0lEQVRYCcVXTWhcVRQ+586kSUMMxkyaElstCto2SIhitS5Ek8xUKV2poatCcVHtUlFQk8mbaaziwpWgglJwVaquitBOfhQXFlqlzSJpFSpIYyXNjBNiTCck7x2/8/LeNDOZxDuEkgOXe++553zfefee+/OYLOXFk3+1LLrRdiO81yNqZ6K9cG0P3MeFaMIQjXssE8Z1JzLO9ls20MBZX7oG8w9GxB0goaPrW5aNMp1yOZIa7Wv6o2ykpLtmAPs/vrG14Z+6d4jpbSKuhdcSyq9wGMPXjonwmESXrriLzFGOdDBLB8Y6MNYBu0dRokSygMA/mrun8MGFN3behm6VVAwg4WR3i6FvYK1T7MHo9BK7ydH+1uurECoouk5MPRyVSBrBHMYwVobG2aOXM07sWrn5qgB60rc6mcwIDJtQrnrEr44kmy+UO9r0u9O5/YbkS9juQckLed3DyW2XV/qWBBB3ptvI8EUY3I9p/67OW+g967TNr3Sotn3IuVlfMLVnsBwH4fsnebJvyGm5GeIUA3jljERmrv49SizPYuq+z7c2H/jlGC+Ghhupn/hcapqmcudB9jwJ/3jvnvu6vu5lVzF1fXyZuZZ7U8nRmVzytvT+H3kilYvH09mLWrQdwFSsFEsxFVs5fK7A0g8gMZjbif4ACpKbjv7gNGaD8bUrlk8x+KRflttr22JEMRUbTUwwDQScyzPgedQHZT0xnx7ujw2jfVfExwYHwOsDTjLdJ2ebmeQIlJ7neo41s/DrsL3kl+W2lWvAga0tR3zueGr6GL78M3ifH0rGXrBC2aAR8uYcIA5gwV8zIE8onoh8u0Fca/ciF7j1uOzEnqcIm59sEXoGc0+z6+H45V1CvAvHcD7THztu669cnp+L0okAeIc6zjbM/24LgGM1gZk7jnRu1aQWoU9sfUOuhrmtaPIO3YY1KLLWZaEO5TKUbMY5zx8W9UJ6elpLwKXbsaZ4EFl7B4bMtDv0iRipKoDQT2sNQI9b1utXFdYisi+wzZ/ri/1m7QfDgEuvgUUEIJPq3DhX/5DWNqIXDOweC2wvIR90Oq3lDpdMIgD2r0dXvGdsEW5H6x6HLRJYU7C69VefO1x8Gde1ZFSJLfWS1jbCnhtOPxmpfv2LXOA2Xk2tvnwKKPFuZ/oRmwBwqRQDcKNeVQkYcOjtWVBuM/JuYw5b6isojIkYxyYAFn5K7ZBF10fea52y8QltAg6jnMqNHFBmGkQ1j+U43HMi2xMar1Nv0zGsf1s8nUsmUtPOOrbFIR8bHFDMB5zL13Gmr/kGlCkUzedTzzmzsaJXhYawnA3UmARpiYj5ooJZiUoxFRtK3X6pgNPv+IZVPcnwbOl6f+aBaO1CNvPW9n9LmCp01nuSaTRF2YxHqZ8DYQT6WsXT+RD6eUztwYLZ8rM+rcPxamv1VQzFUkzFXvkiVrySGQgJNvXHJAxiU3/NwiC03rSf05VBaPtu/Z7/B8Yn/w7eguloAAAAAElFTkSuQmCC');
+  }
+
+  div.callout-note.callout-style-default .callout-title {
+    background-color: #dae6fb
+  }
+
+  div.callout-important {
+    border-left-color: #d9534f !important;
+  }
+
+  div.callout-important .callout-icon::before {
+    background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAAXNSR0IArs4c6QAAAERlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAA6ABAAMAAAABAAEAAKACAAQAAAABAAAAIKADAAQAAAABAAAAIAAAAACshmLzAAAEKklEQVRYCcVXTWhcVRS+575MJym48A+hSRFr00ySRQhURRfd2HYjk2SSTokuBCkU2o0LoSKKraKIBTcuFCoidGFD08nkBzdREbpQ1EDNIv8qSGMFUboImMSZd4/f9zJv8ibJMC8xJQfO3HPPPef7zrvvvnvviIkpC9nsw0UttFunbUhpFzFtarSd6WJkStVMw5xyVqYTvkwfzuf/5FgtkVoB0729j1rjXwThS7Vio+Mo6DNnvLfahoZ+i/o32lULuJ3NNiz7q6+pyAUkJaFF6JwaM2lUJlV0MlnQn5aTRbEu0SEqHUa0A4AdiGuB1kFXRfVyg5d87+Dg4DL6m2TLAub60ilj7A1Ec4odSAc8X95sHh7+ZRPCFo6Fnp7HfU/fBng/hi10CjCnWnJjsxvDNxWw0NfV6Rv5GgP3I3jGWXumdTD/3cbEOP2ZbOZp69yniG3FQ9z1jD7bnBu9Fc2tKGC2q+uAJOQHBDRiZX1x36o7fWBs7J9ownbtO+n0/qWkvW7UPIfc37WgT6ZGR++EOJyeQDSb9UB+DZ1G6DdLDzyS+b/kBCYGsYgJbSQHuThGKRcw5xdeQf8YdNHsc6ePXrlSYMBuSIAFTGAtQo+VuALo4BX83N190NWZWbynBjhOHsmNfFWLeL6v+ynsA58zDvvAC8j5PkbOcXCMg2PZFk3q8MjI7WAG/Dp9AwP7jdGBOOQkAvlFUB+irtm16I1Zw9YBcpGTGXYmk3kQIC/Cds55l+iMI3jqhjAuaoe+am2Jw5GT3Nbz3CkE12NavmzN5+erJW7046n/CH1RO/RVa8lBLozXk9uqykkGAyRXLWlLv5jyp4RFsG5vGVzpDLnIjTWgnRy2Rr+tDKvRc7Y8AyZq10jj8DqXdnIRNtFZb+t/ZRtXcDiVnzpqx8mPcDWxgARUqx0W1QB9MeUZiNrV4qP+Ehc+BpNgATsTX8ozYKL2NtFYAHc84fG7ndxUPr+AR/iQSns7uSUufAymwDOb2+NjK27lEFocm/EE2WpyIy/Hi66MWuMKJn8RvxIcj87IM5Vh9663ziW36kR0HNenXuxmfaD8JC7tfKbrhFr7LiZCrMjrzTeGx+PmkosrkNzW94ObzwocJ7A1HokLolY+AvkTiD/q1H0cN48c5EL8Crkttsa/AXQVDmutfyku0E7jShx49XqV3MFK8IryDhYVbj7Sj2P2eBxwcXoe8T8idsKKPRcnZw1b+slFTubwUwhktrfnAt7J++jwQtLZcm3sr9LQrjRzz6cfMv9aLvgmnAGvpoaGLxM4mAEaLV7iAzQ3oU0IvD5x9ix3yF2RAAuYAOO2f7PEFWCXZ4C9Pb2UsgDeVnFSpbFK7/IWu7TPTvBqzbGdCHOJQSxiEjt6IyZmxQyEJHv6xyQsYk//moVFsN2zP6fRImjfq7/n/wFDguUQFNEwugAAAABJRU5ErkJggg==');
+  }
+
+  div.callout-important.callout-style-default .callout-title {
+    background-color: #f7dddc
+  }
+
+  div.callout-warning {
+    border-left-color: #f0ad4e !important;
+  }
+
+  div.callout-warning .callout-icon::before {
+    background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAAXNSR0IArs4c6QAAAERlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAA6ABAAMAAAABAAEAAKACAAQAAAABAAAAIKADAAQAAAABAAAAIAAAAACshmLzAAAETklEQVRYCeVWW2gcVRg+58yaTUnizqbipZeX4uWhBEniBaoUX1Ioze52t7sRq6APio9V9MEaoWlVsFasRq0gltaAPuxms8lu0gcviE/FFOstVbSIxgcv6SU7EZqmdc7v9+9mJtNks51NTUH84ed889/PP+cmxP+d5FIbMJmNbpREu4WUkiTtCicKny0l1pIKmBzovF2S+hIJHX8iEu3hZJ5lNZGqyRrGSIQpq15AzF28jgpeY6yk6GVdrfFqdrD6Iw+QlB8g0YS2g7dyQmXM/IDhBhT0UCiRf59lfqmmDvzRt6kByV/m4JjtzuaujMUM2c5Z2d6JdKrRb3K2q6mA+oYVz8JnDdKPmmNthzkAk/lN63sYPgevrguc72aZX/L9C6x09GYyxBgCX4NlvyGUHOKELlm5rXeR1kchuChJt4SSwyddZRXgvwMGvYo4QSlk3/zkHD8UHxwVJA6zjZZqP8v8kK8OWLnIZtLyCAJagYC4rTGW/9Pqj92N/c+LUaAj27movwbi19tk/whRCIE7Q9vyI6yvRpftAKVTdUjOW40X3h5OXsKCdmFcx0xlLJoSuQngnrJe7Kcjm4OMq9FlC7CMmScQANuNvjfP3PjGXDBaUQmbp296S5L4DrpbrHN1T87ZVEZVCzg1FF0Ft+dKrlLukI+/c9ENo+TvlTDbYFvuKPtQ9+l052rXrgKoWkDAFnvh0wTOmYn8R5f4k/jN/fZiCM1tQx9jQQ4ANhqG4hiL0qIFTGViG9DKB7GYzgubnpofgYRwO+DFjh0Zin2m4b/97EDkXkc+f6xYAPX0KK2I/7fUQuwzuwo/L3AkcjugPNixC8cHf0FyPjWlItmLxWw4Ou9YsQCr5fijMGoD/zpdRy95HRysyXA74MWOnscpO4j2y3HAVisw85hX5+AFBRSHt4ShfLFkIMXTqyKFc46xdzQM6XbAi702a7sy04J0+feReMFKp5q9esYLCqAZYw/k14E/xcLLsFElaornTuJB0svMuJINy8xkIYuL+xPAlWRceH6+HX7THJ0djLUom46zREu7tTkxwmf/FdOZ/sh6Q8qvEAiHpm4PJ4a/doJe0gH1t+aHRgCzOvBvJedEK5OFE5jpm4AGP2a8Dxe3gGJ/pAutug9Gp6he92CsSsWBaEcxGx0FHytmIpuqGkOpldqNYQK8cSoXvd+xLxXADw0kf6UkJNFtdo5MOgaLjiQOQHcn+A6h5NuL2s0qsC2LOM75PcF3yr5STuBSAcGG+meA14K/CI21HcS4LBT6tv0QAh8Dr5l93AhZzG5ZJ4VxAqdZUEl9z7WJ4aN+svMvwHHL21UKTd1mqvChH7/Za5xzXBBKrUcB0TQ+Ulgkfbi/H/YT5EptrGzsEK7tR1B7ln9BBwckYfMiuSqklSznIuoIIOM42MQO+QnduCoFCI0bpkzjCjddHPN/F+2Yu+sd9bKNpVwHhbS3LluK/0zgfwD0xYI5dXuzlQAAAABJRU5ErkJggg==');
+  }
+
+  div.callout-warning.callout-style-default .callout-title {
+    background-color: #fcefdc
+  }
+
+  div.callout-tip {
+    border-left-color: #02b875 !important;
+  }
+
+  div.callout-tip .callout-icon::before {
+    background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAAXNSR0IArs4c6QAAAERlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAA6ABAAMAAAABAAEAAKACAAQAAAABAAAAIKADAAQAAAABAAAAIAAAAACshmLzAAADr0lEQVRYCe1XTWgTQRj9ZjZV8a9SPIkKgj8I1bMHsUWrqYLVg4Ue6v9BwZOxSYsIerFao7UiUryIqJcqgtpimhbBXoSCVxUFe9CTiogUrUp2Pt+3aUI2u5vdNh4dmMzOzHvvezuz8xNFM0mjnbXaNu1MvFWRXkXEyE6aYOYJpdW4IXuA4r0fo8qqSMDBU0v1HJUgVieAXxzCsdE/YJTdFcVIZQNMyhruOMJKXYFoLfIfIvVIMWdsrd+Rpd86ZmyzzjJmLStqRn0v8lzkb4rVIXvnpScOJuAn2ACC65FkPzEdEy4TPWRLJ2h7z4cArXzzaOdKlbOvKKX25Wl00jSnrwVxAg3o4dRxhO13RBSdNvH0xSARv3adTXbBdTf64IWO2vH0LT+cv4GR1DJt+DUItaQogeBX/chhbTBxEiZ6gftlDNXTrvT7co4ub5A6gp9HIcHvzTa46OS5fBeP87Qm0fQkr4FsYgVQ7Qg+ZayaDg9jhg1GkWj8RG6lkeSacrrHgDaxdoBiZPg+NXV/KifMuB6//JmYH4CntVEHy/keA6x4h4CU5oFy8GzrBS18cLJMXcljAKB6INjWsRcuZBWVaS3GDrqB7rdapVIeA+isQ57Eev9eCqzqOa81CY05VLd6SamW2wA2H3SiTbnbSxmzfp7WtKZkqy4mdyAlGx7ennghYf8voqp9cLSgKdqNfa6RdRsAAkPwRuJZNbpByn+RrJi1RXTwdi8RQF6ymDwGMAtZ6TVE+4uoKh+MYkcLsT0Hk8eAienbiGdjJHZTpmNjlbFJNKDVAp2fJlYju6IreQxQ08UJDNYdoLSl6AadO+fFuCQqVMB1NJwPm69T04Wv5WhfcWyfXQB+wXRs1pt+nCknRa0LVzSA/2B+a9+zQJadb7IyyV24YAxKp2Jqs3emZTuNnKxsah+uabKbMk7CbTgJx/zIgQYErIeTKRQ9yD9wxVof5YolPHqaWo7TD6tJlh7jQnK5z2n3+fGdggIOx2kaa2YI9QWarc5Ce1ipNWMKeSG4DysFF52KBmTNMmn5HqCFkwy34rDg05gDwgH3bBi+sgFhN/e8QvRn8kbamCOhgrZ9GJhFDgfcMHzFb6BAtjKpFhzTjwv1KCVuxHvCbsSiEz4CANnj84cwHdFXAbAOJ4LTSAawGWFn5tDhLMYz6nWeU2wJfIhmIJBefcd/A5FWQWGgrWzyORZ3Q6HuV+Jf0Bj+BTX69fm1zWgK7By1YTXchFDORywnfQ7GpzOo6S+qECrsx2ifVQAAAABJRU5ErkJggg==');
+  }
+
+  div.callout-tip.callout-style-default .callout-title {
+    background-color: #ccf1e3
+  }
+
+  div.callout-caution {
+    border-left-color: #fd7e14 !important;
+  }
+
+  div.callout-caution .callout-icon::before {
+    background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAAXNSR0IArs4c6QAAAERlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAA6ABAAMAAAABAAEAAKACAAQAAAABAAAAIKADAAQAAAABAAAAIAAAAACshmLzAAACV0lEQVRYCdVWzWoUQRCuqp2ICBLJXgITZL1EfQDBW/bkzUMUD7klD+ATSHBEfAIfQO+iXsWDxJsHL96EHAwhgzlkg8nBg25XWb0zIb0zs9muYYWkoKeru+vn664fBqElyZNuyh167NXJ8Ut8McjbmEraKHkd7uAnAFku+VWdb3reSmRV8PKSLfZ0Gjn3a6Xlcq9YGb6tADjn+lUfTXtVmaZ1KwBIvFI11rRXlWlatwIAAv2asaa9mlB9wwygiDX26qaw1yYPzFXg2N1GgG0FMF8Oj+VIx7E/03lHx8UhvYyNZLN7BwSPgekXXLribw7w5/c8EF+DBK5idvDVYtEEwMeYefjjLAdEyQ3M9nfOkgnPTEkYU+sxMq0BxNR6jExrAI31H1rzvLEfRIdgcv1XEdj6QTQAS2wtstEALLG1yEZ3QhH6oDX7ExBSFEkFINXH98NTrme5IOaaA7kIfiu2L8A3qhH9zRbukdCqdsA98TdElyeMe5BI8Rs2xHRIsoTSSVFfCFCWGPn9XHb4cdobRIWABNf0add9jakDjQJpJ1bTXOJXnnRXHRf+dNL1ZV1MBRCXhMbaHqGI1JkKIL7+i8uffuP6wVQAzO7+qVEbF6NbS0LJureYcWXUUhH66nLR5rYmva+2tjRFtojkM2aD76HEGAD3tPtKM309FJg5j/K682ywcWJ3PASCcycH/22u+Bh7Aa0ehM2Fu4z0SAE81HF9RkB21c5bEn4Dzw+/qNOyXr3DCTQDMBOdhi4nAgiFDGCinIa2owCEChUwD8qzd03PG+qdW/4fDzjUMcE1ZpIAAAAASUVORK5CYII=');
+  }
+
+  div.callout-caution.callout-style-default .callout-title {
+    background-color: #ffe5d0
+  }
+
+  </style>
+  <style type="text/css">
+    .reveal div.sourceCode {
+      margin: 0;
+      overflow: auto;
+    }
+    .reveal div.hanging-indent {
+      margin-left: 1em;
+      text-indent: -1em;
+    }
+    .reveal .slide:not(.center) {
+      height: 100%;
+    }
+    .reveal .slide.scrollable {
+      overflow-y: auto;
+    }
+    .reveal .footnotes {
+      height: 100%;
+      overflow-y: auto;
+    }
+    .reveal .slide .absolute {
+      position: absolute;
+      display: block;
+    }
+    .reveal .footnotes ol {
+      counter-reset: ol;
+      list-style-type: none; 
+      margin-left: 0;
+    }
+    .reveal .footnotes ol li:before {
+      counter-increment: ol;
+      content: counter(ol) ". "; 
+    }
+    .reveal .footnotes ol li > p:first-child {
+      display: inline-block;
+    }
+    .reveal .slide ul,
+    .reveal .slide ol {
+      margin-bottom: 0.5em;
+    }
+    .reveal .slide ul li,
+    .reveal .slide ol li {
+      margin-top: 0.4em;
+      margin-bottom: 0.2em;
+    }
+    .reveal .slide ul[role="tablist"] li {
+      margin-bottom: 0;
+    }
+    .reveal .slide ul li > *:first-child,
+    .reveal .slide ol li > *:first-child {
+      margin-block-start: 0;
+    }
+    .reveal .slide ul li > *:last-child,
+    .reveal .slide ol li > *:last-child {
+      margin-block-end: 0;
+    }
+    .reveal .slide .columns:nth-child(3) {
+      margin-block-start: 0.8em;
+    }
+    .reveal blockquote {
+      box-shadow: none;
+    }
+    .reveal .tippy-content>* {
+      margin-top: 0.2em;
+      margin-bottom: 0.7em;
+    }
+    .reveal .tippy-content>*:last-child {
+      margin-bottom: 0.2em;
+    }
+    .reveal .slide > img.stretch.quarto-figure-center,
+    .reveal .slide > img.r-stretch.quarto-figure-center {
+      display: block;
+      margin-left: auto;
+      margin-right: auto; 
+    }
+    .reveal .slide > img.stretch.quarto-figure-left,
+    .reveal .slide > img.r-stretch.quarto-figure-left  {
+      display: block;
+      margin-left: 0;
+      margin-right: auto; 
+    }
+    .reveal .slide > img.stretch.quarto-figure-right,
+    .reveal .slide > img.r-stretch.quarto-figure-right  {
+      display: block;
+      margin-left: auto;
+      margin-right: 0; 
+    }
+  </style>
+</head>
+<body class="quarto-light">
+  <div class="reveal">
+    <div class="slides">
+
+<section id="title-slide" class="quarto-title-block center">
+  <h1 class="title">Data Science</h1>
+  <p class="subtitle">Data wrangling with data.table</p>
+
+<div class="quarto-title-authors">
+<div class="quarto-title-author">
+<div class="quarto-title-author-name">
+Mislav Sagovac 
+</div>
+<div class="quarto-title-author-email">
+<a href="mailto:mislav.sagovac@unicath.hr">mislav.sagovac@unicath.hr</a>
+</div>
+        <p class="quarto-title-affiliation">
+            Catholic University of Croatia
+          </p>
+    </div>
+</div>
+
+</section>
+<section>
+<section id="prologue" class="title-slide slide level1 center">
+<h1>Prologue</h1>
+
+</section>
+<section id="checklist" class="slide level2">
+<h2>Checklist</h2>
+<p>We’ll be using the following packages in today’s lecture:</p>
+<ul>
+<li>Already installed: <strong>dplyr</strong>, <strong>ggplot2</strong>, <strong>nycflights13</strong></li>
+<li>New: <strong>data.table</strong>, <strong>tidyfast</strong>, <strong>dtplyr</strong>, <strong>microbenchmark</strong></li>
+<li>Alternative: install <strong>fastverse</strong></li>
+</ul>
+<p>The following code chunk will install (if necessary) and load everything for you.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href=""></a><span class="cf">if</span> (<span class="sc">!</span><span class="fu">require</span>(pacman)) <span class="fu">install.packages</span>(<span class="st">'pacman'</span>, <span class="at">repos =</span> <span class="st">'https://cran.rstudio.com'</span>)</span>
+<span id="cb1-2"><a href=""></a>pacman<span class="sc">::</span><span class="fu">p_load</span>(dplyr, data.table, dtplyr, tidyfast, microbenchmark, ggplot2, nycflights13)</span>
+<span id="cb1-3"><a href=""></a><span class="fu">options</span>(<span class="at">dplyr.summarise.inform =</span> <span class="cn">FALSE</span>) <span class="do">## Turn off annoying dplyr group_by messages (optional)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section></section>
+<section>
+<section id="introduction" class="title-slide slide level1 center">
+<h1>Introduction</h1>
+
+</section>
+<section id="why-learn-data.table" class="slide level2">
+<h2>Why learn data.table?</h2>
+<p>The <strong>tidyverse</strong> is great. It provides a bridge to many of the big data tools (SQL databases, duckDB, etc.)</p>
+<p>So why bother learning another data wrangling package/syntax?</p>
+<p>There are at least five reasons:</p>
+<ol type="1">
+<li>Concise</li>
+<li>Insanely fast</li>
+<li>Memory efficient</li>
+<li>Feature rich (and stable)</li>
+<li>Dependency free</li>
+</ol>
+</section>
+<section id="why-learn-data.table-cont." class="slide level2 smaller">
+<h2>Why learn data.table? (cont.)</h2>
+<p><strong>1) Concise</strong></p>
+<p>These two code chunks do the same thing:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href=""></a><span class="co"># library(dplyr) ## Already loaded</span></span>
+<span id="cb2-2"><a href=""></a><span class="co"># data(starwars, package = "dplyr") ## Optional to bring the DF into the global env</span></span>
+<span id="cb2-3"><a href=""></a>starwars <span class="sc">%&gt;%</span> </span>
+<span id="cb2-4"><a href=""></a>  <span class="fu">filter</span>(species<span class="sc">==</span><span class="st">"Human"</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb2-5"><a href=""></a>  <span class="fu">group_by</span>(homeworld) <span class="sc">%&gt;%</span> </span>
+<span id="cb2-6"><a href=""></a>  <span class="fu">summarise</span>(<span class="at">mean_height=</span><span class="fu">mean</span>(height)) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>vs</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href=""></a><span class="co"># library(data.table) ## Already loaded</span></span>
+<span id="cb3-2"><a href=""></a>starwars_dt <span class="ot">=</span> <span class="fu">as.data.table</span>(starwars)</span>
+<span id="cb3-3"><a href=""></a>starwars_dt[species<span class="sc">==</span><span class="st">"Human"</span>, <span class="fu">mean</span>(height), by<span class="ot">=</span>homeworld]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="why-learn-data.table-cont.-1" class="slide level2 smaller">
+<h2>Why learn data.table? (cont.)</h2>
+<p><strong>2) Insanely fast</strong></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href=""></a>collapse_dplyr <span class="ot">=</span> <span class="cf">function</span>() {</span>
+<span id="cb4-2"><a href=""></a>  storms <span class="sc">%&gt;%</span></span>
+<span id="cb4-3"><a href=""></a>    <span class="fu">group_by</span>(name, year, month, day) <span class="sc">%&gt;%</span> </span>
+<span id="cb4-4"><a href=""></a>    <span class="fu">summarize</span>(<span class="at">wind =</span> <span class="fu">mean</span>(wind), <span class="at">pressure =</span> <span class="fu">mean</span>(pressure), <span class="at">category =</span> dplyr<span class="sc">::</span><span class="fu">first</span>(category))</span>
+<span id="cb4-5"><a href=""></a>  }</span>
+<span id="cb4-6"><a href=""></a></span>
+<span id="cb4-7"><a href=""></a>storms_dt <span class="ot">=</span> <span class="fu">as.data.table</span>(storms)</span>
+<span id="cb4-8"><a href=""></a>collapse_dt <span class="ot">=</span> <span class="cf">function</span>() {</span>
+<span id="cb4-9"><a href=""></a>  storms_dt[, .(<span class="at">wind =</span> <span class="fu">mean</span>(wind), <span class="at">pressure =</span> <span class="fu">mean</span>(pressure), <span class="at">category =</span> <span class="fu">first</span>(category)),</span>
+<span id="cb4-10"><a href=""></a>            by <span class="ot">=</span> .(name, year, month, day)]</span>
+<span id="cb4-11"><a href=""></a>  }</span>
+<span id="cb4-12"><a href=""></a></span>
+<span id="cb4-13"><a href=""></a><span class="fu">microbenchmark</span>(<span class="fu">collapse_dplyr</span>(), <span class="fu">collapse_dt</span>(), <span class="at">times =</span> <span class="dv">1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Unit: milliseconds
+             expr      min       lq     mean   median       uq      max neval
+ collapse_dplyr() 274.0078 274.0078 274.0078 274.0078 274.0078 274.0078     1
+    collapse_dt()  20.0762  20.0762  20.0762  20.0762  20.0762  20.0762     1</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>Unit: milliseconds
+             expr      min       lq     mean   median       uq      max neval
+ collapse_dplyr() 258.8662 258.8662 258.8662 258.8662 258.8662 258.8662     1
+    collapse_dt()  20.9529  20.9529  20.9529  20.9529  20.9529  20.9529     1</code></pre>
+</div>
+</div>
+<p><strong>Result:</strong> data.table is 10x faster! (Thanks to <a href="https://twitter.com/ckhead">Keith Head</a> for this example.)</p>
+</section>
+<section id="why-learn-data.table-cont.-2" class="slide level2 smaller">
+<h2>Why learn data.table? (cont.)</h2>
+<p><strong>3) Memory efficient</strong></p>
+<p>Measuring and comparing memory use <a href="https://stackoverflow.com/a/61376971">gets complicated</a>. But see <a href="https://jangorecki.gitlab.io/r-talks/2019-06-18_Poznan_why-data.table/why-data.table.pdf">here</a> (esp.&nbsp;from slide 12) for a thorough walkthrough of data.table’s memory use and efficiency.</p>
+<p><strong>4) Features and 5) No dependencies</strong></p>
+<p>They have to do with the stability of your code over time. Just to emphasise the point about <a href="http://www.tinyverse.org/">dependencies</a>, though:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href=""></a>tools<span class="sc">::</span><span class="fu">package_dependencies</span>(<span class="st">"data.table"</span>, <span class="at">recursive =</span> <span class="cn">TRUE</span>)[[<span class="dv">1</span>]]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "methods"</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href=""></a>tools<span class="sc">::</span><span class="fu">package_dependencies</span>(<span class="st">"dplyr"</span>, <span class="at">recursive =</span> <span class="cn">TRUE</span>)[[<span class="dv">1</span>]]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> [1] "cli"        "generics"   "glue"       "lifecycle"  "magrittr"  
+ [6] "methods"    "pillar"     "R6"         "rlang"      "tibble"    
+[11] "tidyselect" "utils"      "vctrs"      "fansi"      "utf8"      
+[16] "pkgconfig"  "withr"      "grDevices"  "graphics"  </code></pre>
+</div>
+</div>
+</section>
+<section id="before-we-continue" class="slide level2">
+<h2>Before we continue…</h2>
+<p>The purpose of this lecture is <em>not</em> to convince you that data.table is superior to the tidyverse. (Or vice versa.)</p>
+<p>For sure, people have strong opinions on the matter and you may find yourself pulling strongly in one direction or the other. And that’s okay, but…</p>
+<p>My goal is simply to show you another powerful tool that you can use to tackle big (or small!) data problems efficiently in R.</p>
+<p>Knowing how to use each of them and how they complement each other is big advantage.</p>
+</section></section>
+<section>
+<section id="data.table-basics" class="title-slide slide level1 center">
+<h1>data.table basics</h1>
+
+</section>
+<section id="the-data.table-object-1" class="slide level2">
+<h2>The data.table object (1)</h2>
+<p>We’ve already seen that the tidyerse provides its own enhanced version of a data.frame in the form of tibbles.</p>
+<p>The same is true for data.table. In fact, data.table functions only work on objects that have been converted to data.tables first.</p>
+<p>Beyond simple visual enhancements (similar to tibbles), the specialised internal structure of data.table objects is a key reason why the package is so fast. (More <a href="https://rdatatable.gitlab.io/data.table/articles/datatable-intro.html#what-is-datatable-1a">here</a> and <a href="https://twitter.com/matloff/status/1131372631372918784">here</a>.)</p>
+</section>
+<section id="the-data.table-object-2" class="slide level2">
+<h2>The data.table object (2)</h2>
+<p>To create a data.table, we have a couple of options:</p>
+<ul>
+<li><code>fread('mydata.csv')</code> reads a CSV into R as a data.table (and is very fast).</li>
+<li><code>data.table(x = 1:10)</code> creates a new data.table from scratch</li>
+<li><code>as.data.table(d)</code> coerces an existing data frame (<code>d</code>) to a data.table.</li>
+<li><code>setDT(d)</code> coerces an existing data frame to a data.table <em>by reference</em>; i.e.&nbsp;we don’t have to (re)assign it.</li>
+</ul>
+</section>
+<section id="what-does-modify-by-reference-mean" class="slide level2 smaller">
+<h2>What does “modify by reference” mean?</h2>
+<p>That last bullet leads us to an important concept that underlies much of data.table’s awesomeness: It tries, as much as possible, to <em>modify by reference</em>.</p>
+<p>We don’t have time to go into details here, but the very (very) short version is that there are basically two ways of changing or assigning objects in R.</p>
+<ol type="1">
+<li><strong>Copy-on-modify:</strong> Creates a copy of your data. Implies extra computational overhead.<sup>*</sup></li>
+<li><strong>Modify-in-place:</strong> Avoids creating copies and simply changes the data where it sits in memory.</li>
+</ol>
+<p>When we say that data.table “modifies by reference”, that essentially means it modifies objects in place. This translates to lower memory overhead and faster computation time!</p>
+<p>Further reading if this stuff interests you: (a) <a href="https://rdatatable.gitlab.io/data.table/articles/datatable-reference-semantics.html">Reference semantics</a> data.table vignette, (b) <a href="https://adv-r.hadley.nz/names-values.html">Names and Values</a> section of <em>Advanced R</em> (Hadley Wickham), (c) Nice <a href="https://tysonbarrett.com//jekyll/update/2019/07/12/datatable/">blog post</a> by Tyson Barrett that’s accessible to beginners.</p>
+</section>
+<section id="data.table-syntax" class="slide level2">
+<h2>data.table syntax</h2>
+<p>All data.tables accept the same basic syntax:</p>
+<div class="r-stack">
+<p>DT[<span style="color: #66C2A5;">i</span>, <span style="color: #FC8D62;">j</span>, <span style="color: #8DA0CB;">by</span>]</p>
+</div>
+<div class="columns">
+<div class="column" style="width:33%;">
+<p><span style="color: #66C2A5;">On which rows?</span></p>
+</div><div class="column" style="width:33%;">
+<p><span style="color: #FC8D62;">What to do?</span></p>
+</div><div class="column" style="width:33%;">
+<p><span style="color: #8DA0CB;">Grouped by what?</span></p>
+</div></div>
+<div class="r-stack">
+<p>dplyr “equivalents”</p>
+</div>
+<div class="columns">
+<div class="column" style="width:33%;">
+<p><span style="color: #66C2A5;">filter(); slice(); arrange()</span></p>
+</div><div class="column" style="width:33%;">
+<p><span style="color: #FC8D62;">select(); mutate()</span></p>
+</div><div class="column" style="width:33%;">
+<p><span style="color: #8DA0CB;">group_by()</span></p>
+</div></div>
+<p>Tidyverse tends to break up operations step-by-step, data.table aims to do everything in one concise expression.</p>
+<ul>
+<li>Execute complex data wrangling commands as a single.</li>
+<li>You can certainly chain (pipe) multiple operations together too.</li>
+</ul>
+</section>
+<section id="a-quick-example" class="slide level2 smaller">
+<h2>A Quick Example</h2>
+<p>We’ll dive into the details (and quirks) of <code>data.table</code> shortly.</p>
+<p>But first, a quick side-by-side comparison with <code>dplyr</code>, since that will help to orientate us for the rest of the lecture. Using our <code>starwars</code> dataset, say we want to know:</p>
+<blockquote>
+<p>What is the average height of the human characters by gender?</p>
+</blockquote>
+<div class="columns">
+<div class="column" style="width:50%;">
+<p>dplyr</p>
+<div class="sourceCode" id="cb11" data-code-line-numbers="|3|5|4"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href=""></a><span class="fu">data</span>(starwars, <span class="at">package =</span> <span class="st">"dplyr"</span>)</span>
+<span id="cb11-2"><a href=""></a>starwars <span class="sc">%&gt;%</span></span>
+<span id="cb11-3"><a href=""></a>  <span class="fu">filter</span>(species <span class="sc">==</span> <span class="st">"Human"</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb11-4"><a href=""></a>  <span class="fu">group_by</span>(gender) <span class="sc">%&gt;%</span></span>
+<span id="cb11-5"><a href=""></a>  <span class="fu">summarise</span>(<span class="fu">mean</span>(height, <span class="at">na.rm =</span> <span class="cn">TRUE</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 2 × 2
+  gender    `mean(height, na.rm = TRUE)`
+  &lt;chr&gt;                            &lt;dbl&gt;
+1 feminine                          164.
+2 masculine                         182.</code></pre>
+</div>
+</div>
+</div><div class="column" style="width:50%;">
+<p>data.table</p>
+<div class="sourceCode" id="cb13" data-code-line-numbers="|3|4|5"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href=""></a>starwars_dt <span class="ot">=</span> <span class="fu">as.data.table</span>(starwars)</span>
+<span id="cb13-2"><a href=""></a>starwars_dt[</span>
+<span id="cb13-3"><a href=""></a>  species <span class="sc">==</span> <span class="st">"Human"</span>,</span>
+<span id="cb13-4"><a href=""></a>  <span class="fu">mean</span>(height, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb13-5"><a href=""></a>  by <span class="ot">=</span> gender]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>      gender       V1
+      &lt;char&gt;    &lt;num&gt;
+1: masculine 182.3913
+2:  feminine 163.5714</code></pre>
+</div>
+</div>
+</div></div>
+</section></section>
+<section>
+<section id="working-with-rows-dti" class="title-slide slide level1 center">
+<h1>Working with rows: DT[i, ]</h1>
+
+</section>
+<section id="subset-by-rows-filter" class="slide level2 smaller">
+<h2>Subset by rows (filter)</h2>
+<div class="fragment">
+<p>Subsetting by rows is very straightforward in data.table. Everything works pretty much the same as you’d expect if you’re coming from dplyr.</p>
+<ul>
+<li><p><code>DT[x == "string", ]</code>: Subset to rows where variable x equals “string”</p></li>
+<li><p><code>DT[y &gt; 5, ]</code>: Subset to rows where variable y is greater than 5</p></li>
+<li><p><code>DT[1:10, ]</code>: Subset to the first 10 rows</p></li>
+</ul>
+</div>
+<div class="fragment">
+<p>Multiple filters/conditions are fine too:</p>
+<ul>
+<li><code>DT[x=="string" &amp; y&gt;5, ]</code>: Subset to rows where x is “string” AND y is greater than 5</li>
+</ul>
+</div>
+<div class="fragment">
+<p>Note that we don’t actually need commas when we’re only subsetting on <code>i</code> (i.e.&nbsp;no <code>j</code> or <code>by</code> components). - <code>DT[x=="string"]</code> is equivalent to <code>DT[x=="string", ]</code> - <code>DT[1:10]</code> is equivalent to <code>DT[1:10, ]</code> - etc.</p>
+</div>
+</section>
+<section id="subset-by-rows-filter-cont." class="slide level2">
+<h2>Subset by rows (filter) cont.</h2>
+<p>Just to emphasise the point, here’s an example of subsetting by rows using our starwars data.table from earlier.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href=""></a>starwars_dt[height<span class="sc">&gt;</span><span class="dv">190</span> <span class="sc">&amp;</span> species<span class="sc">==</span><span class="st">'Human'</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>                  name height  mass hair_color skin_color eye_color birth_year
+                &lt;char&gt;  &lt;int&gt; &lt;num&gt;     &lt;char&gt;     &lt;char&gt;    &lt;char&gt;      &lt;num&gt;
+1:         Darth Vader    202   136       none      white    yellow       41.9
+2:        Qui-Gon Jinn    193    89      brown       fair      blue       92.0
+3:               Dooku    193    80      white       fair     brown      102.0
+4: Bail Prestor Organa    191    NA      black        tan     brown       67.0
+      sex    gender homeworld species
+   &lt;char&gt;    &lt;char&gt;    &lt;char&gt;  &lt;char&gt;
+1:   male masculine  Tatooine   Human
+2:   male masculine      &lt;NA&gt;   Human
+3:   male masculine   Serenno   Human
+4:   male masculine  Alderaan   Human
+                                                                       films
+                                                                      &lt;list&gt;
+1: A New Hope,The Empire Strikes Back,Return of the Jedi,Revenge of the Sith
+2:                                                        The Phantom Menace
+3:                                  Attack of the Clones,Revenge of the Sith
+4:                                  Attack of the Clones,Revenge of the Sith
+           vehicles       starships
+             &lt;list&gt;          &lt;list&gt;
+1:                  TIE Advanced x1
+2:  Tribubble bongo                
+3: Flitknot speeder                
+4:                                 </code></pre>
+</div>
+</div>
+</section>
+<section id="order-by-rows-arrange" class="slide level2">
+<h2>Order by rows (arrange)</h2>
+<div class="fragment">
+<div class="sourceCode" id="cb17"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href=""></a>starwars_dt[<span class="fu">order</span>(birth_year)]  <span class="do">## (temporarily) sort by youngest to oldest</span></span>
+<span id="cb17-2"><a href=""></a>starwars_dt[<span class="fu">order</span>(<span class="sc">-</span>birth_year)] <span class="do">## (temporarily) sort by oldest to youngest</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="fragment">
+<p>While ordering as per the above is very straightforward, data.table also provides an optimised <code>setorder()</code> function for reordering <em>by reference</em>.</p>
+</div>
+<div class="fragment">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href=""></a><span class="fu">setorder</span>(starwars_dt, birth_year, <span class="at">na.last =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb18-2"><a href=""></a>starwars_dt[<span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>, name<span class="sc">:</span>birth_year] <span class="do">## Only print subset to stay on the slide</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>                    name height  mass hair_color skin_color eye_color
+                  &lt;char&gt;  &lt;int&gt; &lt;num&gt;     &lt;char&gt;     &lt;char&gt;    &lt;char&gt;
+1: Wicket Systri Warrick     88    20      brown      brown     brown
+2:                 IG-88    200   140       none      metal       red
+3:        Luke Skywalker    172    77      blond       fair      blue
+4:           Leia Organa    150    49      brown      light     brown
+5:        Wedge Antilles    170    77      brown       fair     hazel
+   birth_year
+        &lt;num&gt;
+1:          8
+2:         15
+3:         19
+4:         19
+5:         21</code></pre>
+</div>
+</div>
+</div>
+</section></section>
+<section>
+<section id="manipulating-columns-dt-j" class="title-slide slide level1 center">
+<h1>Manipulating columns: DT[, j]</h1>
+
+</section>
+<section id="j-one-slot-to-rule-them-all" class="slide level2 smaller">
+<h2>j: One slot to rule them all</h2>
+<div class="fragment">
+<p>Recall some of the dplyr verbs that we used to manipulate our variables in different ways:</p>
+<ul>
+<li><code>select()</code></li>
+<li><code>mutate()</code></li>
+<li><code>summarise()</code></li>
+<li><code>count()</code></li>
+</ul>
+</div>
+<div class="fragment">
+<p>data.table recognizes that all of these verbs are just different versions of telling R… &gt;“<em>Do something to this variable in my dataset</em>”</p>
+<p>… and it let’s you do all of those operations in one place: the <code>j</code> slot.</p>
+</div>
+<div class="fragment">
+<p>However, this concision requires a few syntax tweaks w.r.t. how we change and assign variables in our dataset.</p>
+<ul>
+<li>Some people find this off-putting (or, at least, weird) when they first come to data.table.</li>
+<li>I hope to convince you that these syntax tweaks aren’t actually that difficult to grok and give us a <em>lot</em> of power in return.</li>
+</ul>
+</div>
+</section>
+<section id="modifying-columns" class="slide level2 smaller">
+<h2>Modifying columns :=</h2>
+<div class="fragment">
+<p>To add, delete, or change columns in data.table, we use the <strong><code>:=</code></strong> operator.</p>
+<ul>
+<li>Known as the <em>walrus</em> operator</li>
+</ul>
+</div>
+<div class="fragment">
+<p>For example,</p>
+<ul>
+<li><code>DT[, xsq := x^2]</code>: Create a new column (<code>xsq</code>) from an existing one (<code>x</code>)</li>
+<li><code>DT[, x := as.character(x)]</code>: Change an existing column</li>
+</ul>
+</div>
+<div class="fragment">
+<p><strong>Important:</strong> <code>:=</code> is <em>modifying by reference</em>, i.e.&nbsp;in place. So we don’t have to (re)assign the object to save these changes.</p>
+</div>
+<div class="fragment">
+<p>However, we also won’t see these changes printed to screen unless we ask R explicitly.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href=""></a>DT <span class="ot">=</span> <span class="fu">data.table</span>(<span class="at">x =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>)</span>
+<span id="cb20-2"><a href=""></a><span class="co"># DT[, xsq := x^2] ## Modifies in place but doesn't print the result</span></span>
+<span id="cb20-3"><a href=""></a>DT[, x_sq <span class="sc">:</span><span class="er">=</span> x<span class="sc">^</span><span class="dv">2</span>][] <span class="do">## Adding [] prints the result.</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>       x  x_sq
+   &lt;int&gt; &lt;num&gt;
+1:     1     1
+2:     2     4</code></pre>
+</div>
+</div>
+</div>
+</section>
+<section id="modifying-columns-cont." class="slide level2 smaller">
+<h2>Modifying columns := (cont.)</h2>
+<div class="fragment">
+<p>As I keep saying, <em>modifying by reference</em> has important implications for data manipulation. Consider what happens if we copy our data.table and then remove a column.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href=""></a>DT_copy <span class="ot">=</span> DT</span>
+<span id="cb22-2"><a href=""></a>DT_copy[, x_sq <span class="sc">:</span><span class="er">=</span> <span class="cn">NULL</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+<div class="fragment">
+<p>Clearly, “x_sq” has been removed from <code>DT_copy</code>. But what of the original <code>DT</code> table?</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href=""></a>DT</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>       x
+   &lt;int&gt;
+1:     1
+2:     2</code></pre>
+</div>
+</div>
+</div>
+<div class="fragment">
+<p>Uh-oh! It too has been removed… exactly as modifying by reference demands. To avoid this behaviour, use the explicit <a href="https://rdatatable.gitlab.io/data.table/reference/copy.html"><code>data.table::copy()</code></a> function. Run this next chunk yourself:</p>
+<div class="cell" data-highlightspans="true">
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href=""></a>DT[, x_sq <span class="sc">:</span><span class="er">=</span> x<span class="sc">^</span><span class="dv">2</span>]     </span>
+<span id="cb25-2"><a href=""></a>DT_copy <span class="ot">=</span> <span class="fu">copy</span>(DT)  </span>
+<span id="cb25-3"><a href=""></a>DT_copy[, x_sq <span class="sc">:</span><span class="er">=</span> <span class="cn">NULL</span>]</span>
+<span id="cb25-4"><a href=""></a>DT <span class="do">## x_sq is still there (run and confirm for yourself)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+</section></section>
+<section>
+<section id="modifying-columns-cont.-1" class="title-slide slide level1 smaller center">
+<h1>Modifying columns := (cont.)</h1>
+<div class="fragment">
+<p><strong>Sub-assign by reference</strong></p>
+<p>One really cool implication of <code>:=</code> is data.table’s <a href="https://rdatatable.gitlab.io/data.table/articles/datatable-reference-semantics.html#ref-i-j">sub-assign by reference</a> functionality. As a simple example, consider another fake dataset.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href=""></a>DT2 <span class="ot">=</span> <span class="fu">data.table</span>(<span class="at">a =</span> <span class="sc">-</span><span class="dv">2</span><span class="sc">:</span><span class="dv">2</span>, <span class="at">b =</span> LETTERS[<span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+<div class="fragment">
+<p>Now, imagine we want to locate all rows where “a” is negative and replace the corresponding “b” cell with NA.</p>
+</div>
+<div class="fragment">
+<ul>
+<li><p>In dplyr you’d have to do something like <code>...mutate(b = ifelse(a &lt; 0, NA, b))</code>.</p></li>
+<li><p>In data.table, simply specify which rows to target (<code>i</code>) and then sub-assign (<code>j</code>) directly.</p></li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href=""></a>DT2[a <span class="sc">&lt;</span> <span class="dv">0</span>, b <span class="sc">:</span><span class="er">=</span> <span class="cn">NA</span>][] <span class="do">## Again, just adding the second [] to print to screen</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>       a      b
+   &lt;int&gt; &lt;char&gt;
+1:    -2   &lt;NA&gt;
+2:    -1   &lt;NA&gt;
+3:     0      C
+4:     1      D
+5:     2      E</code></pre>
+</div>
+</div>
+</div>
+</section>
+<section id="modifying-columns-cont.-2" class="slide level2 smaller">
+<h2>Modifying columns := (cont.)</h2>
+<div class="fragment">
+<p>To modify multiple columns simultaneously, we have two options.</p>
+<ol type="1">
+<li>LHS <code>:=</code> RHS form: <code>DT[, c("var1", "var2") := .(val1, val2)]</code></li>
+<li>Functional form: <code>DT[, ':=' (var1=val1, var2=val2)]</code></li>
+</ol>
+</div>
+<div class="fragment">
+<p>Personally, I prefer the LHS form. But we will use both.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href=""></a>DT[, <span class="fu">c</span>(<span class="st">"y"</span>, <span class="st">"y_name"</span>) <span class="sc">:</span><span class="er">=</span> .(<span class="dv">3</span><span class="sc">:</span><span class="dv">4</span>, <span class="fu">c</span>(<span class="st">"three"</span>, <span class="st">"four"</span>))]</span>
+<span id="cb29-2"><a href=""></a>DT <span class="do">## Another way to print the results instead of appending []</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>       x     y y_name
+   &lt;int&gt; &lt;int&gt; &lt;char&gt;
+1:     1     3  three
+2:     2     4   four</code></pre>
+</div>
+</div>
+</div>
+<div class="fragment">
+<p>Note, however, that dynamically assigning dependent columns in a single step (like we did with dplyr::mutate) doesn’t work.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href=""></a>DT[, <span class="st">':='</span>(<span class="at">z =</span> <span class="dv">5</span><span class="sc">:</span><span class="dv">6</span>, <span class="at">z_sq =</span> z<span class="sc">^</span><span class="dv">2</span>)][]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-error">
+<pre><code>Error in eval(jsub, SDenv, parent.frame()): object 'z' not found</code></pre>
+</div>
+</div>
+</div>
+</section>
+<section id="aside-chaining-data.table-operations" class="slide level2 smaller">
+<h2>Aside: Chaining data.table operations</h2>
+<div class="fragment">
+<p>That last example provides as good a time as any to mention that you can chain multiple data.table operations together.</p>
+</div>
+<div class="fragment">
+<p>The native data.table way is simply to append consecutive <code>[]</code> terms.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href=""></a>DT[, z <span class="sc">:</span><span class="er">=</span> <span class="dv">5</span><span class="sc">:</span><span class="dv">6</span>][, z_sq <span class="sc">:</span><span class="er">=</span> z<span class="sc">^</span><span class="dv">2</span>][] </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>       x     y y_name     z  z_sq
+   &lt;int&gt; &lt;int&gt; &lt;char&gt; &lt;int&gt; &lt;num&gt;
+1:     1     3  three     5    25
+2:     2     4   four     6    36</code></pre>
+</div>
+</div>
+</div>
+<div class="fragment">
+<p>But if you prefer the <strong>magrittr</strong> pipe, then that’s also possible. Just prefix each step with <code>.</code>:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href=""></a><span class="co"># library(magrittr) ## Not needed since we've already loaded %&gt;% via dplyr</span></span>
+<span id="cb35-2"><a href=""></a>DT <span class="sc">%&gt;%</span></span>
+<span id="cb35-3"><a href=""></a>  .[, xyz <span class="sc">:</span><span class="er">=</span> x<span class="sc">+</span>y<span class="sc">+</span>z] <span class="sc">%&gt;%</span></span>
+<span id="cb35-4"><a href=""></a>  .[, xyz_sq <span class="sc">:</span><span class="er">=</span> xyz<span class="sc">^</span><span class="dv">2</span>] <span class="sc">%&gt;%</span></span>
+<span id="cb35-5"><a href=""></a>  .[] </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>       x     y y_name     z  z_sq   xyz xyz_sq
+   &lt;int&gt; &lt;int&gt; &lt;char&gt; &lt;int&gt; &lt;num&gt; &lt;int&gt;  &lt;num&gt;
+1:     1     3  three     5    25     9     81
+2:     2     4   four     6    36    12    144</code></pre>
+</div>
+</div>
+</div>
+</section>
+<section id="modifying-columns-cont.-3" class="slide level2">
+<h2>Modifying columns := (cont.)</h2>
+<p>To remove a column from your dataset, set it to NULL.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href=""></a>DT[, y_name <span class="sc">:</span><span class="er">=</span> <span class="cn">NULL</span>]</span>
+<span id="cb37-2"><a href=""></a>DT</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>       x     y     z  z_sq   xyz xyz_sq
+   &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;num&gt; &lt;int&gt;  &lt;num&gt;
+1:     1     3     5    25     9     81
+2:     2     4     6    36    12    144</code></pre>
+</div>
+</div>
+</section>
+<section id="subsetting-on-columns-select" class="slide level2 smaller">
+<h2>Subsetting on columns (select)</h2>
+<div class="fragment">
+<p>We can also use the <code>j</code> slot to subset our data on columns. I’ll return to the starwars dataset for these examples…</p>
+</div>
+<div class="fragment">
+<p>Subset by column position:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href=""></a>starwars_dt[<span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>, <span class="fu">c</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>, <span class="dv">10</span>)]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>                    name height  mass homeworld
+                  &lt;char&gt;  &lt;int&gt; &lt;num&gt;    &lt;char&gt;
+1: Wicket Systri Warrick     88    20     Endor
+2:                 IG-88    200   140      &lt;NA&gt;</code></pre>
+</div>
+</div>
+</div>
+<div class="fragment">
+<p>Or by name:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb41"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href=""></a><span class="co"># starwars_dt[, c("name", "height", "mass", "homeworld")] ## Also works</span></span>
+<span id="cb41-2"><a href=""></a><span class="co"># starwars_dt[, list(name, height, mass, homeworld)] ## So does this</span></span>
+<span id="cb41-3"><a href=""></a>starwars_dt[<span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>, .(name, height, mass, homeworld)]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>                    name height  mass homeworld
+                  &lt;char&gt;  &lt;int&gt; &lt;num&gt;    &lt;char&gt;
+1: Wicket Systri Warrick     88    20     Endor
+2:                 IG-88    200   140      &lt;NA&gt;</code></pre>
+</div>
+</div>
+</div>
+</section>
+<section id="aside-whats-with-the-." class="slide level2 smaller">
+<h2>Aside: What’s with the .()?</h2>
+<p>We’ve now seen <code>.()</code> in a couple places, e.g the previous slide and <a href="#/fast">this slide</a> from earlier if you were paying close attention.</p>
+<ul>
+<li><code>.()</code> is just a data.table shortcut for <code>list()</code>.</li>
+</ul>
+<p>We’ll be using <code>.()</code> quite liberally once we start working subsetting and/or grouping by multiple variables at a time.</p>
+<p>You can think of it as one of data.table’s syntactical quirks. But, really, it’s just there to give you more options. You can often — if not always — use these three forms interchangeably in data.table: - <code>.(var1, var2, ...)</code> - <code>list(var1, var2, ...)</code> - <code>c("var1", "var2", ...)</code></p>
+<div class="fragment">
+<p>I like the <code>.()</code> syntax best — less typing! — but each to their own.</p>
+</div>
+<div class="fragment">
+<p>Okay, back to subsetting on columns…</p>
+</div>
+</section>
+<section id="subsetting-on-columns-cont." class="slide level2">
+<h2>Subsetting on columns (cont.)</h2>
+<p>You can also exclude columns through negation. Try this next code chunk yourself:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb43"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb43-1"><a href=""></a>starwars_dt[, <span class="sc">!</span><span class="fu">c</span>(<span class="st">"name"</span>, <span class="st">"height"</span>)]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="renaming-columns" class="slide level2 smaller">
+<h2>Renaming columns</h2>
+<div class="fragment">
+<p>You can rename (set) a column by reference. Again, run this yourself:</p>
+<div class="sourceCode" id="cb44"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb44-1"><a href=""></a><span class="fu">setnames</span>(starwars_dt, <span class="at">old =</span> <span class="fu">c</span>(<span class="st">"name"</span>, <span class="st">"homeworld"</span>), <span class="at">new =</span> <span class="fu">c</span>(<span class="st">"alias"</span>, <span class="st">"crib"</span>))[]</span>
+<span id="cb44-2"><a href=""></a><span class="do">## Better change it back, in case we use "name" or "homeworld" on a later slide</span></span>
+<span id="cb44-3"><a href=""></a><span class="fu">setnames</span>(starwars_dt, <span class="at">old =</span> <span class="fu">c</span>(<span class="st">"alias"</span>, <span class="st">"crib"</span>), <span class="at">new =</span> <span class="fu">c</span>(<span class="st">"name"</span>, <span class="st">"homeworld"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="fragment">
+<p>While the <code>setnames()</code> approach offers performance benefits, I often find it convenient to dynamically (and/or temporarily) rename columns when subsetting them. For example:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb45"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb45-1"><a href=""></a>starwars_dt[<span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>, .(<span class="at">alias =</span> name, <span class="at">crib =</span> homeworld)]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>                   alias   crib
+                  &lt;char&gt; &lt;char&gt;
+1: Wicket Systri Warrick  Endor
+2:                 IG-88   &lt;NA&gt;</code></pre>
+</div>
+</div>
+</div>
+</section>
+<section id="subsetting-on-columns-cont.-1" class="slide level2">
+<h2>Subsetting on columns (cont.)</h2>
+<p>One last thing I’ll mention w.r.t. to subsetting columns is that you can also use dplyr verbs on data.tables if you prefer.</p>
+<p>For example run the following code chunk for yourself. (You’ll get a warning about efficiency loss, but this will be very minor for a case like this.)</p>
+<div class="sourceCode" id="cb47"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb47-1"><a href=""></a>starwars_dt[<span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>, ] <span class="sc">%&gt;%</span> </span>
+<span id="cb47-2"><a href=""></a>  <span class="fu">select</span>(<span class="at">crib =</span> homeworld, <span class="fu">everything</span>())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>I am not fan of this approach. I’ll get back to dplyr+data.table functionality at the end of the lecture….</p>
+</section>
+<section id="aggregating" class="slide level2 smaller">
+<h2>Aggregating</h2>
+<div class="fragment">
+<p>Finally, we can do aggregating manipulations in <code>j</code>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb48"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb48-1"><a href=""></a>starwars_dt[, <span class="fu">mean</span>(height, <span class="at">na.rm=</span>T)]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 174.6049</code></pre>
+</div>
+</div>
+</div>
+<div class="fragment">
+<p>Note that we don’t keep anything unless we assign the result to a new object. If you want to add the new aggregated column to your original dataset, use <code>:=</code>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb50"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb50-1"><a href=""></a>starwars_dt[, mean_height <span class="sc">:</span><span class="er">=</span> <span class="fu">mean</span>(height, <span class="at">na.rm=</span>T)] <span class="sc">%&gt;%</span> <span class="do">## Add mean height as column</span></span>
+<span id="cb50-2"><a href=""></a>  .[<span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>, .(name, height, mean_height)] <span class="do">## Just to keep everything on the slide</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>                    name height mean_height
+                  &lt;char&gt;  &lt;int&gt;       &lt;num&gt;
+1: Wicket Systri Warrick     88    174.6049
+2:                 IG-88    200    174.6049
+3:        Luke Skywalker    172    174.6049
+4:           Leia Organa    150    174.6049
+5:        Wedge Antilles    170    174.6049</code></pre>
+</div>
+</div>
+</div>
+</section>
+<section id="aggregating-cont." class="slide level2 smaller">
+<h2>Aggregating (cont.)</h2>
+<div class="fragment">
+<p>data.table also provides <a href="https://rdatatable.gitlab.io/data.table/reference/special-symbols.html">special convenience symbols</a> for common aggregation tasks in <code>j</code>.</p>
+<p>For example, we can quickly count the number of observations using <code>.N</code>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb52"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb52-1"><a href=""></a>starwars_dt[, .N]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 87</code></pre>
+</div>
+</div>
+</div>
+<div class="fragment">
+<p>Of course, this is a pretty silly example since it’s just going to give us the total number of rows in the dataset. Like most forms of aggregation, <code>.N</code> is much more interesting when it is applied by group.</p>
+<ul>
+<li>This provides a nice segue to our next section…</li>
+</ul>
+</div>
+</section></section>
+<section>
+<section id="group-by-dt-by" class="title-slide slide level1 center">
+<h1>Group by: DT[, , by]</h1>
+
+</section>
+<section id="by" class="slide level2 smaller">
+<h2>by</h2>
+<div class="fragment">
+<p>data.table’s <code>by</code> argument functions very similarly to the <code>dplyr::group_by</code> equivalent. Try these next few examples in your own R console:</p>
+<ul>
+<li><code>starwars_dt[, mean(height, na.rm=T), by = species]</code>: Collapse by single variable</li>
+<li><code>starwars_dt[, .(species_height = mean(height, na.rm=T)), by = species]</code>: As above, but explicitly name the summary variable</li>
+<li><code>starwars_dt[, mean(mass, na.rm=T), by = height&gt;190]</code>: Conditionals work too.</li>
+<li><code>starwars_dt[, species_n := .N, by = species][]</code>: Add an aggregated column to the data (here: number of observations by species group)</li>
+</ul>
+</div>
+<div class="fragment">
+<p>To perform aggregations by multiple variables, we’ll use the <code>.()</code> syntax again.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb54"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb54-1"><a href=""></a>starwars_dt[, .(<span class="at">mean_height =</span> <span class="fu">mean</span>(height, <span class="at">na.rm=</span>T)), by <span class="ot">=</span> .(species, homeworld)] <span class="sc">%&gt;%</span></span>
+<span id="cb54-2"><a href=""></a>  <span class="fu">head</span>(<span class="dv">4</span>) <span class="do">## Just to keep everything on the slide</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>   species homeworld mean_height
+    &lt;char&gt;    &lt;char&gt;       &lt;num&gt;
+1:    Ewok     Endor     88.0000
+2:   Droid      &lt;NA&gt;    148.0000
+3:   Human  Tatooine    179.2500
+4:   Human  Alderaan    176.3333</code></pre>
+</div>
+</div>
+</div>
+</section>
+<section id="efficient-subsetting-with-.sd" class="slide level2 smaller">
+<h2>Efficient subsetting with .SD</h2>
+<div class="fragment">
+<p>We’ve seen how to group by multiple variables. But what if we want to <em>summarise</em> multiple variables, regardless of how we are grouping?</p>
+<p>One solution is to again use <code>.()</code> and write everything out, e.g.</p>
+<div class="sourceCode" id="cb56"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb56-1"><a href=""></a><span class="do">## Run yourself if you'd like to check the output</span></span>
+<span id="cb56-2"><a href=""></a>starwars_dt[, </span>
+<span id="cb56-3"><a href=""></a>            .(<span class="fu">mean</span>(height, <span class="at">na.rm=</span>T), <span class="fu">mean</span>(mass, <span class="at">na.rm=</span>T), <span class="fu">mean</span>(birth_year, <span class="at">na.rm=</span>T)), </span>
+<span id="cb56-4"><a href=""></a>            by <span class="ot">=</span> species]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="fragment">
+<p>But this soon become tedious. Imagine we have even more variables. Do we really have to write out <code>mean(..., na.rm=T)</code> for each one?</p>
+</div>
+<div class="fragment">
+<p>Fortunately, the answer is “no”. data.table provides a special <code>.SD</code> symbol for <strong>s</strong>ubsetting <strong>d</strong>ata. In truth, .SD can do a <a href="https://rdatatable.gitlab.io/data.table/articles/datatable-sd-usage.html">lot more</a> than what I’m about to show you, but here’s how it would work in the present case…</p>
+<div style="text-align: right">
+<p><em>See next slide.</em></p>
+</div>
+</div>
+</section>
+<section id="efficient-subsetting-with-.sd-cont." class="slide level2 smaller">
+<h2>Efficient subsetting with .SD (cont.)</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb57"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb57-1"><a href=""></a>starwars_dt[, </span>
+<span id="cb57-2"><a href=""></a>            <span class="fu">lapply</span>(.SD, mean, <span class="at">na.rm=</span>T), <span class="co">#&lt;&lt;</span></span>
+<span id="cb57-3"><a href=""></a>            .SDcols <span class="ot">=</span> <span class="fu">c</span>(<span class="st">"height"</span>, <span class="st">"mass"</span>, <span class="st">"birth_year"</span>),</span>
+<span id="cb57-4"><a href=""></a>            by <span class="ot">=</span> species] <span class="sc">%&gt;%</span></span>
+<span id="cb57-5"><a href=""></a>  <span class="fu">head</span>(<span class="dv">2</span>) <span class="do">## Just keep everything on the slide</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>   species height  mass birth_year
+    &lt;char&gt;  &lt;num&gt; &lt;num&gt;      &lt;num&gt;
+1:    Ewok   88.0 20.00    8.00000
+2:   Droid  131.2 69.75   53.33333</code></pre>
+</div>
+</div>
+</section>
+<section id="efficient-subsetting-with-.sd-cont.-1" class="slide level2 smaller">
+<h2>Efficient subsetting with .SD (cont.)</h2>
+<div class="sourceCode" id="cb59" data-code-line-numbers="2"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb59-1"><a href=""></a>starwars_dt[, </span>
+<span id="cb59-2"><a href=""></a>            <span class="fu">lapply</span>(.SD, mean, <span class="at">na.rm=</span>T), <span class="co">#&lt;&lt;</span></span>
+<span id="cb59-3"><a href=""></a>            .SDcols <span class="ot">=</span> <span class="fu">c</span>(<span class="st">"height"</span>, <span class="st">"mass"</span>, <span class="st">"birth_year"</span>),</span>
+<span id="cb59-4"><a href=""></a>            by <span class="ot">=</span> species] <span class="sc">%&gt;%</span></span>
+<span id="cb59-5"><a href=""></a>  <span class="fu">head</span>(<span class="dv">2</span>) <span class="do">## Just keep everything on the slide</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>   species height  mass birth_year
+    &lt;char&gt;  &lt;num&gt; &lt;num&gt;      &lt;num&gt;
+1:    Ewok   88.0 20.00    8.00000
+2:   Droid  131.2 69.75   53.33333</code></pre>
+</div>
+</div>
+<p>First, we specify what we want to <em>do</em> on our data subset (i.e.&nbsp;<code>.SD</code>). In this case, we want the mean for each element, which we obtain by iterating over with the base <code>lapply()</code> function.</p>
+</section>
+<section id="efficient-subsetting-with-.sd-cont.-2" class="slide level2 smaller">
+<h2>Efficient subsetting with .SD (cont.)</h2>
+<div class="sourceCode" id="cb61" data-code-line-numbers="3"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb61-1"><a href=""></a>starwars_dt[, </span>
+<span id="cb61-2"><a href=""></a>            <span class="fu">lapply</span>(.SD, mean, <span class="at">na.rm=</span>T), <span class="co">#&lt;&lt;</span></span>
+<span id="cb61-3"><a href=""></a>            .SDcols <span class="ot">=</span> <span class="fu">c</span>(<span class="st">"height"</span>, <span class="st">"mass"</span>, <span class="st">"birth_year"</span>),</span>
+<span id="cb61-4"><a href=""></a>            by <span class="ot">=</span> species] <span class="sc">%&gt;%</span></span>
+<span id="cb61-5"><a href=""></a>  <span class="fu">head</span>(<span class="dv">2</span>) <span class="do">## Just keep everything on the slide</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>   species height  mass birth_year
+    &lt;char&gt;  &lt;num&gt; &lt;num&gt;      &lt;num&gt;
+1:    Ewok   88.0 20.00    8.00000
+2:   Droid  131.2 69.75   53.33333</code></pre>
+</div>
+</div>
+<p>First, we specify what we want to <em>do</em> on our data subset (i.e.&nbsp;<code>.SD</code>). In this case, we want the mean for each element, which we obtain by iterating over with the base <code>lapply()</code> function.</p>
+<p>Then, we specify <em>which columns</em> to subset with the <code>.SDcols</code> argument.</p>
+</section>
+<section id="efficient-subsetting-with-.sd-cont.-3" class="slide level2 smaller">
+<h2>Efficient subsetting with .SD (cont.)</h2>
+<div class="sourceCode" id="cb63" data-code-line-numbers="3"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb63-1"><a href=""></a>starwars_dt[, </span>
+<span id="cb63-2"><a href=""></a>            <span class="fu">lapply</span>(.SD, mean, <span class="at">na.rm=</span>T), <span class="co">#&lt;&lt;</span></span>
+<span id="cb63-3"><a href=""></a>            .SDcols <span class="ot">=</span> <span class="fu">c</span>(<span class="st">"height"</span>, <span class="st">"mass"</span>, <span class="st">"birth_year"</span>),</span>
+<span id="cb63-4"><a href=""></a>            by <span class="ot">=</span> species] <span class="sc">%&gt;%</span></span>
+<span id="cb63-5"><a href=""></a>  <span class="fu">head</span>(<span class="dv">2</span>) <span class="do">## Just keep everything on the slide</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>   species height  mass birth_year
+    &lt;char&gt;  &lt;num&gt; &lt;num&gt;      &lt;num&gt;
+1:    Ewok   88.0 20.00    8.00000
+2:   Droid  131.2 69.75   53.33333</code></pre>
+</div>
+</div>
+<p>First, we specify what we want to <em>do</em> on our data subset (i.e.&nbsp;<code>.SD</code>). In this case, we want the mean for each element, which we obtain by iterating over with the base <code>lapply()</code> function.</p>
+<p>Then, we specify <em>which columns</em> to subset with the <code>.SDcols</code> argument.</p>
+<p>P.S. One annoyance I have is that the <code>.()</code> syntax doesn’t work for <code>.SDcols</code>. However, we can at least feed it consecutive columns without quotes, e.g.&nbsp;<code>.SDcols = height:mass</code>. See <a href="https://rdatatable.gitlab.io/data.table/articles/datatable-intro.html#how-can-we-specify-just-the-columns-we-would-like-to-compute-the-mean-on">here</a>.</p>
+</section>
+<section id="efficient-subsetting-with-.sd-cont.-4" class="slide level2 smaller">
+<h2>Efficient subsetting with .SD (cont.)</h2>
+<p>Just to add: We need only specify <code>.SDcols</code> if we want to subset specific parts of the data. (You can also use shortcuts like <code>.SDcols = is.numeric</code> or <code>.SDcols = patterns('abc')</code>.)</p>
+<p>If we instead want to apply the same function on <em>all</em> the variables in our dataset, then <code>.SD</code> by itself will suffice.</p>
+<p>As a quick example, recall our earlier DT object that contains only numeric variables.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb65"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb65-1"><a href=""></a>DT</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>       x     y     z  z_sq   xyz xyz_sq
+   &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;num&gt; &lt;int&gt;  &lt;num&gt;
+1:     1     3     5    25     9     81
+2:     2     4     6    36    12    144</code></pre>
+</div>
+</div>
+<p>We can obtain the mean for each variable as follows.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb67"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb67-1"><a href=""></a>DT[, <span class="fu">lapply</span>(.SD, mean)]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>       x     y     z  z_sq   xyz xyz_sq
+   &lt;num&gt; &lt;num&gt; &lt;num&gt; &lt;num&gt; &lt;num&gt;  &lt;num&gt;
+1:   1.5   3.5   5.5  30.5  10.5  112.5</code></pre>
+</div>
+</div>
+</section>
+<section id="keyby" class="slide level2">
+<h2>keyby</h2>
+<p>The last thing I want to mention w.r.t. <code>by</code> is its close relative: <code>keyby</code>.</p>
+<p>The <code>keyby</code> argument works exactly like <code>by</code> — you can use it as a drop-in replacement — except that it orders the results and creates a <strong>key</strong>.</p>
+<ul>
+<li>Setting a key for a data.table will allow for various (and often astonishing) performance gains.</li>
+<li>Keys are important enough that I want to save them for their own section, though…</li>
+</ul>
+</section></section>
+<section>
+<section id="keys" class="title-slide slide level1 center">
+<h1>Keys</h1>
+
+</section>
+<section id="what-are-keys" class="slide level2 smaller">
+<h2>What are keys?</h2>
+<div class="fragment">
+<p>Keys are a way of ordering the data that allows for <em>extremely</em> fast subsetting.</p>
+<p>The data.table <a href="https://rdatatable.gitlab.io/data.table/articles/datatable-keys-fast-subset.html">vignette</a> describes them as “supercharged rownames”. I know that might sound a bit abstract, but here’s the idea in a nutshell…</p>
+</div>
+<div class="fragment">
+<p>Imagine that we want to filter a dataset based on a particular value (e.g.&nbsp;find all the human characters in our starwars dataset). - Normally, we’d have to search through the whole dataset to identify matching cases. - But, if we’ve set an appropriate key, then the data are already ordered in such a way that we (i.e.&nbsp;our computer) only has to search through a much smaller subset.</p>
+</div>
+<div class="fragment">
+<p><strong>Analogy:</strong> Think of the way a filing cabinet might divide items by alphabetical order: Files starting “ABC” in the top drawer, “DEF” in the second drawer, etc. To find <em>Alice’s</em> file, you’d only have to search the top draw. For <em>Fred</em>, the second draw, and so on.</p>
+</div>
+<div class="fragment">
+<p>Not only is this much quicker, but the same idea also carries over to <em>all other</em> forms of data manipulation that rely on subsetting (aggregation by group, joins, etc.)</p>
+</div>
+</section>
+<section id="how-do-i-set-a-key" class="slide level2 smaller">
+<h2>How do I set a key?</h2>
+<div class="fragment">
+<p>You can set a key when you first create a data.table. E.g.</p>
+<ul>
+<li><code>DT = data.table(x = 1:10, y = LETTERS[1:10], key = "x")</code></li>
+<li><code>DT = as.data.table(d, key = "x")</code></li>
+<li><code>setDT(d, key = "x")</code></li>
+</ul>
+</div>
+<div class="fragment">
+<p>Or, you can set keys on an existing data.table with the <code>setkey()</code> function.</p>
+<ul>
+<li><code>setkey(DT, x)</code>: Note that the key doesn’t have to be quoted this time</li>
+</ul>
+</div>
+<div class="fragment">
+<p><strong>Important:</strong> Since keys just describe a particular ordering of the data, you can set a key on <em>multiple</em> columns. (More <a href="https://rdatatable.gitlab.io/data.table/articles/datatable-keys-fast-subset.html#key-properties">here</a>.) E.g.</p>
+<ul>
+<li><code>DT = as.data.table(DF, key = c("x", "y"))</code></li>
+<li><code>setkey(DT, x, y)</code>: Again, no quotes needed</li>
+</ul>
+</div>
+<div class="fragment">
+<p>Use the <code>key()</code> function to see what keys are currently set for your data.table. You can only ever have one key per table at a time, but it’s very easy to change them using one of the above commands.</p>
+</div>
+</section>
+<section id="example" class="slide level2 smaller">
+<h2>Example</h2>
+<div class="fragment">
+<p>Recall the <a href="#/fast">speed benchmark</a> that we saw at the very beginning of the lecture: data.table ended up being 10x faster than dplyr for a fairly standard summarising task.</p>
+</div>
+<div class="fragment">
+<p>Let’s redo the benchmark, but this time include a version where we pre-assign a key. For optimal performance, the key should match the same variables that we’re grouping/subsetting on.</p>
+<ul>
+<li>Again, a key can be set on multiple variables, although the lead grouping variable (in the below case: “name”) is the most important.</li>
+</ul>
+<div class="sourceCode" id="cb69"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb69-1"><a href=""></a><span class="do">## First create a keyed version of the storms data.table.</span></span>
+<span id="cb69-2"><a href=""></a><span class="do">## Note that key variables match the 'by' grouping variables below.</span></span>
+<span id="cb69-3"><a href=""></a>storms_dt_key <span class="ot">=</span> <span class="fu">as.data.table</span>(storms, <span class="at">key =</span> <span class="fu">c</span>(<span class="st">"name"</span>, <span class="st">"year"</span>, <span class="st">"month"</span>, <span class="st">"day"</span>))</span>
+<span id="cb69-4"><a href=""></a><span class="do">## Collapse function for this keyed data.table. Everything else stays the same.</span></span>
+<span id="cb69-5"><a href=""></a>collapse_dt_key <span class="ot">=</span> <span class="cf">function</span>() {</span>
+<span id="cb69-6"><a href=""></a>  storms_dt_key[, .(<span class="at">wind =</span> <span class="fu">mean</span>(wind), <span class="at">pressure =</span> <span class="fu">mean</span>(pressure), <span class="at">category =</span> <span class="fu">first</span>(category)), </span>
+<span id="cb69-7"><a href=""></a>                by <span class="ot">=</span> .(name, year, month, day)]</span>
+<span id="cb69-8"><a href=""></a>}</span>
+<span id="cb69-9"><a href=""></a><span class="do">## Run the benchmark on all three functions.</span></span>
+<span id="cb69-10"><a href=""></a><span class="fu">microbenchmark</span>(<span class="fu">collapse_dplyr</span>(), <span class="fu">collapse_dt</span>(), <span class="fu">collapse_dt_key</span>(), <span class="at">times =</span> <span class="dv">1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div style="text-align: right">
+<p><em>See next slide for results</em></p>
+</div>
+</div>
+</section>
+<section id="example-cont." class="slide level2 smaller">
+<h2>Example (cont.)</h2>
+<div class="cell" data-mmessage="false">
+<div class="cell-output cell-output-stdout">
+<pre><code>Unit: milliseconds
+              expr      min       lq     mean   median       uq      max neval
+  collapse_dplyr() 546.8766 546.8766 546.8766 546.8766 546.8766 546.8766     1
+ collapse_dt_key()  11.9146  11.9146  11.9146  11.9146  11.9146  11.9146     1</code></pre>
+</div>
+</div>
+<div class="fragment">
+<p>The keyed data.table version is now <strong>50x</strong> (!!!) faster than dplyr.</p>
+<ul>
+<li>That thing you feel… is your face melting.</li>
+</ul>
+</div>
+<div class="fragment">
+<p>It’s not just this toy example. In my experience working with real-life data, setting keys almost always leads to huge speed-ups… and those gains tend to scale as the datasets increase in size.</p>
+</div>
+<div class="fragment">
+<p><strong>Bottom line:</strong> data.table is already plenty fast. But use keys if you’re really serious about performance.</p>
+</div>
+</section></section>
+<section>
+<section id="merging-datasets" class="title-slide slide level1 center">
+<h1>Merging datasets</h1>
+
+</section>
+<section id="merge-aka-join-options" class="slide level2 smaller">
+<h2>Merge (aka join) options</h2>
+<div class="fragment">
+<p>data.table provides two ways to merge datasets.</p>
+<ul>
+<li><code>DT1[DT2, on = "id"]</code></li>
+<li><code>merge(DT1, DT2, by = "id")</code></li>
+</ul>
+</div>
+<div class="fragment">
+<p>I prefer the latter because it offers extra functionality (see <code>?merge.data.table</code>), but each to their own.</p>
+</div>
+<div class="fragment">
+<p>I’m going to keep things brief by simply showing you how to repeat the same left join that we <a href="https://raw.githack.com/uo-ec607/lectures/master/05-tidyverse/05-tidyverse.html#54">practiced</a> with dplyr in the last lecture, using data from the <strong>nycflights13</strong> package.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb71"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb71-1"><a href=""></a><span class="co"># library(nycflights13) ## Already loaded</span></span>
+<span id="cb71-2"><a href=""></a>flights_dt <span class="ot">=</span> <span class="fu">as.data.table</span>(flights) </span>
+<span id="cb71-3"><a href=""></a>planes_dt <span class="ot">=</span> <span class="fu">as.data.table</span>(planes)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+</section>
+<section id="left-join-example-cont." class="slide level2 smaller">
+<h2>Left join example (cont.)</h2>
+<div class="fragment">
+<p>Here’s a comparison with the dplyr equivalents from last week. I’ll let you run and compare these yourself. (Note that the row orders will be different.)</p>
+<div class="collumns">
+<div class="column" style="width:50%;">
+<p><strong>dplyr</strong></p>
+<div class="sourceCode" id="cb72"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb72-1"><a href=""></a><span class="fu">left_join</span>(</span>
+<span id="cb72-2"><a href=""></a>  flights, </span>
+<span id="cb72-3"><a href=""></a>  planes, </span>
+<span id="cb72-4"><a href=""></a>  <span class="at">by =</span> <span class="st">"tailnum"</span></span>
+<span id="cb72-5"><a href=""></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div><div class="column" style="width:50%;">
+<p><strong>data.table</strong></p>
+<div class="sourceCode" id="cb73"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb73-1"><a href=""></a><span class="fu">merge</span>(</span>
+<span id="cb73-2"><a href=""></a>  flights_dt, </span>
+<span id="cb73-3"><a href=""></a>  planes_dt, </span>
+<span id="cb73-4"><a href=""></a>  <span class="at">all.x =</span> <span class="cn">TRUE</span>, <span class="do">## omit for inner join</span></span>
+<span id="cb73-5"><a href=""></a>  <span class="at">by =</span> <span class="st">"tailnum"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div></div>
+</div>
+<div class="fragment">
+<p>If you run these, you’ll see that both methods handle the ambiguous “year” columns by creating “year.x” and “year.y” variants. We avoided this in dplyr by using <code>rename()</code>. How might you avoid the same thing in data.table? <b>Possible answer:</b> Use <code>setnames()</code>.</p>
+</div>
+<div class="fragment">
+<div class="sourceCode" id="cb74" data-code-line-numbers="3"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb74-1"><a href=""></a><span class="fu">merge</span>(</span>
+<span id="cb74-2"><a href=""></a>  flights_dt,</span>
+<span id="cb74-3"><a href=""></a>  <span class="fu">setnames</span>(planes_dt, <span class="at">old =</span> <span class="st">"year"</span>, <span class="at">new =</span> <span class="st">"year_built"</span>), <span class="co">#&lt;&lt; </span></span>
+<span id="cb74-4"><a href=""></a>  <span class="at">all.x =</span> <span class="cn">TRUE</span>, </span>
+<span id="cb74-5"><a href=""></a>  <span class="at">by =</span> <span class="st">"tailnum"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="use-keys-for-lightning-fast-joins" class="slide level2 smaller">
+<h2>Use keys for lightning fast joins</h2>
+<p>The only other thing I’ll point out is that setting <a href="#/keys">keys</a> can lead to dramatic speed-ups for merging data.tables. I’ll demonstrate using an inner join this time.</p>
+<div class="sourceCode" id="cb75"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb75-1"><a href=""></a>merge_dt <span class="ot">=</span> <span class="cf">function</span>() <span class="fu">merge</span>(flights_dt, planes_dt, <span class="at">by =</span> <span class="st">"tailnum"</span>)</span>
+<span id="cb75-2"><a href=""></a></span>
+<span id="cb75-3"><a href=""></a>flights_dt_key <span class="ot">=</span> <span class="fu">as.data.table</span>(flights, <span class="at">key =</span> <span class="st">"tailnum"</span>)</span>
+<span id="cb75-4"><a href=""></a>planes_dt_key <span class="ot">=</span> <span class="fu">as.data.table</span>(planes, <span class="at">key =</span> <span class="st">"tailnum"</span>)</span>
+<span id="cb75-5"><a href=""></a>merge_dt_key <span class="ot">=</span> <span class="cf">function</span>() <span class="fu">merge</span>(flights_dt_key, planes_dt_key, <span class="at">by =</span> <span class="st">"tailnum"</span>)</span>
+<span id="cb75-6"><a href=""></a></span>
+<span id="cb75-7"><a href=""></a><span class="fu">microbenchmark</span>(<span class="fu">merge_dt</span>(), <span class="fu">merge_dt_key</span>(), <span class="at">times =</span> <span class="dv">1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>Unit: milliseconds
+           expr      min       lq     mean   median       uq      max neval
+     merge_dt() 166.7668 166.7668 166.7668 166.7668 166.7668 166.7668     1
+ merge_dt_key() 101.5477 101.5477 101.5477 101.5477 101.5477 101.5477     1</code></pre>
+</div>
+</div>
+<p>So, we get about a <strong>0x</strong> speed-up for this simple case just by setting keys. More importantly, ordering your data by setting keys will make a huge difference once you start working with big datasets and making complicated joins. Trust me. (FWIW, the <a href="https://tysonbarrett.com//jekyll/update/2019/10/11/speed_of_joins/">same is true</a> for dplyr.)</p>
+</section></section>
+<section>
+<section id="reshaping-data" class="title-slide slide level1 center">
+<h1>Reshaping data</h1>
+
+</section>
+<section id="reshaping-options-with-data.table" class="slide level2 smaller">
+<h2>Reshaping options with data.table</h2>
+<div class="fragment">
+<p>In the tidyverse lecture, we saw how to reshape data using the tidyr::pivot* functions.</p>
+<p>data.table offers its own functions for flexibly reshaping data: - <code>melt()</code>: convert wide data to long data - <code>dcast()</code>: convert long data to wide data</p>
+</div>
+<div class="fragment">
+<p>However, I also want to flag the <a href="https://tysonbarrett.com/tidyfast/index.html"><strong>tidyfast</strong></a> package by Tyson Barrett, which implements data.table versions of the tidyr::pivot* functions (among other things). - <code>tidyfast::dt_pivot_longer()</code>: wide to long - <code>tidyfast::dt_pivot_wider()</code>: long to wide</p>
+</div>
+<div class="fragment">
+<p>I’ll demonstrate reshaping with both options on the same fake “stocks” data that we created last time:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb77"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb77-1"><a href=""></a>stocks <span class="ot">=</span> <span class="fu">data.table</span>(<span class="at">time =</span> <span class="fu">as.Date</span>(<span class="st">'2009-01-01'</span>) <span class="sc">+</span> <span class="dv">0</span><span class="sc">:</span><span class="dv">1</span>,</span>
+<span id="cb77-2"><a href=""></a>                    <span class="at">X =</span> <span class="fu">rnorm</span>(<span class="dv">2</span>, <span class="dv">0</span>, <span class="dv">1</span>),</span>
+<span id="cb77-3"><a href=""></a>                    <span class="at">Y =</span> <span class="fu">rnorm</span>(<span class="dv">2</span>, <span class="dv">0</span>, <span class="dv">2</span>),</span>
+<span id="cb77-4"><a href=""></a>                    <span class="at">Z =</span> <span class="fu">rnorm</span>(<span class="dv">2</span>, <span class="dv">0</span>, <span class="dv">4</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+</section>
+<section id="reshape-from-wide-to-long" class="slide level2 smaller">
+<h2>Reshape from wide to long</h2>
+<p>Our data are currently in wide format.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb78"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb78-1"><a href=""></a>stocks</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>         time          X         Y         Z
+       &lt;Date&gt;      &lt;num&gt;     &lt;num&gt;     &lt;num&gt;
+1: 2009-01-01  0.6255777  2.792861 -5.436091
+2: 2009-01-02 -0.7198150 -1.331890 -1.392955</code></pre>
+</div>
+</div>
+<p>To convert this into long format, we could do either of the following:</p>
+<div class="columns">
+<div class="column" style="width:50%;">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb80"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb80-1"><a href=""></a><span class="co"># See ?melt.data.table for options</span></span>
+<span id="cb80-2"><a href=""></a><span class="fu">melt</span>(stocks, <span class="at">id.vars =</span><span class="st">"time"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>         time variable      value
+       &lt;Date&gt;   &lt;fctr&gt;      &lt;num&gt;
+1: 2009-01-01        X  0.6255777
+2: 2009-01-02        X -0.7198150
+3: 2009-01-01        Y  2.7928606
+4: 2009-01-02        Y -1.3318899
+5: 2009-01-01        Z -5.4360914
+6: 2009-01-02        Z -1.3929554</code></pre>
+</div>
+</div>
+</div><div class="column" style="width:50%;">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb82"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb82-1"><a href=""></a>stocks <span class="sc">%&gt;%</span> </span>
+<span id="cb82-2"><a href=""></a>  <span class="fu">dt_pivot_longer</span>(X<span class="sc">:</span>Z, <span class="at">names_to=</span><span class="st">"stock"</span>, <span class="at">values_to=</span><span class="st">"price"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>         time  stock      price
+       &lt;Date&gt; &lt;char&gt;      &lt;num&gt;
+1: 2009-01-01      X  0.6255777
+2: 2009-01-02      X -0.7198150
+3: 2009-01-01      Y  2.7928606
+4: 2009-01-02      Y -1.3318899
+5: 2009-01-01      Z -5.4360914
+6: 2009-01-02      Z -1.3929554</code></pre>
+</div>
+</div>
+</div></div>
+</section>
+<section id="reshape-from-long-to-wide" class="slide level2 smaller">
+<h2>Reshape from long to wide</h2>
+<div class="fragment">
+<p>Let’s quickly save the long-format stocks data.table. I’ll use the <code>melt()</code> approach and also throw in some extra column-naming options, just so you can see those in action.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb84"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb84-1"><a href=""></a>stocks_long <span class="ot">=</span> <span class="fu">melt</span>(stocks, <span class="at">id.vars =</span><span class="st">"time"</span>, </span>
+<span id="cb84-2"><a href=""></a>                   <span class="at">variable.name =</span> <span class="st">"stock"</span>, <span class="at">value.name =</span> <span class="st">"price"</span>)</span>
+<span id="cb84-3"><a href=""></a>stocks_long</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>         time  stock      price
+       &lt;Date&gt; &lt;fctr&gt;      &lt;num&gt;
+1: 2009-01-01      X  0.6255777
+2: 2009-01-02      X -0.7198150
+3: 2009-01-01      Y  2.7928606
+4: 2009-01-02      Y -1.3318899
+5: 2009-01-01      Z -5.4360914
+6: 2009-01-02      Z -1.3929554</code></pre>
+</div>
+</div>
+</div>
+<div class="fragment">
+<div class="columns">
+<div class="column" style="width:50%;">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb86"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb86-1"><a href=""></a><span class="fu">dcast</span>(stocks_long, </span>
+<span id="cb86-2"><a href=""></a>      time <span class="sc">~</span> stock, </span>
+<span id="cb86-3"><a href=""></a>      <span class="at">value.var =</span> <span class="st">"price"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Key: &lt;time&gt;
+         time          X         Y         Z
+       &lt;Date&gt;      &lt;num&gt;     &lt;num&gt;     &lt;num&gt;
+1: 2009-01-01  0.6255777  2.792861 -5.436091
+2: 2009-01-02 -0.7198150 -1.331890 -1.392955</code></pre>
+</div>
+</div>
+</div><div class="column" style="width:50%;">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb88"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb88-1"><a href=""></a>stocks_long <span class="sc">%&gt;%</span> </span>
+<span id="cb88-2"><a href=""></a>  <span class="fu">dt_pivot_wider</span>(<span class="at">names_from=</span>stock, </span>
+<span id="cb88-3"><a href=""></a>                 <span class="at">values_from=</span>price)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Key: &lt;time&gt;
+         time          X         Y         Z
+       &lt;Date&gt;      &lt;num&gt;     &lt;num&gt;     &lt;num&gt;
+1: 2009-01-01  0.6255777  2.792861 -5.436091
+2: 2009-01-02 -0.7198150 -1.331890 -1.392955</code></pre>
+</div>
+</div>
+</div></div>
+</div>
+</section></section>
+<section>
+<section id="data.table-tidyverse-workflows" class="title-slide slide level1 center">
+<h1>data.table + tidyverse workflows</h1>
+
+</section>
+<section id="pick-and-choose" class="slide level2 smaller">
+<h2>Pick and choose</h2>
+<p>The first point is perhaps the most obvious one: The tidyverse consists of <em>multiple</em> packages. Just because you prefer to use data.table instead of dplyr+tidyr for your data.wrangling needs, doesn’t mean that other tidyverse packages are off limits too.</p>
+<p>Case in point: Almost every hardcore data.table user I know is a hardcore <strong>ggplot2</strong> user too.</p>
+<div class="columns">
+<div class="column" style="width:50%;">
+<div class="sourceCode" id="cb90"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb90-1"><a href=""></a><span class="do">## library(ggplot2) # already loaded</span></span>
+<span id="cb90-2"><a href=""></a>storms_dt[, .(<span class="at">wind =</span> <span class="fu">mean</span>(wind), </span>
+<span id="cb90-3"><a href=""></a>                  <span class="at">pressure =</span> <span class="fu">mean</span>(pressure), </span>
+<span id="cb90-4"><a href=""></a>                  <span class="at">category =</span> <span class="fu">first</span>(category)), </span>
+<span id="cb90-5"><a href=""></a>                by <span class="ot">=</span> .(name, year, month, day)] <span class="sc">%&gt;%</span></span>
+<span id="cb90-6"><a href=""></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> pressure, <span class="at">y =</span> wind, <span class="at">col=</span>category)) <span class="sc">+</span></span>
+<span id="cb90-7"><a href=""></a>  <span class="fu">geom_point</span>(<span class="at">alpha =</span> <span class="fl">0.3</span>) <span class="sc">+</span> </span>
+<span id="cb90-8"><a href=""></a>  <span class="fu">theme_minimal</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div><div class="column" style="width:50%;">
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure>
+<p><img data-src="CourseDataScience_files/figure-revealjs/unnamed-chunk-32-1.png" width="960"></p>
+</figure>
+</div>
+</div>
+</div>
+</div></div>
+</section>
+<section id="dtplyr" class="slide level2 smaller">
+<h2>dtplyr</h2>
+<div class="fragment">
+<p>Do you love dplyr’s syntax, but want data.table’s performance?</p>
+<p>Well, you’re in luck!</p>
+</div>
+<div class="fragment">
+<p>Hadley Wickham’s <strong>dtplyr</strong> package provides a data.table “back-end” for dplyr. - Basically, write your code as if you were using dplyr and then it gets automatically translated to (and evaluated as) data.table code.</p>
+</div>
+<div class="fragment">
+<p>If this sounds appealing to you (and it should) I strongly encourage you to check out the <a href="https://dtplyr.tidyverse.org/">package website</a> for details. But here’s quick example, using our benchmark from earlier.</p>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>Unit: milliseconds
+              expr      min       lq     mean   median       uq      max neval
+  collapse_dplyr() 730.8495 730.8495 730.8495 730.8495 730.8495 730.8495     1
+ collapse_dtplyr()  37.0836  37.0836  37.0836  37.0836  37.0836  37.0836     1</code></pre>
+</div>
+</div>
+<p>A <strong>20x</strong> speed-up for free? I’d take it!</p>
+</div>
+</section></section>
+<section id="thank-you" class="title-slide slide level1 center">
+<h1>Thank you</h1>
+<div class="quarto-auto-generated-content">
+<div class="footer footer-default">
+
+</div>
+</div>
+</section>
+    </div>
+  </div>
+
+  <script>window.backupDefine = window.define; window.define = undefined;</script>
+  <script src="CourseDataScience_files/libs/revealjs/dist/reveal.js"></script>
+  <!-- reveal.js plugins -->
+  <script src="CourseDataScience_files/libs/revealjs/plugin/quarto-line-highlight/line-highlight.js"></script>
+  <script src="CourseDataScience_files/libs/revealjs/plugin/pdf-export/pdfexport.js"></script>
+  <script src="CourseDataScience_files/libs/revealjs/plugin/reveal-menu/menu.js"></script>
+  <script src="CourseDataScience_files/libs/revealjs/plugin/reveal-menu/quarto-menu.js"></script>
+  <script src="CourseDataScience_files/libs/revealjs/plugin/quarto-support/support.js"></script>
+  
+
+  <script src="CourseDataScience_files/libs/revealjs/plugin/notes/notes.js"></script>
+  <script src="CourseDataScience_files/libs/revealjs/plugin/search/search.js"></script>
+  <script src="CourseDataScience_files/libs/revealjs/plugin/zoom/zoom.js"></script>
+  <script src="CourseDataScience_files/libs/revealjs/plugin/math/math.js"></script>
+  <script>window.define = window.backupDefine; window.backupDefine = undefined;</script>
+
+  <script>
+
+      // Full list of configuration options available at:
+      // https://revealjs.com/config/
+      Reveal.initialize({
+'controlsAuto': true,
+'previewLinksAuto': false,
+'pdfSeparateFragments': false,
+'autoAnimateEasing': "ease",
+'autoAnimateDuration': 1,
+'autoAnimateUnmatched': true,
+'menu': {"side":"left","useTextContentForMissingTitles":true,"markers":false,"loadIcons":false,"custom":[{"title":"Tools","icon":"<i class=\"fas fa-gear\"></i>","content":"<ul class=\"slide-menu-items\">\n<li class=\"slide-tool-item active\" data-item=\"0\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.fullscreen(event)\"><kbd>f</kbd> Fullscreen</a></li>\n<li class=\"slide-tool-item\" data-item=\"1\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.speakerMode(event)\"><kbd>s</kbd> Speaker View</a></li>\n<li class=\"slide-tool-item\" data-item=\"2\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.overview(event)\"><kbd>o</kbd> Slide Overview</a></li>\n<li class=\"slide-tool-item\" data-item=\"3\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.togglePdfExport(event)\"><kbd>e</kbd> PDF Export Mode</a></li>\n<li class=\"slide-tool-item\" data-item=\"4\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.keyboardHelp(event)\"><kbd>?</kbd> Keyboard Help</a></li>\n</ul>"}],"openButton":true},
+'smaller': false,
+ 
+        // Display controls in the bottom right corner
+        controls: false,
+
+        // Help the user learn the controls by providing hints, for example by
+        // bouncing the down arrow when they first encounter a vertical slide
+        controlsTutorial: false,
+
+        // Determines where controls appear, "edges" or "bottom-right"
+        controlsLayout: 'edges',
+
+        // Visibility rule for backwards navigation arrows; "faded", "hidden"
+        // or "visible"
+        controlsBackArrows: 'faded',
+
+        // Display a presentation progress bar
+        progress: true,
+
+        // Display the page number of the current slide
+        slideNumber: false,
+
+        // 'all', 'print', or 'speaker'
+        showSlideNumber: 'all',
+
+        // Add the current slide number to the URL hash so that reloading the
+        // page/copying the URL will return you to the same slide
+        hash: true,
+
+        // Start with 1 for the hash rather than 0
+        hashOneBasedIndex: false,
+
+        // Flags if we should monitor the hash and change slides accordingly
+        respondToHashChanges: true,
+
+        // Push each slide change to the browser history
+        history: true,
+
+        // Enable keyboard shortcuts for navigation
+        keyboard: true,
+
+        // Enable the slide overview mode
+        overview: true,
+
+        // Disables the default reveal.js slide layout (scaling and centering)
+        // so that you can use custom CSS layout
+        disableLayout: false,
+
+        // Vertical centering of slides
+        center: false,
+
+        // Enables touch navigation on devices with touch input
+        touch: true,
+
+        // Loop the presentation
+        loop: false,
+
+        // Change the presentation direction to be RTL
+        rtl: false,
+
+        // see https://revealjs.com/vertical-slides/#navigation-mode
+        navigationMode: 'linear',
+
+        // Randomizes the order of slides each time the presentation loads
+        shuffle: false,
+
+        // Turns fragments on and off globally
+        fragments: true,
+
+        // Flags whether to include the current fragment in the URL,
+        // so that reloading brings you to the same fragment position
+        fragmentInURL: false,
+
+        // Flags if the presentation is running in an embedded mode,
+        // i.e. contained within a limited portion of the screen
+        embedded: false,
+
+        // Flags if we should show a help overlay when the questionmark
+        // key is pressed
+        help: true,
+
+        // Flags if it should be possible to pause the presentation (blackout)
+        pause: true,
+
+        // Flags if speaker notes should be visible to all viewers
+        showNotes: false,
+
+        // Global override for autoplaying embedded media (null/true/false)
+        autoPlayMedia: null,
+
+        // Global override for preloading lazy-loaded iframes (null/true/false)
+        preloadIframes: null,
+
+        // Number of milliseconds between automatically proceeding to the
+        // next slide, disabled when set to 0, this value can be overwritten
+        // by using a data-autoslide attribute on your slides
+        autoSlide: 0,
+
+        // Stop auto-sliding after user input
+        autoSlideStoppable: true,
+
+        // Use this method for navigation when auto-sliding
+        autoSlideMethod: null,
+
+        // Specify the average time in seconds that you think you will spend
+        // presenting each slide. This is used to show a pacing timer in the
+        // speaker view
+        defaultTiming: null,
+
+        // Enable slide navigation via mouse wheel
+        mouseWheel: false,
+
+        // The display mode that will be used to show slides
+        display: 'block',
+
+        // Hide cursor if inactive
+        hideInactiveCursor: true,
+
+        // Time before the cursor is hidden (in ms)
+        hideCursorTime: 5000,
+
+        // Opens links in an iframe preview overlay
+        previewLinks: false,
+
+        // Transition style (none/fade/slide/convex/concave/zoom)
+        transition: 'none',
+
+        // Transition speed (default/fast/slow)
+        transitionSpeed: 'default',
+
+        // Transition style for full page slide backgrounds
+        // (none/fade/slide/convex/concave/zoom)
+        backgroundTransition: 'none',
+
+        // Number of slides away from the current that are visible
+        viewDistance: 3,
+
+        // Number of slides away from the current that are visible on mobile
+        // devices. It is advisable to set this to a lower number than
+        // viewDistance in order to save resources.
+        mobileViewDistance: 2,
+
+        // The "normal" size of the presentation, aspect ratio will be preserved
+        // when the presentation is scaled to fit different resolutions. Can be
+        // specified using percentage units.
+        width: 1050,
+
+        height: 700,
+
+        // Factor of the display size that should remain empty around the content
+        margin: 0.1,
+
+        math: {
+          mathjax: 'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js',
+          config: 'TeX-AMS_HTML-full',
+          tex2jax: {
+            inlineMath: [['\\(','\\)']],
+            displayMath: [['\\[','\\]']],
+            balanceBraces: true,
+            processEscapes: false,
+            processRefs: true,
+            processEnvironments: true,
+            preview: 'TeX',
+            skipTags: ['script','noscript','style','textarea','pre','code'],
+            ignoreClass: 'tex2jax_ignore',
+            processClass: 'tex2jax_process'
+          },
+        },
+
+        // reveal.js plugins
+        plugins: [QuartoLineHighlight, PdfExport, RevealMenu, QuartoSupport,
+
+          RevealMath,
+          RevealNotes,
+          RevealSearch,
+          RevealZoom
+        ]
+      });
+    </script>
+    
+
+    <script>
+
+      // htmlwidgets need to know to resize themselves when slides are shown/hidden.
+
+      // Fire the "slideenter" event (handled by htmlwidgets.js) when the current
+
+      // slide changes (different for each slide format).
+
+      (function () {
+
+        // dispatch for htmlwidgets
+
+        function fireSlideEnter() {
+
+          const event = window.document.createEvent("Event");
+
+          event.initEvent("slideenter", true, true);
+
+          window.document.dispatchEvent(event);
+
+        }
+
+    
+
+        function fireSlideChanged(previousSlide, currentSlide) {
+
+          fireSlideEnter();
+
+    
+
+          // dispatch for shiny
+
+          if (window.jQuery) {
+
+            if (previousSlide) {
+
+              window.jQuery(previousSlide).trigger("hidden");
+
+            }
+
+            if (currentSlide) {
+
+              window.jQuery(currentSlide).trigger("shown");
+
+            }
+
+          }
+
+        }
+
+    
+
+        // hookup for slidy
+
+        if (window.w3c_slidy) {
+
+          window.w3c_slidy.add_observer(function (slide_num) {
+
+            // slide_num starts at position 1
+
+            fireSlideChanged(null, w3c_slidy.slides[slide_num - 1]);
+
+          });
+
+        }
+
+    
+
+      })();
+
+    </script>
+
+    
+
+    <script id="quarto-html-after-body" type="application/javascript">
+    window.document.addEventListener("DOMContentLoaded", function (event) {
+      const toggleBodyColorMode = (bsSheetEl) => {
+        const mode = bsSheetEl.getAttribute("data-mode");
+        const bodyEl = window.document.querySelector("body");
+        if (mode === "dark") {
+          bodyEl.classList.add("quarto-dark");
+          bodyEl.classList.remove("quarto-light");
+        } else {
+          bodyEl.classList.add("quarto-light");
+          bodyEl.classList.remove("quarto-dark");
+        }
+      }
+      const toggleBodyColorPrimary = () => {
+        const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+        if (bsSheetEl) {
+          toggleBodyColorMode(bsSheetEl);
+        }
+      }
+      toggleBodyColorPrimary();  
+      const tabsets =  window.document.querySelectorAll(".panel-tabset-tabby")
+      tabsets.forEach(function(tabset) {
+        const tabby = new Tabby('#' + tabset.id);
+      });
+      const isCodeAnnotation = (el) => {
+        for (const clz of el.classList) {
+          if (clz.startsWith('code-annotation-')) {                     
+            return true;
+          }
+        }
+        return false;
+      }
+      const onCopySuccess = function(e) {
+        // button target
+        const button = e.trigger;
+        // don't keep focus
+        button.blur();
+        // flash "checked"
+        button.classList.add('code-copy-button-checked');
+        var currentTitle = button.getAttribute("title");
+        button.setAttribute("title", "Copied!");
+        let tooltip;
+        if (window.bootstrap) {
+          button.setAttribute("data-bs-toggle", "tooltip");
+          button.setAttribute("data-bs-placement", "left");
+          button.setAttribute("data-bs-title", "Copied!");
+          tooltip = new bootstrap.Tooltip(button, 
+            { trigger: "manual", 
+              customClass: "code-copy-button-tooltip",
+              offset: [0, -8]});
+          tooltip.show();    
+        }
+        setTimeout(function() {
+          if (tooltip) {
+            tooltip.hide();
+            button.removeAttribute("data-bs-title");
+            button.removeAttribute("data-bs-toggle");
+            button.removeAttribute("data-bs-placement");
+          }
+          button.setAttribute("title", currentTitle);
+          button.classList.remove('code-copy-button-checked');
+        }, 1000);
+        // clear code selection
+        e.clearSelection();
+      }
+      const getTextToCopy = function(trigger) {
+          const codeEl = trigger.previousElementSibling.cloneNode(true);
+          for (const childEl of codeEl.children) {
+            if (isCodeAnnotation(childEl)) {
+              childEl.remove();
+            }
+          }
+          return codeEl.innerText;
+      }
+      const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+        text: getTextToCopy
+      });
+      clipboard.on('success', onCopySuccess);
+      if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+        // For code content inside modals, clipBoardJS needs to be initialized with a container option
+        // TODO: Check when it could be a function (https://github.com/zenorocha/clipboard.js/issues/860)
+        const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+          text: getTextToCopy,
+          container: window.document.getElementById('quarto-embedded-source-code-modal')
+        });
+        clipboardModal.on('success', onCopySuccess);
+      }
+        var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+        var mailtoRegex = new RegExp(/^mailto:/);
+          var filterRegex = new RegExp('/' + window.location.host + '/');
+        var isInternal = (href) => {
+            return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+        }
+        // Inspect non-navigation links and adorn them if external
+     	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+        for (var i=0; i<links.length; i++) {
+          const link = links[i];
+          if (!isInternal(link.href)) {
+            // undo the damage that might have been done by quarto-nav.js in the case of
+            // links that we want to consider external
+            if (link.dataset.originalHref !== undefined) {
+              link.href = link.dataset.originalHref;
+            }
+          }
+        }
+      function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+        const config = {
+          allowHTML: true,
+          maxWidth: 500,
+          delay: 100,
+          arrow: false,
+          appendTo: function(el) {
+              return el.closest('section.slide') || el.parentElement;
+          },
+          interactive: true,
+          interactiveBorder: 10,
+          theme: 'light-border',
+          placement: 'bottom-start',
+        };
+        if (contentFn) {
+          config.content = contentFn;
+        }
+        if (onTriggerFn) {
+          config.onTrigger = onTriggerFn;
+        }
+        if (onUntriggerFn) {
+          config.onUntrigger = onUntriggerFn;
+        }
+          config['offset'] = [0,0];
+          config['maxWidth'] = 700;
+        window.tippy(el, config); 
+      }
+      const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+      for (var i=0; i<noterefs.length; i++) {
+        const ref = noterefs[i];
+        tippyHover(ref, function() {
+          // use id or data attribute instead here
+          let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+          try { href = new URL(href).hash; } catch {}
+          const id = href.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note) {
+            return note.innerHTML;
+          } else {
+            return "";
+          }
+        });
+      }
+      const findCites = (el) => {
+        const parentEl = el.parentElement;
+        if (parentEl) {
+          const cites = parentEl.dataset.cites;
+          if (cites) {
+            return {
+              el,
+              cites: cites.split(' ')
+            };
+          } else {
+            return findCites(el.parentElement)
+          }
+        } else {
+          return undefined;
+        }
+      };
+      var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+      for (var i=0; i<bibliorefs.length; i++) {
+        const ref = bibliorefs[i];
+        const citeInfo = findCites(ref);
+        if (citeInfo) {
+          tippyHover(citeInfo.el, function() {
+            var popup = window.document.createElement('div');
+            citeInfo.cites.forEach(function(cite) {
+              var citeDiv = window.document.createElement('div');
+              citeDiv.classList.add('hanging-indent');
+              citeDiv.classList.add('csl-entry');
+              var biblioDiv = window.document.getElementById('ref-' + cite);
+              if (biblioDiv) {
+                citeDiv.innerHTML = biblioDiv.innerHTML;
+              }
+              popup.appendChild(citeDiv);
+            });
+            return popup.innerHTML;
+          });
+        }
+      }
+    });
+    </script>
+    
+
+</body></html>
