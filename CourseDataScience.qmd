@@ -11,7 +11,6 @@ execute:
   eval: true
 ---
 
-
 ```{r}
 #| include: false
 
@@ -24,13 +23,15 @@ options(repos = 'https://cran.rstudio.com')
 
 We'll be using the following packages in today's lecture:
 
-- Already installed: **dplyr**, **ggplot2**, **nycflights13**
-- New: **data.table**, **tidyfast**, **dtplyr**, **microbenchmark**
-- Alternative: install **fastverse**
+-   Already installed: **dplyr**, **ggplot2**, **nycflights13**
+-   New: **data.table**, **tidyfast**, **dtplyr**, **microbenchmark**
+-   Alternative: install **fastverse**
 
 The following code chunk will install (if necessary) and load everything for you.
 
 ```{r}
+#| output: hidden
+
 if (!require(pacman)) install.packages('pacman', repos = 'https://cran.rstudio.com')
 pacman::p_load(dplyr, data.table, dtplyr, tidyfast, microbenchmark, ggplot2, nycflights13)
 options(dplyr.summarise.inform = FALSE) ## Turn off annoying dplyr group_by messages (optional)
@@ -46,11 +47,11 @@ So why bother learning another data wrangling package/syntax?
 
 There are at least five reasons:
 
-1. Concise
-2. Insanely fast
-3. Memory efficient
-4. Feature rich (and stable)
-5. Dependency free
+1.  Concise
+2.  Insanely fast
+3.  Memory efficient
+4.  Feature rich (and stable)
+5.  Dependency free
 
 ## Why learn data.table? (cont.) {.smaller}
 
@@ -58,7 +59,7 @@ There are at least five reasons:
 
 These two code chunks do the same thing:
 
-```{.r}
+``` r
 # library(dplyr) ## Already loaded
 # data(starwars, package = "dplyr") ## Optional to bring the DF into the global env
 starwars %>% 
@@ -66,8 +67,10 @@ starwars %>%
   group_by(homeworld) %>% 
   summarise(mean_height=mean(height)) 
 ```
+
 vs
-```{.r}
+
+``` r
 # library(data.table) ## Already loaded
 starwars_dt = as.data.table(starwars)
 starwars_dt[species=="Human", mean(height), by=homeworld]
@@ -114,7 +117,7 @@ mbx = round((mb_dt[expr=="collapse_dplyr()", median(time)] /
 mb ## print result
 ```
 
-**Result:** data.table is `r mbx`x faster! (Thanks to [Keith Head](https://twitter.com/ckhead) for this example.)
+**Result:** data.table is `r mbx`x faster! More benchmarks can be found [here](https://h2oai.github.io/db-benchmark/){target="_blank"}
 
 ## Why learn data.table? (cont.) {.smaller}
 
@@ -145,9 +148,9 @@ My goal is simply to show you another powerful tool that you can use to tackle b
 Knowing how to use each of them and how they complement each other is big advantage.
 
 # data.table basics
-  
+
 ## The data.table object (1)
-  
+
 We've already seen that the tidyerse provides its own enhanced version of a data.frame in the form of tibbles.
 
 The same is true for data.table. In fact, data.table functions only work on objects that have been converted to data.tables first.
@@ -158,19 +161,19 @@ Beyond simple visual enhancements (similar to tibbles), the specialised internal
 
 To create a data.table, we have a couple of options:
 
-- `fread('mydata.csv')` reads a CSV into R as a data.table (and is very fast).
-- `data.table(x = 1:10)` creates a new data.table from scratch
-- `as.data.table(d)` coerces an existing data frame (`d`) to a data.table.
-- `setDT(d)` coerces an existing data frame to a data.table *by reference*; i.e. we don't have to (re)assign it.
+-   `fread('mydata.csv')` reads a CSV into R as a data.table (and is very fast).
+-   `data.table(x = 1:10)` creates a new data.table from scratch
+-   `as.data.table(d)` coerces an existing data frame (`d`) to a data.table.
+-   `setDT(d)` coerces an existing data frame to a data.table *by reference*; i.e. we don't have to (re)assign it.
 
 ## What does "modify by reference" mean? {.smaller}
-  
+
 That last bullet leads us to an important concept that underlies much of data.table's awesomeness: It tries, as much as possible, to *modify by reference*.
 
 We don't have time to go into details here, but the very (very) short version is that there are basically two ways of changing or assigning objects in R.
 
-1. **Copy-on-modify:** Creates a copy of your data. Implies extra computational overhead.<sup>*</sup>
-2. **Modify-in-place:** Avoids creating copies and simply changes the data where it sits in memory. 
+1.  **Copy-on-modify:** Creates a copy of your data. Implies extra computational overhead.<sup>\*</sup>
+2.  **Modify-in-place:** Avoids creating copies and simply changes the data where it sits in memory.
 
 When we say that data.table "modifies by reference", that essentially means it modifies objects in place. This translates to lower memory overhead and faster computation time!
 
@@ -180,71 +183,70 @@ Further reading if this stuff interests you: (a) [Reference semantics](https://r
 
 All data.tables accept the same basic syntax:
 
-::: {.r-stack}
-DT\[<span style='color: #66C2A5;'>i</span>, <span style='color: #FC8D62;'>j</span>, <span style='color: #8DA0CB;'>by</span>\]
+::: r-stack
+DT\[[i]{style="color: #66C2A5;"}, [j]{style="color: #FC8D62;"}, [by]{style="color: #8DA0CB;"}\]
 :::
 
-:::{.columns}
-
+:::::: columns
 ::: {.column width="33%"}
-<span style='color: #66C2A5;'>On which rows?</span>
-:::
-
-::: {.column width="33%"}
-<span style='color: #FC8D62;'>What to do?</span>
+[On which rows?]{style="color: #66C2A5;"}
 :::
 
 ::: {.column width="33%"}
-<span style='color: #8DA0CB;'>Grouped by what?</span>
+[What to do?]{style="color: #FC8D62;"}
 :::
 
+::: {.column width="33%"}
+[Grouped by what?]{style="color: #8DA0CB;"}
 :::
+::::::
 
-::: {.r-stack}
+::: r-stack
 dplyr "equivalents"
 :::
 
-:::{.columns}
-
+:::::: columns
 ::: {.column width="33%"}
-<span style='color: #66C2A5;'>filter(); slice(); arrange()</span>
-:::
-
-::: {.column width="33%"}
-<span style='color: #FC8D62;'>select(); mutate()</span>
+[filter(); slice(); arrange()]{style="color: #66C2A5;"}
 :::
 
 ::: {.column width="33%"}
-<span style='color: #8DA0CB;'>group_by()</span>
+[select(); mutate()]{style="color: #FC8D62;"}
 :::
 
+::: {.column width="33%"}
+[group_by()]{style="color: #8DA0CB;"}
 :::
+::::::
 
 Tidyverse tends to break up operations step-by-step, data.table aims to do everything in one concise expression.
 
-- Execute complex data wrangling commands as a single.
-- You can certainly chain (pipe) multiple operations together too.
-
+-   Execute complex data wrangling commands as a single.
+-   You can certainly chain (pipe) multiple operations together too.
 
 ## A Quick Example {.smaller}
 
+:::{.fragment}
 We'll dive into the details (and quirks) of `data.table` shortly.
 
 But first, a quick side-by-side comparison with `dplyr`, since that will help to orientate us for the rest of the lecture. Using our `starwars` dataset, say we want to know:
 
 > What is the average height of the human characters by gender?
+:::
 
-:::{.columns}
-
-:::{.column width="50%"}
+:::{.fragment}
+::::: columns
+::: {.column width="50%"}
 dplyr
-```{.r code-line-numbers="|3|5|4"}
+
+``` {.r}
 data(starwars, package = "dplyr")
 starwars %>%
   filter(species == "Human") %>% 
   group_by(gender) %>%
   summarise(mean(height, na.rm = TRUE))
 ```
+
 ```{r}
 #| echo: false
 
@@ -258,13 +260,15 @@ starwars %>%
 
 ::: {.column width="50%"}
 data.table
-```{.r code-line-numbers="|3|4|5"}
+
+``` {.r}
 starwars_dt = as.data.table(starwars)
 starwars_dt[
   species == "Human",
   mean(height, na.rm = TRUE),
   by = gender]
 ```
+
 ```{r}
 #| echo: false
 
@@ -275,37 +279,197 @@ starwars_dt[
   by = gender]
 ```
 :::
-
+:::::
 :::
 
+## A Quick Example {.smaller}
 
-# Working with rows: DT[i, ]
+We'll dive into the details (and quirks) of `data.table` shortly.
+
+But first, a quick side-by-side comparison with `dplyr`, since that will help to orientate us for the rest of the lecture. Using our `starwars` dataset, say we want to know:
+
+> What is the average height of the human characters by gender?
+
+::::: columns
+::: {.column width="50%"}
+dplyr
+
+``` {.r code-line-numbers="3"}
+data(starwars, package = "dplyr")
+starwars %>%
+  filter(species == "Human") %>% 
+  group_by(gender) %>%
+  summarise(mean(height, na.rm = TRUE))
+```
+
+```{r}
+#| echo: false
+
+data(starwars, package = "dplyr")
+starwars %>%
+  filter(species == "Human") %>% 
+  group_by(gender) %>%
+  summarise(mean(height, na.rm = TRUE))
+```
+:::
+
+::: {.column width="50%"}
+data.table
+
+``` {.r code-line-numbers="3"}
+starwars_dt = as.data.table(starwars)
+starwars_dt[
+  species == "Human",
+  mean(height, na.rm = TRUE),
+  by = gender]
+```
+
+```{r}
+#| echo: false
+
+starwars_dt = as.data.table(starwars)
+starwars_dt[
+  species == "Human",
+  mean(height, na.rm = TRUE),
+  by = gender]
+```
+:::
+:::::
+
+
+## A Quick Example {.smaller}
+
+We'll dive into the details (and quirks) of `data.table` shortly.
+
+But first, a quick side-by-side comparison with `dplyr`, since that will help to orientate us for the rest of the lecture. Using our `starwars` dataset, say we want to know:
+
+> What is the average height of the human characters by gender?
+
+::::: columns
+::: {.column width="50%"}
+dplyr
+
+``` {.r code-line-numbers="5"}
+data(starwars, package = "dplyr")
+starwars %>%
+  filter(species == "Human") %>% 
+  group_by(gender) %>%
+  summarise(mean(height, na.rm = TRUE))
+```
+
+```{r}
+#| echo: false
+
+data(starwars, package = "dplyr")
+starwars %>%
+  filter(species == "Human") %>% 
+  group_by(gender) %>%
+  summarise(mean(height, na.rm = TRUE))
+```
+:::
+
+::: {.column width="50%"}
+data.table
+
+``` {.r code-line-numbers="4"}
+starwars_dt = as.data.table(starwars)
+starwars_dt[
+  species == "Human",
+  mean(height, na.rm = TRUE),
+  by = gender]
+```
+
+```{r}
+#| echo: false
+
+starwars_dt = as.data.table(starwars)
+starwars_dt[
+  species == "Human",
+  mean(height, na.rm = TRUE),
+  by = gender]
+```
+:::
+:::::
+
+
+## A Quick Example {.smaller}
+
+We'll dive into the details (and quirks) of `data.table` shortly.
+
+But first, a quick side-by-side comparison with `dplyr`, since that will help to orientate us for the rest of the lecture. Using our `starwars` dataset, say we want to know:
+
+> What is the average height of the human characters by gender?
+
+::::: columns
+::: {.column width="50%"}
+dplyr
+
+``` {.r code-line-numbers="4"}
+data(starwars, package = "dplyr")
+starwars %>%
+  filter(species == "Human") %>% 
+  group_by(gender) %>%
+  summarise(mean(height, na.rm = TRUE))
+```
+
+```{r}
+#| echo: false
+
+data(starwars, package = "dplyr")
+starwars %>%
+  filter(species == "Human") %>% 
+  group_by(gender) %>%
+  summarise(mean(height, na.rm = TRUE))
+```
+:::
+
+::: {.column width="50%"}
+data.table
+
+``` {.r code-line-numbers="5"}
+starwars_dt = as.data.table(starwars)
+starwars_dt[
+  species == "Human",
+  mean(height, na.rm = TRUE),
+  by = gender]
+```
+
+```{r}
+#| echo: false
+
+starwars_dt = as.data.table(starwars)
+starwars_dt[
+  species == "Human",
+  mean(height, na.rm = TRUE),
+  by = gender]
+```
+:::
+:::::
+
+
+# Working with rows: DT\[i, \]
 
 ## Subset by rows (filter) {.smaller}
 
-:::{.fragment}
-Subsetting by rows is very straightforward in data.table. Everything works pretty much the same as you'd expect if you're coming from dplyr. 
+::: fragment
+Subsetting by rows is very straightforward in data.table. Everything works pretty much the same as you'd expect if you're coming from dplyr.
 
-- `DT[x == "string", ]`: Subset to rows where variable x equals "string"
+-   `DT[x == "string", ]`: Subset to rows where variable x equals "string"
 
-- `DT[y > 5, ]`: Subset to rows where variable y is greater than 5
+-   `DT[y > 5, ]`: Subset to rows where variable y is greater than 5
 
-- `DT[1:10, ]`: Subset to the first 10 rows
+-   `DT[1:10, ]`: Subset to the first 10 rows
 :::
 
-:::{.fragment}
+::: fragment
 Multiple filters/conditions are fine too:
 
-- `DT[x=="string" & y>5, ]`: Subset to rows where x is "string" AND y is greater than 5
+-   `DT[x=="string" & y>5, ]`: Subset to rows where x is "string" AND y is greater than 5
 :::
 
-:::{.fragment}
-Note that we don't actually need commas when we're only subsetting on `i` (i.e. no `j` or `by` components).
-- `DT[x=="string"]` is equivalent to `DT[x=="string", ]`
-- `DT[1:10]` is equivalent to `DT[1:10, ]`
-- etc.
+::: fragment
+Note that we don't actually need commas when we're only subsetting on `i` (i.e. no `j` or `by` components). - `DT[x=="string"]` is equivalent to `DT[x=="string", ]` - `DT[1:10]` is equivalent to `DT[1:10, ]` - etc.
 :::
-
 
 ## Subset by rows (filter) cont.
 
@@ -315,75 +479,72 @@ Just to emphasise the point, here's an example of subsetting by rows using our s
 starwars_dt[height>190 & species=='Human']
 ```
 
-
 ## Order by rows (arrange)
 
-:::{.fragment}
-```{.r}
+::: fragment
+``` r
 starwars_dt[order(birth_year)]  ## (temporarily) sort by youngest to oldest
 starwars_dt[order(-birth_year)] ## (temporarily) sort by oldest to youngest
 ```
 :::
 
-:::{.fragment}
+::: fragment
 While ordering as per the above is very straightforward, data.table also provides an optimised `setorder()` function for reordering *by reference*.
 :::
 
-:::{.fragment}
+::: fragment
 ```{r sw_setorder}
 setorder(starwars_dt, birth_year, na.last = TRUE)
 starwars_dt[1:5, name:birth_year] ## Only print subset to stay on the slide
 ```
 :::
 
-
-# Manipulating columns: DT[, j]
+# Manipulating columns: DT\[, j\]
 
 ## j: One slot to rule them all {.smaller}
 
-:::{.fragment}
+::: fragment
 Recall some of the dplyr verbs that we used to manipulate our variables in different ways:
 
-- `select()`
-- `mutate()`
-- `summarise()`
-- `count()`
+-   `select()`
+-   `mutate()`
+-   `summarise()`
+-   `count()`
 :::
 
-:::{.fragment}
-data.table recognizes that all of these verbs are just different versions of telling R... 
->"*Do something to this variable in my dataset*"
+::: fragment
+data.table recognizes that all of these verbs are just different versions of telling R... \>"*Do something to this variable in my dataset*"
 
 ... and it let's you do all of those operations in one place: the `j` slot.
 :::
 
-:::{.fragment}
+::: fragment
 However, this concision requires a few syntax tweaks w.r.t. how we change and assign variables in our dataset.
 
-- Some people find this off-putting (or, at least, weird) when they first come to data.table.
-- I hope to convince you that these syntax tweaks aren't actually that difficult to grok and give us a *lot* of power in return.
+-   Some people find this off-putting (or, at least, weird) when they first come to data.table.
+-   I hope to convince you that these syntax tweaks aren't actually that difficult to grok and give us a *lot* of power in return.
 :::
 
 ## Modifying columns := {.smaller}
 
-:::{.fragment}
+::: fragment
 To add, delete, or change columns in data.table, we use the **`:=`** operator.
 
-- Known as the *walrus* operator
+-   Known as the *walrus* operator
 :::
 
-:::{.fragment}
+::: fragment
 For example,
 
-- `DT[, xsq := x^2]`: Create a new column (`xsq`) from an existing one (`x`)
-- `DT[, x := as.character(x)]`: Change an existing column
+-   `DT[, xsq := x^2]`: Create a new column (`xsq`) from an existing one (`x`)
+-   `DT[, x := as.character(x)]`: Change an existing column
 :::
 
-:::{.fragment}
+::: fragment
 **Important:** `:=` is *modifying by reference*, i.e. in place. So we don't have to (re)assign the object to save these changes.
 :::
 
-:::{.fragment}
+::: fragment
 However, we also won't see these changes printed to screen unless we ask R explicitly.
 
 ```{r mod_col}
@@ -393,10 +554,9 @@ DT[, x_sq := x^2][] ## Adding [] prints the result.
 ```
 :::
 
-
 ## Modifying columns := (cont.) {.smaller}
 
-:::{.fragment}
+::: fragment
 As I keep saying, *modifying by reference* has important implications for data manipulation. Consider what happens if we copy our data.table and then remove a column.
 
 ```{r mod_copy1}
@@ -405,14 +565,15 @@ DT_copy[, x_sq := NULL]
 ```
 :::
 
-:::{.fragment}
+::: fragment
 Clearly, "x_sq" has been removed from `DT_copy`. But what of the original `DT` table?
+
 ```{r}
 DT
 ```
 :::
 
-:::{.fragment}
+::: fragment
 Uh-oh! It too has been removed... exactly as modifying by reference demands. To avoid this behaviour, use the explicit [`data.table::copy()`](https://rdatatable.gitlab.io/data.table/reference/copy.html) function. Run this next chunk yourself:
 
 ```{r, highlightSpans = TRUE, eval = FALSE}
@@ -423,11 +584,9 @@ DT ## x_sq is still there (run and confirm for yourself)
 ```
 :::
 
+## Modifying columns := (cont.) {.smaller}
 
-# Modifying columns := (cont.) {.smaller}
-
-:::{.fragment}
-
+::: fragment
 **Sub-assign by reference**
 
 One really cool implication of `:=` is data.table's [sub-assign by reference](https://rdatatable.gitlab.io/data.table/articles/datatable-reference-semantics.html#ref-i-j) functionality. As a simple example, consider another fake dataset.
@@ -437,14 +596,14 @@ DT2 = data.table(a = -2:2, b = LETTERS[1:5])
 ```
 :::
 
-:::{.fragment}
-Now, imagine we want to locate all rows where "a" is negative and replace the corresponding "b" cell with NA. 
+::: fragment
+Now, imagine we want to locate all rows where "a" is negative and replace the corresponding "b" cell with NA.
 :::
 
-:::{.fragment}
-- In dplyr you'd have to do something like `...mutate(b = ifelse(a < 0, NA, b))`.
+::: fragment
+-   In dplyr you'd have to do something like `...mutate(b = ifelse(a < 0, NA, b))`.
 
-- In data.table, simply specify which rows to target (`i`) and then sub-assign (`j`) directly.
+-   In data.table, simply specify which rows to target (`i`) and then sub-assign (`j`) directly.
 
 ```{r subassign2, cache=FALSE}
 DT2[a < 0, b := NA][] ## Again, just adding the second [] to print to screen
@@ -453,15 +612,16 @@ DT2[a < 0, b := NA][] ## Again, just adding the second [] to print to screen
 
 ## Modifying columns := (cont.) {.smaller}
 
-:::{.fragment}
+::: fragment
 To modify multiple columns simultaneously, we have two options.
 
-1. LHS `:=` RHS form: `DT[, c("var1", "var2") := .(val1, val2)]`
-2. Functional form: `DT[, ':=' (var1=val1, var2=val2)]`
+1.  LHS `:=` RHS form: `DT[, c("var1", "var2") := .(val1, val2)]`
+2.  Functional form: `DT[, ':=' (var1=val1, var2=val2)]`
+3.  let form: `DT[, let(var1=val1, var2=val2)]`
 :::
 
-:::{.fragment}
-Personally, I prefer the LHS form. But we will use both.
+::: fragment
+Personally, I prefer the LHS form when creating many columns programatically.
 
 ```{r}
 DT[, c("y", "y_name") := .(3:4, c("three", "four"))]
@@ -469,21 +629,17 @@ DT ## Another way to print the results instead of appending []
 ```
 :::
 
-:::{.fragment}
-Note, however, that dynamically assigning dependent columns in a single step (like we did with dplyr::mutate) doesn't work.
+::: fragment
+You can't use variable crated inside let to create new variables.
 
 ```{r mod_cols2, error=TRUE}
-DT[, ':='(z = 5:6, z_sq = z^2)][]
+DT[, let(z = 5:6, z_sq = z^2)][]
 ```
 :::
 
 ## Aside: Chaining data.table operations {.smaller}
 
-:::{.fragment}
-That last example provides as good a time as any to mention that you can chain multiple data.table operations together.
-:::
-
-:::{.fragment}
+::: fragment
 The native data.table way is simply to append consecutive `[]` terms.
 
 ```{r}
@@ -491,7 +647,7 @@ DT[, z := 5:6][, z_sq := z^2][]
 ```
 :::
 
-:::{.fragment}
+::: fragment
 But if you prefer the **magrittr** pipe, then that's also possible. Just prefix each step with `.`:
 
 ```{r}
@@ -502,6 +658,19 @@ DT %>%
   .[] 
 ```
 :::
+
+:::{.fragment}
+You can also use base pipe operator:
+
+```{r}
+DT |>
+  _[, xyz := x+y+z] |>
+  _[, xyz_sq := xyz^2] |>
+  _[] 
+```
+:::
+
+More in [blog post](https://www.r-bloggers.com/2024/01/piping-data-tables/){target="_blank"}
 
 ## Modifying columns := (cont.)
 
@@ -514,18 +683,19 @@ DT
 
 ## Subsetting on columns (select) {.smaller}
 
-:::{.fragment}
+::: fragment
 We can also use the `j` slot to subset our data on columns. I'll return to the starwars dataset for these examples...
 :::
 
-:::{.fragment}
+::: fragment
 Subset by column position:
+
 ```{r}
 starwars_dt[1:2, c(1:3, 10)]
 ```
 :::
 
-:::{.fragment}
+::: fragment
 Or by name:
 
 ```{r sub_cols2}
@@ -539,23 +709,19 @@ starwars_dt[1:2, .(name, height, mass, homeworld)]
 
 We've now seen `.()` in a couple places, e.g the previous slide and [this slide](#fast) from earlier if you were paying close attention.
 
-- `.()` is just a data.table shortcut for `list()`. 
+-   `.()` is just a data.table shortcut for `list()`.
 
 We'll be using `.()` quite liberally once we start working subsetting and/or grouping by multiple variables at a time.
 
-You can think of it as one of data.table's syntactical quirks. But, really, it's just there to give you more options. You can often &mdash; if not always &mdash; use these three forms interchangeably in data.table:
-- `.(var1, var2, ...)`
-- `list(var1, var2, ...)`
-- `c("var1", "var2", ...)`
+You can think of it as one of data.table's syntactical quirks. But, really, it's just there to give you more options. You can often — if not always — use these three forms interchangeably in data.table: - `.(var1, var2, ...)` - `list(var1, var2, ...)` - `c("var1", "var2", ...)`
 
-:::{.fragment}
-I like the `.()` syntax best &mdash; less typing! &mdash; but each to their own.
+::: fragment
+I like the `.()` syntax best — less typing! — but each to their own.
 :::
 
-:::{.fragment}
+::: fragment
 Okay, back to subsetting on columns...
 :::
-
 
 ## Subsetting on columns (cont.)
 
@@ -565,20 +731,19 @@ You can also exclude columns through negation. Try this next code chunk yourself
 starwars_dt[, !c("name", "height")]
 ```
 
-
 ## Renaming columns {.smaller}
 
-:::{.fragment}
+::: fragment
 You can rename (set) a column by reference. Again, run this yourself:
 
-```{.r}
+``` r
 setnames(starwars_dt, old = c("name", "homeworld"), new = c("alias", "crib"))[]
 ## Better change it back, in case we use "name" or "homeworld" on a later slide
 setnames(starwars_dt, old = c("alias", "crib"), new = c("name", "homeworld"))
 ```
 :::
 
-:::{.fragment}
+::: fragment
 While the `setnames()` approach offers performance benefits, I often find it convenient to dynamically (and/or temporarily) rename columns when subsetting them. For example:
 
 ```{r}
@@ -586,24 +751,22 @@ starwars_dt[1:2, .(alias = name, crib = homeworld)]
 ```
 :::
 
-
 ## Subsetting on columns (cont.)
 
-One last thing I'll mention w.r.t. to subsetting columns is that you can also use dplyr verbs on data.tables if you prefer. 
+One last thing I'll mention w.r.t. to subsetting columns is that you can also use dplyr verbs on data.tables if you prefer.
 
 For example run the following code chunk for yourself. (You'll get a warning about efficiency loss, but this will be very minor for a case like this.)
 
-```{.r}
+``` r
 starwars_dt[1:5, ] %>% 
   select(crib = homeworld, everything())
 ```
 
 I am not fan of this approach. I'll get back to dplyr+data.table functionality at the end of the lecture....
 
-
 ## Aggregating {.smaller}
 
-:::{.fragment}
+::: fragment
 Finally, we can do aggregating manipulations in `j`.
 
 ```{r simple_agg1, cache=FALSE}
@@ -611,7 +774,7 @@ starwars_dt[, mean(height, na.rm=T)]
 ```
 :::
 
-:::{.fragment}
+::: fragment
 Note that we don't keep anything unless we assign the result to a new object. If you want to add the new aggregated column to your original dataset, use `:=`.
 
 ```{r simple_agg2,cache=FALSE}
@@ -620,10 +783,9 @@ starwars_dt[, mean_height := mean(height, na.rm=T)] %>% ## Add mean height as co
 ```
 :::
 
-
 ## Aggregating (cont.) {.smaller}
 
-:::{.fragment}
+::: fragment
 data.table also provides [special convenience symbols](https://rdatatable.gitlab.io/data.table/reference/special-symbols.html) for common aggregation tasks in `j`.
 
 For example, we can quickly count the number of observations using `.N`.
@@ -633,26 +795,26 @@ starwars_dt[, .N]
 ```
 :::
 
-:::{.fragment}
+::: fragment
 Of course, this is a pretty silly example since it's just going to give us the total number of rows in the dataset. Like most forms of aggregation, `.N` is much more interesting when it is applied by group.
 
-- This provides a nice segue to our next section...
+-   This provides a nice segue to our next section...
 :::
 
-# Group by: DT[, , by]
+# Group by: DT\[, , by\]
 
 ## by {.smaller}
 
-:::{.fragment}
-data.table's `by` argument functions very similarly to the `dplyr::group_by` equivalent. Try these next few examples in your own R console:
+::: fragment
+data.table's `by` argument functions very similarly to the `dplyr::group_by` equivalent.
 
-- `starwars_dt[, mean(height, na.rm=T), by = species]`: Collapse by single variable
-- `starwars_dt[, .(species_height = mean(height, na.rm=T)), by = species]`: As above, but explicitly name the summary variable
-- `starwars_dt[, mean(mass, na.rm=T), by = height>190]`: Conditionals work too.
-- `starwars_dt[, species_n := .N, by = species][]`: Add an aggregated column to the data (here: number of observations by species group)
+-   `starwars_dt[, mean(height, na.rm=T), by = species]`: Collapse by single variable
+-   `starwars_dt[, .(species_height = mean(height, na.rm=T)), by = species]`: As above, but explicitly name the summary variable
+-   `starwars_dt[, mean(mass, na.rm=T), by = height>190]`: Conditionals.
+-   `starwars_dt[, species_n := .N, by = species][]`: Add an aggregated column to the data (here: number of observations by species group)
 :::
 
-:::{.fragment}
+::: fragment
 To perform aggregations by multiple variables, we'll use the `.()` syntax again.
 
 ```{r by1, cache=FALSE}
@@ -663,12 +825,12 @@ starwars_dt[, .(mean_height = mean(height, na.rm=T)), by = .(species, homeworld)
 
 ## Efficient subsetting with .SD {.smaller}
 
-:::{.fragment}
+::: fragment
 We've seen how to group by multiple variables. But what if we want to *summarise* multiple variables, regardless of how we are grouping?
 
 One solution is to again use `.()` and write everything out, e.g.
 
-```{.r}
+``` r
 ## Run yourself if you'd like to check the output
 starwars_dt[, 
             .(mean(height, na.rm=T), mean(mass, na.rm=T), mean(birth_year, na.rm=T)), 
@@ -676,18 +838,17 @@ starwars_dt[,
 ```
 :::
 
-:::{.fragment}
+::: fragment
 But this soon become tedious. Imagine we have even more variables. Do we really have to write out `mean(..., na.rm=T)` for each one?
-
 :::
 
-:::{.fragment}
+:::: fragment
 Fortunately, the answer is "no". data.table provides a special `.SD` symbol for **s**ubsetting **d**ata. In truth, .SD can do a [lot more](https://rdatatable.gitlab.io/data.table/articles/datatable-sd-usage.html) than what I'm about to show you, but here's how it would work in the present case...
 
 ::: {style="text-align: right"}
 *See next slide.*
 :::
-:::
+::::
 
 ## Efficient subsetting with .SD (cont.) {.smaller}
 
@@ -699,16 +860,16 @@ starwars_dt[,
   head(2) ## Just keep everything on the slide
 ```
 
-
 ## Efficient subsetting with .SD (cont.) {.smaller}
 
-```{.r code-line-numbers="2"}
+``` {.r code-line-numbers="2"}
 starwars_dt[, 
             lapply(.SD, mean, na.rm=T), #<<
             .SDcols = c("height", "mass", "birth_year"),
             by = species] %>%
   head(2) ## Just keep everything on the slide
 ```
+
 ```{r}
 #| echo: false
 
@@ -723,13 +884,14 @@ First, we specify what we want to *do* on our data subset (i.e. `.SD`). In this 
 
 ## Efficient subsetting with .SD (cont.) {.smaller}
 
-```{.r code-line-numbers="3"}
+``` {.r code-line-numbers="3"}
 starwars_dt[, 
             lapply(.SD, mean, na.rm=T), #<<
             .SDcols = c("height", "mass", "birth_year"),
             by = species] %>%
   head(2) ## Just keep everything on the slide
 ```
+
 ```{r}
 #| echo: false
 
@@ -746,13 +908,14 @@ Then, we specify *which columns* to subset with the `.SDcols` argument.
 
 ## Efficient subsetting with .SD (cont.) {.smaller}
 
-```{.r code-line-numbers="3"}
+``` {.r code-line-numbers="3"}
 starwars_dt[, 
             lapply(.SD, mean, na.rm=T), #<<
             .SDcols = c("height", "mass", "birth_year"),
             by = species] %>%
   head(2) ## Just keep everything on the slide
 ```
+
 ```{r}
 #| echo: false
 
@@ -773,7 +936,7 @@ P.S. One annoyance I have is that the `.()` syntax doesn't work for `.SDcols`. H
 
 Just to add: We need only specify `.SDcols` if we want to subset specific parts of the data. (You can also use shortcuts like `.SDcols = is.numeric` or `.SDcols = patterns('abc')`.)
 
-If we instead want to apply the same function on *all* the variables in our dataset, then `.SD` by itself will suffice. 
+If we instead want to apply the same function on *all* the variables in our dataset, then `.SD` by itself will suffice.
 
 As a quick example, recall our earlier DT object that contains only numeric variables.
 
@@ -787,81 +950,76 @@ We can obtain the mean for each variable as follows.
 DT[, lapply(.SD, mean)]
 ```
 
-
 ## keyby
 
 The last thing I want to mention w.r.t. `by` is its close relative: `keyby`.
 
-The `keyby` argument works exactly like `by` &mdash; you can use it as a drop-in replacement &mdash; except that it orders the results and creates a **key**.
+The `keyby` argument works exactly like `by` — you can use it as a drop-in replacement — except that it orders the results and creates a **key**.
 
-- Setting a key for a data.table will allow for various (and often astonishing) performance gains.
-- Keys are important enough that I want to save them for their own section, though...
+-   Setting a key for a data.table will allow for various (and often astonishing) performance gains.
+-   Keys are important enough that I want to save them for their own section, though...
 
-
-# Keys
+# Keys {#keys}
 
 ## What are keys? {.smaller}
 
-:::{.fragment}
+::: fragment
 Keys are a way of ordering the data that allows for *extremely* fast subsetting.
 
 The data.table [vignette](https://rdatatable.gitlab.io/data.table/articles/datatable-keys-fast-subset.html) describes them as "supercharged rownames". I know that might sound a bit abstract, but here's the idea in a nutshell...
 :::
 
-:::{.fragment}
-Imagine that we want to filter a dataset based on a particular value (e.g. find all the human characters in our starwars dataset).
-- Normally, we'd have to search through the whole dataset to identify matching cases.
-- But, if we've set an appropriate key, then the data are already ordered in such a way that we (i.e. our computer) only has to search through a much smaller subset.
+::: fragment
+Imagine that we want to filter a dataset based on a particular value (e.g. find all the human characters in our starwars dataset). - Normally, we'd have to search through the whole dataset to identify matching cases. - But, if we've set an appropriate key, then the data are already ordered in such a way that we (i.e. our computer) only has to search through a much smaller subset.
 :::
 
-:::{.fragment}
+::: fragment
 **Analogy:** Think of the way a filing cabinet might divide items by alphabetical order: Files starting "ABC" in the top drawer, "DEF" in the second drawer, etc. To find *Alice's* file, you'd only have to search the top draw. For *Fred*, the second draw, and so on.
 :::
 
-:::{.fragment}
+::: fragment
 Not only is this much quicker, but the same idea also carries over to *all other* forms of data manipulation that rely on subsetting (aggregation by group, joins, etc.)
 :::
 
 ## How do I set a key? {.smaller}
 
-:::{.fragment}
+::: fragment
 You can set a key when you first create a data.table. E.g.
 
-- `DT = data.table(x = 1:10, y = LETTERS[1:10], key = "x")`
-- `DT = as.data.table(d, key = "x")`
-- `setDT(d, key = "x")`
+-   `DT = data.table(x = 1:10, y = LETTERS[1:10], key = "x")`
+-   `DT = as.data.table(d, key = "x")`
+-   `setDT(d, key = "x")`
 :::
 
-:::{.fragment}
+::: fragment
 Or, you can set keys on an existing data.table with the `setkey()` function.
 
-- `setkey(DT, x)`: Note that the key doesn't have to be quoted this time
+-   `setkey(DT, x)`: Note that the key doesn't have to be quoted this time
 :::
 
-:::{.fragment}
+::: fragment
 **Important:** Since keys just describe a particular ordering of the data, you can set a key on *multiple* columns. (More [here](https://rdatatable.gitlab.io/data.table/articles/datatable-keys-fast-subset.html#key-properties).) E.g.
 
-- `DT = as.data.table(DF, key = c("x", "y"))`
-- `setkey(DT, x, y)`: Again, no quotes needed
+-   `DT = as.data.table(DF, key = c("x", "y"))`
+-   `setkey(DT, x, y)`: Again, no quotes needed
 :::
 
-:::{.fragment}
+::: fragment
 Use the `key()` function to see what keys are currently set for your data.table. You can only ever have one key per table at a time, but it's very easy to change them using one of the above commands.
 :::
 
-
 ## Example {.smaller}
 
-:::{.fragment}
+::: fragment
 Recall the [speed benchmark](#fast) that we saw at the very beginning of the lecture: data.table ended up being `r mbx`x faster than dplyr for a fairly standard summarising task.
 :::
 
-:::{.fragment}
+:::: fragment
 Let's redo the benchmark, but this time include a version where we pre-assign a key. For optimal performance, the key should match the same variables that we're grouping/subsetting on.
 
-- Again, a key can be set on multiple variables, although the lead grouping variable (in the below case: "name") is the most important.
+-   Again, a key can be set on multiple variables, although the lead grouping variable (in the below case: "name") is the most important.
 
-```{.r}
+``` r
 ## First create a keyed version of the storms data.table.
 ## Note that key variables match the 'by' grouping variables below.
 storms_dt_key = as.data.table(storms, key = c("name", "year", "month", "day"))
@@ -874,10 +1032,10 @@ collapse_dt_key = function() {
 microbenchmark(collapse_dplyr(), collapse_dt(), collapse_dt_key(), times = 1)
 ```
 
-:::{style="text-align: right"}
+::: {style="text-align: right"}
 *See next slide for results*
 :::
-:::
+::::
 
 ## Example (cont.) {.smaller}
 
@@ -899,17 +1057,17 @@ mbx_key = round((mb_key_dt[expr=="collapse_dplyr()", median(time)] /
 mb_key ## print result
 ```
 
-:::{.fragment}
+::: fragment
 The keyed data.table version is now **`r mbx_key`x** (!!!) faster than dplyr.
 
-- That thing you feel... is your face melting.
+-   That thing you feel... is your face melting.
 :::
 
-:::{.fragment}
+::: fragment
 It's not just this toy example. In my experience working with real-life data, setting keys almost always leads to huge speed-ups... and those gains tend to scale as the datasets increase in size.
 :::
 
-:::{.fragment}
+::: fragment
 **Bottom line:** data.table is already plenty fast. But use keys if you're really serious about performance.
 :::
 
@@ -917,18 +1075,18 @@ It's not just this toy example. In my experience working with real-life data, se
 
 ## Merge (aka join) options {.smaller}
 
-:::{.fragment}
+::: fragment
 data.table provides two ways to merge datasets.
 
-- `DT1[DT2, on = "id"]`
-- `merge(DT1, DT2, by = "id")`
+-   `DT1[DT2, on = "id"]`
+-   `merge(DT1, DT2, by = "id")`
 :::
 
-:::{.fragment}
+::: fragment
 I prefer the latter because it offers extra functionality (see `?merge.data.table`), but each to their own.
 :::
 
-:::{.fragment}
+::: fragment
 I'm going to keep things brief by simply showing you how to repeat the same left join that we [practiced](https://raw.githack.com/uo-ec607/lectures/master/05-tidyverse/05-tidyverse.html#54) with dplyr in the last lecture, using data from the **nycflights13** package.
 
 ```{r}
@@ -938,18 +1096,16 @@ planes_dt = as.data.table(planes)
 ```
 :::
 
-
-
 ## Left join example (cont.) {.smaller}
 
-:::{.fragment}
+:::::: fragment
 Here's a comparison with the dplyr equivalents from last week. I'll let you run and compare these yourself. (Note that the row orders will be different.)
 
-:::{.collumns}
-
-:::{.column width="50%"}
+::::: collumns
+::: {.column width="50%"}
 **dplyr**
-```{.r}
+
+``` r
 left_join(
   flights, 
   planes, 
@@ -958,9 +1114,10 @@ left_join(
 ```
 :::
 
-:::{.column width="50%"}
+::: {.column width="50%"}
 **data.table**
-```{.r}
+
+``` r
 merge(
   flights_dt, 
   planes_dt, 
@@ -968,16 +1125,15 @@ merge(
   by = "tailnum")
 ```
 :::
+:::::
+::::::
 
-:::
-:::
-
-:::{.fragment}
+::: fragment
 If you run these, you'll see that both methods handle the ambiguous "year" columns by creating "year.x" and "year.y" variants. We avoided this in dplyr by using `rename()`. How might you avoid the same thing in data.table? <b>Possible answer:</b> Use `setnames()`.
 :::
 
-:::{.fragment}
-```{.r code-line-numbers="3"}
+::: fragment
+``` {.r code-line-numbers="3"}
 merge(
   flights_dt,
   setnames(planes_dt, old = "year", new = "year_built"), #<< 
@@ -986,12 +1142,11 @@ merge(
 ```
 :::
 
-
 ## Use keys for lightning fast joins {.smaller}
 
 The only other thing I'll point out is that setting [keys](#keys) can lead to dramatic speed-ups for merging data.tables. I'll demonstrate using an inner join this time.
 
-```{.r}
+``` r
 merge_dt = function() merge(flights_dt, planes_dt, by = "tailnum")
 
 flights_dt_key = as.data.table(flights, key = "tailnum")
@@ -1019,28 +1174,24 @@ mbx_join = round((mb_join_dt[expr=="merge_dt()", median(time)] /
 mb_join ## print result
 ```
 
-So, we get about a **`r mbx_join`x** speed-up for this simple case just by setting keys. More importantly, ordering your data by setting keys will make a huge difference once you start working with big datasets and making complicated joins. Trust me. (FWIW, the [same is true](https://tysonbarrett.com//jekyll/update/2019/10/11/speed_of_joins/) for dplyr.) 
+So, we get about a **`r mbx_join`x** speed-up for this simple case just by setting keys. More importantly, ordering your data by setting keys will make a huge difference once you start working with big datasets and making complicated joins. Trust me. (FWIW, the [same is true](https://tysonbarrett.com//jekyll/update/2019/10/11/speed_of_joins/) for dplyr.)
 
 # Reshaping data
 
 ## Reshaping options with data.table {.smaller}
 
-:::{.fragment}
-In the tidyverse lecture, we saw how to reshape data using the tidyr::pivot* functions.
+::: fragment
+In the tidyverse lecture, we saw how to reshape data using the tidyr::pivot\* functions.
 
-data.table offers its own functions for flexibly reshaping data:
-- `melt()`: convert wide data to long data
-- `dcast()`: convert long data to wide data
+data.table offers its own functions for flexibly reshaping data: - `melt()`: convert wide data to long data - `dcast()`: convert long data to wide data
 :::
 
-:::{.fragment}
-However, I also want to flag the [**tidyfast**](https://tysonbarrett.com/tidyfast/index.html) package by Tyson Barrett, which implements data.table versions of the tidyr::pivot* functions (among other things).
-- `tidyfast::dt_pivot_longer()`: wide to long
-- `tidyfast::dt_pivot_wider()`: long to wide
+::: fragment
+However, I also want to flag the [**tidyfast**](https://tysonbarrett.com/tidyfast/index.html) package by Tyson Barrett, which implements data.table versions of the tidyr::pivot\* functions (among other things). - `tidyfast::dt_pivot_longer()`: wide to long - `tidyfast::dt_pivot_wider()`: long to wide
 :::
 
-:::{.fragment}
-I'll demonstrate reshaping with both options on the same fake "stocks" data that we created last time: 
+::: fragment
+I'll demonstrate reshaping with both options on the same fake "stocks" data that we created last time:
 
 ```{r stocks}
 stocks = data.table(time = as.Date('2009-01-01') + 0:1,
@@ -1050,37 +1201,35 @@ stocks = data.table(time = as.Date('2009-01-01') + 0:1,
 ```
 :::
 
-
 ## Reshape from wide to long {.smaller}
 
 Our data are currently in wide format.
+
 ```{r}
 stocks
 ```
 
 To convert this into long format, we could do either of the following:
 
-:::{.columns}
-
-:::{.column width="50%"}
+::::: columns
+::: {.column width="50%"}
 ```{r}
 # See ?melt.data.table for options
 melt(stocks, id.vars ="time")
 ```
 :::
 
-:::{.column width="50%"}
+::: {.column width="50%"}
 ```{r}
 stocks %>% 
   dt_pivot_longer(X:Z, names_to="stock", values_to="price")
 ```
 :::
-
-:::
+:::::
 
 ## Reshape from long to wide {.smaller}
 
-:::{.fragment}
+::: fragment
 Let's quickly save the long-format stocks data.table. I'll use the `melt()` approach and also throw in some extra column-naming options, just so you can see those in action.
 
 ```{r stocks_long}
@@ -1090,11 +1239,9 @@ stocks_long
 ```
 :::
 
-:::{.fragment}
-
-:::{.columns}
-
-:::{.column width="50%"}
+:::::: fragment
+::::: columns
+::: {.column width="50%"}
 ```{r}
 dcast(stocks_long, 
       time ~ stock, 
@@ -1102,32 +1249,27 @@ dcast(stocks_long,
 ```
 :::
 
-:::{.column width="50%"}
+::: {.column width="50%"}
 ```{r}
 stocks_long %>% 
   dt_pivot_wider(names_from=stock, 
                  values_from=price)
 ```
 :::
-
-:::
-
-:::
-
+:::::
+::::::
 
 # data.table + tidyverse workflows
 
 ## Pick and choose {.smaller}
 
-The first point is perhaps the most obvious one: The tidyverse consists of *multiple* packages. Just because you prefer to use data.table instead of dplyr+tidyr for your data.wrangling needs, doesn't mean that other tidyverse packages are off limits too.  
+The first point is perhaps the most obvious one: The tidyverse consists of *multiple* packages. Just because you prefer to use data.table instead of dplyr+tidyr for your data.wrangling needs, doesn't mean that other tidyverse packages are off limits too.
 
 Case in point: Almost every hardcore data.table user I know is a hardcore **ggplot2** user too.
 
-
-:::{.columns}
-
-:::{.column width="50%"}
-```{.r}
+::::: columns
+::: {.column width="50%"}
+``` r
 ## library(ggplot2) # already loaded
 storms_dt[, .(wind = mean(wind), 
                   pressure = mean(pressure), 
@@ -1139,7 +1281,7 @@ storms_dt[, .(wind = mean(wind),
 ```
 :::
 
-:::{.column width="50%"}
+::: {.column width="50%"}
 ```{r}
 #| echo: false
 #| fig-height: 6
@@ -1151,23 +1293,21 @@ collapse_dt_key() %>%
   coord_equal()
 ```
 :::
-
-:::
+:::::
 
 ## dtplyr {.smaller}
 
-:::{.fragment}
-Do you love dplyr's syntax, but want data.table's performance? 
+::: fragment
+Do you love dplyr's syntax, but want data.table's performance?
 
 Well, you're in luck!
 :::
 
-:::{.fragment}
-Hadley Wickham's **dtplyr** package provides a data.table "back-end" for dplyr.
-- Basically, write your code as if you were using dplyr and then it gets automatically translated to (and evaluated as) data.table code.
+::: fragment
+Hadley Wickham's **dtplyr** package provides a data.table "back-end" for dplyr. - Basically, write your code as if you were using dplyr and then it gets automatically translated to (and evaluated as) data.table code.
 :::
 
-:::{.fragment}
+::: fragment
 If this sounds appealing to you (and it should) I strongly encourage you to check out the [package website](https://dtplyr.tidyverse.org/) for details. But here's quick example, using our benchmark from earlier.
 
 ```{r}

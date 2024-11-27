@@ -8,7 +8,7 @@
 <link href="CourseDataScience_files/libs/quarto-html/light-border.css" rel="stylesheet">
 <link href="CourseDataScience_files/libs/quarto-html/quarto-html.min.css" rel="stylesheet" data-mode="light">
 <link href="CourseDataScience_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles"><meta charset="utf-8">
-  <meta name="generator" content="quarto-1.5.57">
+  <meta name="generator" content="quarto-1.5.47">
 
   <meta name="author" content="Mislav Sagovac">
   <title>Data Science</title>
@@ -482,19 +482,19 @@ Mislav Sagovac
 <div class="cell-output cell-output-stdout">
 <pre><code>Unit: milliseconds
              expr      min       lq     mean   median       uq      max neval
- collapse_dplyr() 274.0078 274.0078 274.0078 274.0078 274.0078 274.0078     1
-    collapse_dt()  20.0762  20.0762  20.0762  20.0762  20.0762  20.0762     1</code></pre>
+ collapse_dplyr() 228.3654 228.3654 228.3654 228.3654 228.3654 228.3654     1
+    collapse_dt()  21.5316  21.5316  21.5316  21.5316  21.5316  21.5316     1</code></pre>
 </div>
 </div>
 <div class="cell">
 <div class="cell-output cell-output-stdout">
 <pre><code>Unit: milliseconds
              expr      min       lq     mean   median       uq      max neval
- collapse_dplyr() 258.8662 258.8662 258.8662 258.8662 258.8662 258.8662     1
-    collapse_dt()  20.9529  20.9529  20.9529  20.9529  20.9529  20.9529     1</code></pre>
+ collapse_dplyr() 200.9807 200.9807 200.9807 200.9807 200.9807 200.9807     1
+    collapse_dt()  13.0137  13.0137  13.0137  13.0137  13.0137  13.0137     1</code></pre>
 </div>
 </div>
-<p><strong>Result:</strong> data.table is 10x faster! (Thanks to <a href="https://twitter.com/ckhead">Keith Head</a> for this example.)</p>
+<p><strong>Result:</strong> data.table is 20x faster! More benchmarks can be found <a href="https://h2oai.github.io/db-benchmark/" target="_blank">here</a></p>
 </section>
 <section id="why-learn-data.table-cont.-2" class="slide level2 smaller">
 <h2>Why learn data.table? (cont.)</h2>
@@ -590,15 +590,18 @@ Mislav Sagovac
 </section>
 <section id="a-quick-example" class="slide level2 smaller">
 <h2>A Quick Example</h2>
+<div class="fragment">
 <p>We’ll dive into the details (and quirks) of <code>data.table</code> shortly.</p>
 <p>But first, a quick side-by-side comparison with <code>dplyr</code>, since that will help to orientate us for the rest of the lecture. Using our <code>starwars</code> dataset, say we want to know:</p>
 <blockquote>
 <p>What is the average height of the human characters by gender?</p>
 </blockquote>
+</div>
+<div class="fragment">
 <div class="columns">
 <div class="column" style="width:50%;">
 <p>dplyr</p>
-<div class="sourceCode" id="cb11" data-code-line-numbers="|3|5|4"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href=""></a><span class="fu">data</span>(starwars, <span class="at">package =</span> <span class="st">"dplyr"</span>)</span>
+<div class="sourceCode" id="cb11"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href=""></a><span class="fu">data</span>(starwars, <span class="at">package =</span> <span class="st">"dplyr"</span>)</span>
 <span id="cb11-2"><a href=""></a>starwars <span class="sc">%&gt;%</span></span>
 <span id="cb11-3"><a href=""></a>  <span class="fu">filter</span>(species <span class="sc">==</span> <span class="st">"Human"</span>) <span class="sc">%&gt;%</span> </span>
 <span id="cb11-4"><a href=""></a>  <span class="fu">group_by</span>(gender) <span class="sc">%&gt;%</span></span>
@@ -614,11 +617,135 @@ Mislav Sagovac
 </div>
 </div><div class="column" style="width:50%;">
 <p>data.table</p>
-<div class="sourceCode" id="cb13" data-code-line-numbers="|3|4|5"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href=""></a>starwars_dt <span class="ot">=</span> <span class="fu">as.data.table</span>(starwars)</span>
+<div class="sourceCode" id="cb13"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href=""></a>starwars_dt <span class="ot">=</span> <span class="fu">as.data.table</span>(starwars)</span>
 <span id="cb13-2"><a href=""></a>starwars_dt[</span>
 <span id="cb13-3"><a href=""></a>  species <span class="sc">==</span> <span class="st">"Human"</span>,</span>
 <span id="cb13-4"><a href=""></a>  <span class="fu">mean</span>(height, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
 <span id="cb13-5"><a href=""></a>  by <span class="ot">=</span> gender]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>      gender       V1
+      &lt;char&gt;    &lt;num&gt;
+1: masculine 182.3913
+2:  feminine 163.5714</code></pre>
+</div>
+</div>
+</div></div>
+</div>
+</section>
+<section id="a-quick-example-1" class="slide level2 smaller">
+<h2>A Quick Example</h2>
+<p>We’ll dive into the details (and quirks) of <code>data.table</code> shortly.</p>
+<p>But first, a quick side-by-side comparison with <code>dplyr</code>, since that will help to orientate us for the rest of the lecture. Using our <code>starwars</code> dataset, say we want to know:</p>
+<blockquote>
+<p>What is the average height of the human characters by gender?</p>
+</blockquote>
+<div class="columns">
+<div class="column" style="width:50%;">
+<p>dplyr</p>
+<div class="sourceCode" id="cb15" data-code-line-numbers="3"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href=""></a><span class="fu">data</span>(starwars, <span class="at">package =</span> <span class="st">"dplyr"</span>)</span>
+<span id="cb15-2"><a href=""></a>starwars <span class="sc">%&gt;%</span></span>
+<span id="cb15-3"><a href=""></a>  <span class="fu">filter</span>(species <span class="sc">==</span> <span class="st">"Human"</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb15-4"><a href=""></a>  <span class="fu">group_by</span>(gender) <span class="sc">%&gt;%</span></span>
+<span id="cb15-5"><a href=""></a>  <span class="fu">summarise</span>(<span class="fu">mean</span>(height, <span class="at">na.rm =</span> <span class="cn">TRUE</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 2 × 2
+  gender    `mean(height, na.rm = TRUE)`
+  &lt;chr&gt;                            &lt;dbl&gt;
+1 feminine                          164.
+2 masculine                         182.</code></pre>
+</div>
+</div>
+</div><div class="column" style="width:50%;">
+<p>data.table</p>
+<div class="sourceCode" id="cb17" data-code-line-numbers="3"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href=""></a>starwars_dt <span class="ot">=</span> <span class="fu">as.data.table</span>(starwars)</span>
+<span id="cb17-2"><a href=""></a>starwars_dt[</span>
+<span id="cb17-3"><a href=""></a>  species <span class="sc">==</span> <span class="st">"Human"</span>,</span>
+<span id="cb17-4"><a href=""></a>  <span class="fu">mean</span>(height, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb17-5"><a href=""></a>  by <span class="ot">=</span> gender]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>      gender       V1
+      &lt;char&gt;    &lt;num&gt;
+1: masculine 182.3913
+2:  feminine 163.5714</code></pre>
+</div>
+</div>
+</div></div>
+</section>
+<section id="a-quick-example-2" class="slide level2 smaller">
+<h2>A Quick Example</h2>
+<p>We’ll dive into the details (and quirks) of <code>data.table</code> shortly.</p>
+<p>But first, a quick side-by-side comparison with <code>dplyr</code>, since that will help to orientate us for the rest of the lecture. Using our <code>starwars</code> dataset, say we want to know:</p>
+<blockquote>
+<p>What is the average height of the human characters by gender?</p>
+</blockquote>
+<div class="columns">
+<div class="column" style="width:50%;">
+<p>dplyr</p>
+<div class="sourceCode" id="cb19" data-code-line-numbers="5"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href=""></a><span class="fu">data</span>(starwars, <span class="at">package =</span> <span class="st">"dplyr"</span>)</span>
+<span id="cb19-2"><a href=""></a>starwars <span class="sc">%&gt;%</span></span>
+<span id="cb19-3"><a href=""></a>  <span class="fu">filter</span>(species <span class="sc">==</span> <span class="st">"Human"</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb19-4"><a href=""></a>  <span class="fu">group_by</span>(gender) <span class="sc">%&gt;%</span></span>
+<span id="cb19-5"><a href=""></a>  <span class="fu">summarise</span>(<span class="fu">mean</span>(height, <span class="at">na.rm =</span> <span class="cn">TRUE</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 2 × 2
+  gender    `mean(height, na.rm = TRUE)`
+  &lt;chr&gt;                            &lt;dbl&gt;
+1 feminine                          164.
+2 masculine                         182.</code></pre>
+</div>
+</div>
+</div><div class="column" style="width:50%;">
+<p>data.table</p>
+<div class="sourceCode" id="cb21" data-code-line-numbers="4"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href=""></a>starwars_dt <span class="ot">=</span> <span class="fu">as.data.table</span>(starwars)</span>
+<span id="cb21-2"><a href=""></a>starwars_dt[</span>
+<span id="cb21-3"><a href=""></a>  species <span class="sc">==</span> <span class="st">"Human"</span>,</span>
+<span id="cb21-4"><a href=""></a>  <span class="fu">mean</span>(height, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb21-5"><a href=""></a>  by <span class="ot">=</span> gender]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>      gender       V1
+      &lt;char&gt;    &lt;num&gt;
+1: masculine 182.3913
+2:  feminine 163.5714</code></pre>
+</div>
+</div>
+</div></div>
+</section>
+<section id="a-quick-example-3" class="slide level2 smaller">
+<h2>A Quick Example</h2>
+<p>We’ll dive into the details (and quirks) of <code>data.table</code> shortly.</p>
+<p>But first, a quick side-by-side comparison with <code>dplyr</code>, since that will help to orientate us for the rest of the lecture. Using our <code>starwars</code> dataset, say we want to know:</p>
+<blockquote>
+<p>What is the average height of the human characters by gender?</p>
+</blockquote>
+<div class="columns">
+<div class="column" style="width:50%;">
+<p>dplyr</p>
+<div class="sourceCode" id="cb23" data-code-line-numbers="4"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href=""></a><span class="fu">data</span>(starwars, <span class="at">package =</span> <span class="st">"dplyr"</span>)</span>
+<span id="cb23-2"><a href=""></a>starwars <span class="sc">%&gt;%</span></span>
+<span id="cb23-3"><a href=""></a>  <span class="fu">filter</span>(species <span class="sc">==</span> <span class="st">"Human"</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb23-4"><a href=""></a>  <span class="fu">group_by</span>(gender) <span class="sc">%&gt;%</span></span>
+<span id="cb23-5"><a href=""></a>  <span class="fu">summarise</span>(<span class="fu">mean</span>(height, <span class="at">na.rm =</span> <span class="cn">TRUE</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 2 × 2
+  gender    `mean(height, na.rm = TRUE)`
+  &lt;chr&gt;                            &lt;dbl&gt;
+1 feminine                          164.
+2 masculine                         182.</code></pre>
+</div>
+</div>
+</div><div class="column" style="width:50%;">
+<p>data.table</p>
+<div class="sourceCode" id="cb25" data-code-line-numbers="5"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href=""></a>starwars_dt <span class="ot">=</span> <span class="fu">as.data.table</span>(starwars)</span>
+<span id="cb25-2"><a href=""></a>starwars_dt[</span>
+<span id="cb25-3"><a href=""></a>  species <span class="sc">==</span> <span class="st">"Human"</span>,</span>
+<span id="cb25-4"><a href=""></a>  <span class="fu">mean</span>(height, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb25-5"><a href=""></a>  by <span class="ot">=</span> gender]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell">
 <div class="cell-output cell-output-stdout">
 <pre><code>      gender       V1
@@ -658,7 +785,7 @@ Mislav Sagovac
 <h2>Subset by rows (filter) cont.</h2>
 <p>Just to emphasise the point, here’s an example of subsetting by rows using our starwars data.table from earlier.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href=""></a>starwars_dt[height<span class="sc">&gt;</span><span class="dv">190</span> <span class="sc">&amp;</span> species<span class="sc">==</span><span class="st">'Human'</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href=""></a>starwars_dt[height<span class="sc">&gt;</span><span class="dv">190</span> <span class="sc">&amp;</span> species<span class="sc">==</span><span class="st">'Human'</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>                  name height  mass hair_color skin_color eye_color birth_year
                 &lt;char&gt;  &lt;int&gt; &lt;num&gt;     &lt;char&gt;     &lt;char&gt;    &lt;char&gt;      &lt;num&gt;
@@ -690,16 +817,16 @@ Mislav Sagovac
 <section id="order-by-rows-arrange" class="slide level2">
 <h2>Order by rows (arrange)</h2>
 <div class="fragment">
-<div class="sourceCode" id="cb17"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href=""></a>starwars_dt[<span class="fu">order</span>(birth_year)]  <span class="do">## (temporarily) sort by youngest to oldest</span></span>
-<span id="cb17-2"><a href=""></a>starwars_dt[<span class="fu">order</span>(<span class="sc">-</span>birth_year)] <span class="do">## (temporarily) sort by oldest to youngest</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb29"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href=""></a>starwars_dt[<span class="fu">order</span>(birth_year)]  <span class="do">## (temporarily) sort by youngest to oldest</span></span>
+<span id="cb29-2"><a href=""></a>starwars_dt[<span class="fu">order</span>(<span class="sc">-</span>birth_year)] <span class="do">## (temporarily) sort by oldest to youngest</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="fragment">
 <p>While ordering as per the above is very straightforward, data.table also provides an optimised <code>setorder()</code> function for reordering <em>by reference</em>.</p>
 </div>
 <div class="fragment">
 <div class="cell">
-<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href=""></a><span class="fu">setorder</span>(starwars_dt, birth_year, <span class="at">na.last =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb18-2"><a href=""></a>starwars_dt[<span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>, name<span class="sc">:</span>birth_year] <span class="do">## Only print subset to stay on the slide</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href=""></a><span class="fu">setorder</span>(starwars_dt, birth_year, <span class="at">na.last =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb30-2"><a href=""></a>starwars_dt[<span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>, name<span class="sc">:</span>birth_year] <span class="do">## Only print subset to stay on the slide</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>                    name height  mass hair_color skin_color eye_color
                   &lt;char&gt;  &lt;int&gt; &lt;num&gt;     &lt;char&gt;     &lt;char&gt;    &lt;char&gt;
@@ -768,9 +895,9 @@ Mislav Sagovac
 <div class="fragment">
 <p>However, we also won’t see these changes printed to screen unless we ask R explicitly.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href=""></a>DT <span class="ot">=</span> <span class="fu">data.table</span>(<span class="at">x =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>)</span>
-<span id="cb20-2"><a href=""></a><span class="co"># DT[, xsq := x^2] ## Modifies in place but doesn't print the result</span></span>
-<span id="cb20-3"><a href=""></a>DT[, x_sq <span class="sc">:</span><span class="er">=</span> x<span class="sc">^</span><span class="dv">2</span>][] <span class="do">## Adding [] prints the result.</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href=""></a>DT <span class="ot">=</span> <span class="fu">data.table</span>(<span class="at">x =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>)</span>
+<span id="cb32-2"><a href=""></a><span class="co"># DT[, xsq := x^2] ## Modifies in place but doesn't print the result</span></span>
+<span id="cb32-3"><a href=""></a>DT[, x_sq <span class="sc">:</span><span class="er">=</span> x<span class="sc">^</span><span class="dv">2</span>][] <span class="do">## Adding [] prints the result.</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>       x  x_sq
    &lt;int&gt; &lt;num&gt;
@@ -785,14 +912,14 @@ Mislav Sagovac
 <div class="fragment">
 <p>As I keep saying, <em>modifying by reference</em> has important implications for data manipulation. Consider what happens if we copy our data.table and then remove a column.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href=""></a>DT_copy <span class="ot">=</span> DT</span>
-<span id="cb22-2"><a href=""></a>DT_copy[, x_sq <span class="sc">:</span><span class="er">=</span> <span class="cn">NULL</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href=""></a>DT_copy <span class="ot">=</span> DT</span>
+<span id="cb34-2"><a href=""></a>DT_copy[, x_sq <span class="sc">:</span><span class="er">=</span> <span class="cn">NULL</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div>
 <div class="fragment">
 <p>Clearly, “x_sq” has been removed from <code>DT_copy</code>. But what of the original <code>DT</code> table?</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href=""></a>DT</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href=""></a>DT</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>       x
    &lt;int&gt;
@@ -804,21 +931,20 @@ Mislav Sagovac
 <div class="fragment">
 <p>Uh-oh! It too has been removed… exactly as modifying by reference demands. To avoid this behaviour, use the explicit <a href="https://rdatatable.gitlab.io/data.table/reference/copy.html"><code>data.table::copy()</code></a> function. Run this next chunk yourself:</p>
 <div class="cell" data-highlightspans="true">
-<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href=""></a>DT[, x_sq <span class="sc">:</span><span class="er">=</span> x<span class="sc">^</span><span class="dv">2</span>]     </span>
-<span id="cb25-2"><a href=""></a>DT_copy <span class="ot">=</span> <span class="fu">copy</span>(DT)  </span>
-<span id="cb25-3"><a href=""></a>DT_copy[, x_sq <span class="sc">:</span><span class="er">=</span> <span class="cn">NULL</span>]</span>
-<span id="cb25-4"><a href=""></a>DT <span class="do">## x_sq is still there (run and confirm for yourself)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href=""></a>DT[, x_sq <span class="sc">:</span><span class="er">=</span> x<span class="sc">^</span><span class="dv">2</span>]     </span>
+<span id="cb37-2"><a href=""></a>DT_copy <span class="ot">=</span> <span class="fu">copy</span>(DT)  </span>
+<span id="cb37-3"><a href=""></a>DT_copy[, x_sq <span class="sc">:</span><span class="er">=</span> <span class="cn">NULL</span>]</span>
+<span id="cb37-4"><a href=""></a>DT <span class="do">## x_sq is still there (run and confirm for yourself)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div>
-</section></section>
-<section>
-<section id="modifying-columns-cont.-1" class="title-slide slide level1 smaller center">
-<h1>Modifying columns := (cont.)</h1>
+</section>
+<section id="modifying-columns-cont.-1" class="slide level2 smaller">
+<h2>Modifying columns := (cont.)</h2>
 <div class="fragment">
 <p><strong>Sub-assign by reference</strong></p>
 <p>One really cool implication of <code>:=</code> is data.table’s <a href="https://rdatatable.gitlab.io/data.table/articles/datatable-reference-semantics.html#ref-i-j">sub-assign by reference</a> functionality. As a simple example, consider another fake dataset.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href=""></a>DT2 <span class="ot">=</span> <span class="fu">data.table</span>(<span class="at">a =</span> <span class="sc">-</span><span class="dv">2</span><span class="sc">:</span><span class="dv">2</span>, <span class="at">b =</span> LETTERS[<span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href=""></a>DT2 <span class="ot">=</span> <span class="fu">data.table</span>(<span class="at">a =</span> <span class="sc">-</span><span class="dv">2</span><span class="sc">:</span><span class="dv">2</span>, <span class="at">b =</span> LETTERS[<span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div>
 <div class="fragment">
@@ -830,7 +956,7 @@ Mislav Sagovac
 <li><p>In data.table, simply specify which rows to target (<code>i</code>) and then sub-assign (<code>j</code>) directly.</p></li>
 </ul>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href=""></a>DT2[a <span class="sc">&lt;</span> <span class="dv">0</span>, b <span class="sc">:</span><span class="er">=</span> <span class="cn">NA</span>][] <span class="do">## Again, just adding the second [] to print to screen</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href=""></a>DT2[a <span class="sc">&lt;</span> <span class="dv">0</span>, b <span class="sc">:</span><span class="er">=</span> <span class="cn">NA</span>][] <span class="do">## Again, just adding the second [] to print to screen</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>       a      b
    &lt;int&gt; &lt;char&gt;
@@ -850,13 +976,14 @@ Mislav Sagovac
 <ol type="1">
 <li>LHS <code>:=</code> RHS form: <code>DT[, c("var1", "var2") := .(val1, val2)]</code></li>
 <li>Functional form: <code>DT[, ':=' (var1=val1, var2=val2)]</code></li>
+<li>let form: <code>DT[, let(var1=val1, var2=val2)]</code></li>
 </ol>
 </div>
 <div class="fragment">
-<p>Personally, I prefer the LHS form. But we will use both.</p>
+<p>Personally, I prefer the LHS form when creating many columns programatically.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href=""></a>DT[, <span class="fu">c</span>(<span class="st">"y"</span>, <span class="st">"y_name"</span>) <span class="sc">:</span><span class="er">=</span> .(<span class="dv">3</span><span class="sc">:</span><span class="dv">4</span>, <span class="fu">c</span>(<span class="st">"three"</span>, <span class="st">"four"</span>))]</span>
-<span id="cb29-2"><a href=""></a>DT <span class="do">## Another way to print the results instead of appending []</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb41"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href=""></a>DT[, <span class="fu">c</span>(<span class="st">"y"</span>, <span class="st">"y_name"</span>) <span class="sc">:</span><span class="er">=</span> .(<span class="dv">3</span><span class="sc">:</span><span class="dv">4</span>, <span class="fu">c</span>(<span class="st">"three"</span>, <span class="st">"four"</span>))]</span>
+<span id="cb41-2"><a href=""></a>DT <span class="do">## Another way to print the results instead of appending []</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>       x     y y_name
    &lt;int&gt; &lt;int&gt; &lt;char&gt;
@@ -866,9 +993,9 @@ Mislav Sagovac
 </div>
 </div>
 <div class="fragment">
-<p>Note, however, that dynamically assigning dependent columns in a single step (like we did with dplyr::mutate) doesn’t work.</p>
+<p>You can’t use variable crated inside let to create new variables.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href=""></a>DT[, <span class="st">':='</span>(<span class="at">z =</span> <span class="dv">5</span><span class="sc">:</span><span class="dv">6</span>, <span class="at">z_sq =</span> z<span class="sc">^</span><span class="dv">2</span>)][]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb43"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb43-1"><a href=""></a>DT[, <span class="fu">let</span>(<span class="at">z =</span> <span class="dv">5</span><span class="sc">:</span><span class="dv">6</span>, <span class="at">z_sq =</span> z<span class="sc">^</span><span class="dv">2</span>)][]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-error">
 <pre><code>Error in eval(jsub, SDenv, parent.frame()): object 'z' not found</code></pre>
 </div>
@@ -878,12 +1005,9 @@ Mislav Sagovac
 <section id="aside-chaining-data.table-operations" class="slide level2 smaller">
 <h2>Aside: Chaining data.table operations</h2>
 <div class="fragment">
-<p>That last example provides as good a time as any to mention that you can chain multiple data.table operations together.</p>
-</div>
-<div class="fragment">
 <p>The native data.table way is simply to append consecutive <code>[]</code> terms.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href=""></a>DT[, z <span class="sc">:</span><span class="er">=</span> <span class="dv">5</span><span class="sc">:</span><span class="dv">6</span>][, z_sq <span class="sc">:</span><span class="er">=</span> z<span class="sc">^</span><span class="dv">2</span>][] </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb45"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb45-1"><a href=""></a>DT[, z <span class="sc">:</span><span class="er">=</span> <span class="dv">5</span><span class="sc">:</span><span class="dv">6</span>][, z_sq <span class="sc">:</span><span class="er">=</span> z<span class="sc">^</span><span class="dv">2</span>][] </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>       x     y y_name     z  z_sq
    &lt;int&gt; &lt;int&gt; &lt;char&gt; &lt;int&gt; &lt;num&gt;
@@ -895,11 +1019,11 @@ Mislav Sagovac
 <div class="fragment">
 <p>But if you prefer the <strong>magrittr</strong> pipe, then that’s also possible. Just prefix each step with <code>.</code>:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href=""></a><span class="co"># library(magrittr) ## Not needed since we've already loaded %&gt;% via dplyr</span></span>
-<span id="cb35-2"><a href=""></a>DT <span class="sc">%&gt;%</span></span>
-<span id="cb35-3"><a href=""></a>  .[, xyz <span class="sc">:</span><span class="er">=</span> x<span class="sc">+</span>y<span class="sc">+</span>z] <span class="sc">%&gt;%</span></span>
-<span id="cb35-4"><a href=""></a>  .[, xyz_sq <span class="sc">:</span><span class="er">=</span> xyz<span class="sc">^</span><span class="dv">2</span>] <span class="sc">%&gt;%</span></span>
-<span id="cb35-5"><a href=""></a>  .[] </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb47"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb47-1"><a href=""></a><span class="co"># library(magrittr) ## Not needed since we've already loaded %&gt;% via dplyr</span></span>
+<span id="cb47-2"><a href=""></a>DT <span class="sc">%&gt;%</span></span>
+<span id="cb47-3"><a href=""></a>  .[, xyz <span class="sc">:</span><span class="er">=</span> x<span class="sc">+</span>y<span class="sc">+</span>z] <span class="sc">%&gt;%</span></span>
+<span id="cb47-4"><a href=""></a>  .[, xyz_sq <span class="sc">:</span><span class="er">=</span> xyz<span class="sc">^</span><span class="dv">2</span>] <span class="sc">%&gt;%</span></span>
+<span id="cb47-5"><a href=""></a>  .[] </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>       x     y y_name     z  z_sq   xyz xyz_sq
    &lt;int&gt; &lt;int&gt; &lt;char&gt; &lt;int&gt; &lt;num&gt; &lt;int&gt;  &lt;num&gt;
@@ -908,13 +1032,29 @@ Mislav Sagovac
 </div>
 </div>
 </div>
+<div class="fragment">
+<p>You can also use base pipe operator:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb49"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb49-1"><a href=""></a>DT <span class="sc">|&gt;</span></span>
+<span id="cb49-2"><a href=""></a>  _[, xyz <span class="sc">:</span><span class="er">=</span> x<span class="sc">+</span>y<span class="sc">+</span>z] <span class="sc">|&gt;</span></span>
+<span id="cb49-3"><a href=""></a>  _[, xyz_sq <span class="sc">:</span><span class="er">=</span> xyz<span class="sc">^</span><span class="dv">2</span>] <span class="sc">|&gt;</span></span>
+<span id="cb49-4"><a href=""></a>  _[] </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>       x     y y_name     z  z_sq   xyz xyz_sq
+   &lt;int&gt; &lt;int&gt; &lt;char&gt; &lt;int&gt; &lt;num&gt; &lt;int&gt;  &lt;num&gt;
+1:     1     3  three     5    25     9     81
+2:     2     4   four     6    36    12    144</code></pre>
+</div>
+</div>
+</div>
+<p>More in <a href="https://www.r-bloggers.com/2024/01/piping-data-tables/" target="_blank">blog post</a></p>
 </section>
 <section id="modifying-columns-cont.-3" class="slide level2">
 <h2>Modifying columns := (cont.)</h2>
 <p>To remove a column from your dataset, set it to NULL.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href=""></a>DT[, y_name <span class="sc">:</span><span class="er">=</span> <span class="cn">NULL</span>]</span>
-<span id="cb37-2"><a href=""></a>DT</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb51"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb51-1"><a href=""></a>DT[, y_name <span class="sc">:</span><span class="er">=</span> <span class="cn">NULL</span>]</span>
+<span id="cb51-2"><a href=""></a>DT</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>       x     y     z  z_sq   xyz xyz_sq
    &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;num&gt; &lt;int&gt;  &lt;num&gt;
@@ -931,7 +1071,7 @@ Mislav Sagovac
 <div class="fragment">
 <p>Subset by column position:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href=""></a>starwars_dt[<span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>, <span class="fu">c</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>, <span class="dv">10</span>)]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb53"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb53-1"><a href=""></a>starwars_dt[<span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>, <span class="fu">c</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>, <span class="dv">10</span>)]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>                    name height  mass homeworld
                   &lt;char&gt;  &lt;int&gt; &lt;num&gt;    &lt;char&gt;
@@ -943,9 +1083,9 @@ Mislav Sagovac
 <div class="fragment">
 <p>Or by name:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb41"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href=""></a><span class="co"># starwars_dt[, c("name", "height", "mass", "homeworld")] ## Also works</span></span>
-<span id="cb41-2"><a href=""></a><span class="co"># starwars_dt[, list(name, height, mass, homeworld)] ## So does this</span></span>
-<span id="cb41-3"><a href=""></a>starwars_dt[<span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>, .(name, height, mass, homeworld)]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb55"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb55-1"><a href=""></a><span class="co"># starwars_dt[, c("name", "height", "mass", "homeworld")] ## Also works</span></span>
+<span id="cb55-2"><a href=""></a><span class="co"># starwars_dt[, list(name, height, mass, homeworld)] ## So does this</span></span>
+<span id="cb55-3"><a href=""></a>starwars_dt[<span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>, .(name, height, mass, homeworld)]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>                    name height  mass homeworld
                   &lt;char&gt;  &lt;int&gt; &lt;num&gt;    &lt;char&gt;
@@ -974,21 +1114,21 @@ Mislav Sagovac
 <h2>Subsetting on columns (cont.)</h2>
 <p>You can also exclude columns through negation. Try this next code chunk yourself:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb43"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb43-1"><a href=""></a>starwars_dt[, <span class="sc">!</span><span class="fu">c</span>(<span class="st">"name"</span>, <span class="st">"height"</span>)]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb57"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb57-1"><a href=""></a>starwars_dt[, <span class="sc">!</span><span class="fu">c</span>(<span class="st">"name"</span>, <span class="st">"height"</span>)]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="renaming-columns" class="slide level2 smaller">
 <h2>Renaming columns</h2>
 <div class="fragment">
 <p>You can rename (set) a column by reference. Again, run this yourself:</p>
-<div class="sourceCode" id="cb44"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb44-1"><a href=""></a><span class="fu">setnames</span>(starwars_dt, <span class="at">old =</span> <span class="fu">c</span>(<span class="st">"name"</span>, <span class="st">"homeworld"</span>), <span class="at">new =</span> <span class="fu">c</span>(<span class="st">"alias"</span>, <span class="st">"crib"</span>))[]</span>
-<span id="cb44-2"><a href=""></a><span class="do">## Better change it back, in case we use "name" or "homeworld" on a later slide</span></span>
-<span id="cb44-3"><a href=""></a><span class="fu">setnames</span>(starwars_dt, <span class="at">old =</span> <span class="fu">c</span>(<span class="st">"alias"</span>, <span class="st">"crib"</span>), <span class="at">new =</span> <span class="fu">c</span>(<span class="st">"name"</span>, <span class="st">"homeworld"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb58"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb58-1"><a href=""></a><span class="fu">setnames</span>(starwars_dt, <span class="at">old =</span> <span class="fu">c</span>(<span class="st">"name"</span>, <span class="st">"homeworld"</span>), <span class="at">new =</span> <span class="fu">c</span>(<span class="st">"alias"</span>, <span class="st">"crib"</span>))[]</span>
+<span id="cb58-2"><a href=""></a><span class="do">## Better change it back, in case we use "name" or "homeworld" on a later slide</span></span>
+<span id="cb58-3"><a href=""></a><span class="fu">setnames</span>(starwars_dt, <span class="at">old =</span> <span class="fu">c</span>(<span class="st">"alias"</span>, <span class="st">"crib"</span>), <span class="at">new =</span> <span class="fu">c</span>(<span class="st">"name"</span>, <span class="st">"homeworld"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="fragment">
 <p>While the <code>setnames()</code> approach offers performance benefits, I often find it convenient to dynamically (and/or temporarily) rename columns when subsetting them. For example:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb45"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb45-1"><a href=""></a>starwars_dt[<span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>, .(<span class="at">alias =</span> name, <span class="at">crib =</span> homeworld)]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb59"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb59-1"><a href=""></a>starwars_dt[<span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>, .(<span class="at">alias =</span> name, <span class="at">crib =</span> homeworld)]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>                   alias   crib
                   &lt;char&gt; &lt;char&gt;
@@ -1002,8 +1142,8 @@ Mislav Sagovac
 <h2>Subsetting on columns (cont.)</h2>
 <p>One last thing I’ll mention w.r.t. to subsetting columns is that you can also use dplyr verbs on data.tables if you prefer.</p>
 <p>For example run the following code chunk for yourself. (You’ll get a warning about efficiency loss, but this will be very minor for a case like this.)</p>
-<div class="sourceCode" id="cb47"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb47-1"><a href=""></a>starwars_dt[<span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>, ] <span class="sc">%&gt;%</span> </span>
-<span id="cb47-2"><a href=""></a>  <span class="fu">select</span>(<span class="at">crib =</span> homeworld, <span class="fu">everything</span>())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb61"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb61-1"><a href=""></a>starwars_dt[<span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>, ] <span class="sc">%&gt;%</span> </span>
+<span id="cb61-2"><a href=""></a>  <span class="fu">select</span>(<span class="at">crib =</span> homeworld, <span class="fu">everything</span>())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>I am not fan of this approach. I’ll get back to dplyr+data.table functionality at the end of the lecture….</p>
 </section>
 <section id="aggregating" class="slide level2 smaller">
@@ -1011,7 +1151,7 @@ Mislav Sagovac
 <div class="fragment">
 <p>Finally, we can do aggregating manipulations in <code>j</code>.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb48"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb48-1"><a href=""></a>starwars_dt[, <span class="fu">mean</span>(height, <span class="at">na.rm=</span>T)]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb62"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb62-1"><a href=""></a>starwars_dt[, <span class="fu">mean</span>(height, <span class="at">na.rm=</span>T)]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 174.6049</code></pre>
 </div>
@@ -1020,8 +1160,8 @@ Mislav Sagovac
 <div class="fragment">
 <p>Note that we don’t keep anything unless we assign the result to a new object. If you want to add the new aggregated column to your original dataset, use <code>:=</code>.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb50"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb50-1"><a href=""></a>starwars_dt[, mean_height <span class="sc">:</span><span class="er">=</span> <span class="fu">mean</span>(height, <span class="at">na.rm=</span>T)] <span class="sc">%&gt;%</span> <span class="do">## Add mean height as column</span></span>
-<span id="cb50-2"><a href=""></a>  .[<span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>, .(name, height, mean_height)] <span class="do">## Just to keep everything on the slide</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb64"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb64-1"><a href=""></a>starwars_dt[, mean_height <span class="sc">:</span><span class="er">=</span> <span class="fu">mean</span>(height, <span class="at">na.rm=</span>T)] <span class="sc">%&gt;%</span> <span class="do">## Add mean height as column</span></span>
+<span id="cb64-2"><a href=""></a>  .[<span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>, .(name, height, mean_height)] <span class="do">## Just to keep everything on the slide</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>                    name height mean_height
                   &lt;char&gt;  &lt;int&gt;       &lt;num&gt;
@@ -1040,7 +1180,7 @@ Mislav Sagovac
 <p>data.table also provides <a href="https://rdatatable.gitlab.io/data.table/reference/special-symbols.html">special convenience symbols</a> for common aggregation tasks in <code>j</code>.</p>
 <p>For example, we can quickly count the number of observations using <code>.N</code>.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb52"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb52-1"><a href=""></a>starwars_dt[, .N]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb66"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb66-1"><a href=""></a>starwars_dt[, .N]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 87</code></pre>
 </div>
@@ -1061,19 +1201,19 @@ Mislav Sagovac
 <section id="by" class="slide level2 smaller">
 <h2>by</h2>
 <div class="fragment">
-<p>data.table’s <code>by</code> argument functions very similarly to the <code>dplyr::group_by</code> equivalent. Try these next few examples in your own R console:</p>
+<p>data.table’s <code>by</code> argument functions very similarly to the <code>dplyr::group_by</code> equivalent.</p>
 <ul>
 <li><code>starwars_dt[, mean(height, na.rm=T), by = species]</code>: Collapse by single variable</li>
 <li><code>starwars_dt[, .(species_height = mean(height, na.rm=T)), by = species]</code>: As above, but explicitly name the summary variable</li>
-<li><code>starwars_dt[, mean(mass, na.rm=T), by = height&gt;190]</code>: Conditionals work too.</li>
+<li><code>starwars_dt[, mean(mass, na.rm=T), by = height&gt;190]</code>: Conditionals.</li>
 <li><code>starwars_dt[, species_n := .N, by = species][]</code>: Add an aggregated column to the data (here: number of observations by species group)</li>
 </ul>
 </div>
 <div class="fragment">
 <p>To perform aggregations by multiple variables, we’ll use the <code>.()</code> syntax again.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb54"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb54-1"><a href=""></a>starwars_dt[, .(<span class="at">mean_height =</span> <span class="fu">mean</span>(height, <span class="at">na.rm=</span>T)), by <span class="ot">=</span> .(species, homeworld)] <span class="sc">%&gt;%</span></span>
-<span id="cb54-2"><a href=""></a>  <span class="fu">head</span>(<span class="dv">4</span>) <span class="do">## Just to keep everything on the slide</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb68"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb68-1"><a href=""></a>starwars_dt[, .(<span class="at">mean_height =</span> <span class="fu">mean</span>(height, <span class="at">na.rm=</span>T)), by <span class="ot">=</span> .(species, homeworld)] <span class="sc">%&gt;%</span></span>
+<span id="cb68-2"><a href=""></a>  <span class="fu">head</span>(<span class="dv">4</span>) <span class="do">## Just to keep everything on the slide</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>   species homeworld mean_height
     &lt;char&gt;    &lt;char&gt;       &lt;num&gt;
@@ -1090,10 +1230,10 @@ Mislav Sagovac
 <div class="fragment">
 <p>We’ve seen how to group by multiple variables. But what if we want to <em>summarise</em> multiple variables, regardless of how we are grouping?</p>
 <p>One solution is to again use <code>.()</code> and write everything out, e.g.</p>
-<div class="sourceCode" id="cb56"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb56-1"><a href=""></a><span class="do">## Run yourself if you'd like to check the output</span></span>
-<span id="cb56-2"><a href=""></a>starwars_dt[, </span>
-<span id="cb56-3"><a href=""></a>            .(<span class="fu">mean</span>(height, <span class="at">na.rm=</span>T), <span class="fu">mean</span>(mass, <span class="at">na.rm=</span>T), <span class="fu">mean</span>(birth_year, <span class="at">na.rm=</span>T)), </span>
-<span id="cb56-4"><a href=""></a>            by <span class="ot">=</span> species]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb70"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb70-1"><a href=""></a><span class="do">## Run yourself if you'd like to check the output</span></span>
+<span id="cb70-2"><a href=""></a>starwars_dt[, </span>
+<span id="cb70-3"><a href=""></a>            .(<span class="fu">mean</span>(height, <span class="at">na.rm=</span>T), <span class="fu">mean</span>(mass, <span class="at">na.rm=</span>T), <span class="fu">mean</span>(birth_year, <span class="at">na.rm=</span>T)), </span>
+<span id="cb70-4"><a href=""></a>            by <span class="ot">=</span> species]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="fragment">
 <p>But this soon become tedious. Imagine we have even more variables. Do we really have to write out <code>mean(..., na.rm=T)</code> for each one?</p>
@@ -1108,11 +1248,11 @@ Mislav Sagovac
 <section id="efficient-subsetting-with-.sd-cont." class="slide level2 smaller">
 <h2>Efficient subsetting with .SD (cont.)</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb57"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb57-1"><a href=""></a>starwars_dt[, </span>
-<span id="cb57-2"><a href=""></a>            <span class="fu">lapply</span>(.SD, mean, <span class="at">na.rm=</span>T), <span class="co">#&lt;&lt;</span></span>
-<span id="cb57-3"><a href=""></a>            .SDcols <span class="ot">=</span> <span class="fu">c</span>(<span class="st">"height"</span>, <span class="st">"mass"</span>, <span class="st">"birth_year"</span>),</span>
-<span id="cb57-4"><a href=""></a>            by <span class="ot">=</span> species] <span class="sc">%&gt;%</span></span>
-<span id="cb57-5"><a href=""></a>  <span class="fu">head</span>(<span class="dv">2</span>) <span class="do">## Just keep everything on the slide</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb71"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb71-1"><a href=""></a>starwars_dt[, </span>
+<span id="cb71-2"><a href=""></a>            <span class="fu">lapply</span>(.SD, mean, <span class="at">na.rm=</span>T), <span class="co">#&lt;&lt;</span></span>
+<span id="cb71-3"><a href=""></a>            .SDcols <span class="ot">=</span> <span class="fu">c</span>(<span class="st">"height"</span>, <span class="st">"mass"</span>, <span class="st">"birth_year"</span>),</span>
+<span id="cb71-4"><a href=""></a>            by <span class="ot">=</span> species] <span class="sc">%&gt;%</span></span>
+<span id="cb71-5"><a href=""></a>  <span class="fu">head</span>(<span class="dv">2</span>) <span class="do">## Just keep everything on the slide</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>   species height  mass birth_year
     &lt;char&gt;  &lt;num&gt; &lt;num&gt;      &lt;num&gt;
@@ -1123,11 +1263,11 @@ Mislav Sagovac
 </section>
 <section id="efficient-subsetting-with-.sd-cont.-1" class="slide level2 smaller">
 <h2>Efficient subsetting with .SD (cont.)</h2>
-<div class="sourceCode" id="cb59" data-code-line-numbers="2"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb59-1"><a href=""></a>starwars_dt[, </span>
-<span id="cb59-2"><a href=""></a>            <span class="fu">lapply</span>(.SD, mean, <span class="at">na.rm=</span>T), <span class="co">#&lt;&lt;</span></span>
-<span id="cb59-3"><a href=""></a>            .SDcols <span class="ot">=</span> <span class="fu">c</span>(<span class="st">"height"</span>, <span class="st">"mass"</span>, <span class="st">"birth_year"</span>),</span>
-<span id="cb59-4"><a href=""></a>            by <span class="ot">=</span> species] <span class="sc">%&gt;%</span></span>
-<span id="cb59-5"><a href=""></a>  <span class="fu">head</span>(<span class="dv">2</span>) <span class="do">## Just keep everything on the slide</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb73" data-code-line-numbers="2"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb73-1"><a href=""></a>starwars_dt[, </span>
+<span id="cb73-2"><a href=""></a>            <span class="fu">lapply</span>(.SD, mean, <span class="at">na.rm=</span>T), <span class="co">#&lt;&lt;</span></span>
+<span id="cb73-3"><a href=""></a>            .SDcols <span class="ot">=</span> <span class="fu">c</span>(<span class="st">"height"</span>, <span class="st">"mass"</span>, <span class="st">"birth_year"</span>),</span>
+<span id="cb73-4"><a href=""></a>            by <span class="ot">=</span> species] <span class="sc">%&gt;%</span></span>
+<span id="cb73-5"><a href=""></a>  <span class="fu">head</span>(<span class="dv">2</span>) <span class="do">## Just keep everything on the slide</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell">
 <div class="cell-output cell-output-stdout">
 <pre><code>   species height  mass birth_year
@@ -1140,11 +1280,11 @@ Mislav Sagovac
 </section>
 <section id="efficient-subsetting-with-.sd-cont.-2" class="slide level2 smaller">
 <h2>Efficient subsetting with .SD (cont.)</h2>
-<div class="sourceCode" id="cb61" data-code-line-numbers="3"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb61-1"><a href=""></a>starwars_dt[, </span>
-<span id="cb61-2"><a href=""></a>            <span class="fu">lapply</span>(.SD, mean, <span class="at">na.rm=</span>T), <span class="co">#&lt;&lt;</span></span>
-<span id="cb61-3"><a href=""></a>            .SDcols <span class="ot">=</span> <span class="fu">c</span>(<span class="st">"height"</span>, <span class="st">"mass"</span>, <span class="st">"birth_year"</span>),</span>
-<span id="cb61-4"><a href=""></a>            by <span class="ot">=</span> species] <span class="sc">%&gt;%</span></span>
-<span id="cb61-5"><a href=""></a>  <span class="fu">head</span>(<span class="dv">2</span>) <span class="do">## Just keep everything on the slide</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb75" data-code-line-numbers="3"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb75-1"><a href=""></a>starwars_dt[, </span>
+<span id="cb75-2"><a href=""></a>            <span class="fu">lapply</span>(.SD, mean, <span class="at">na.rm=</span>T), <span class="co">#&lt;&lt;</span></span>
+<span id="cb75-3"><a href=""></a>            .SDcols <span class="ot">=</span> <span class="fu">c</span>(<span class="st">"height"</span>, <span class="st">"mass"</span>, <span class="st">"birth_year"</span>),</span>
+<span id="cb75-4"><a href=""></a>            by <span class="ot">=</span> species] <span class="sc">%&gt;%</span></span>
+<span id="cb75-5"><a href=""></a>  <span class="fu">head</span>(<span class="dv">2</span>) <span class="do">## Just keep everything on the slide</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell">
 <div class="cell-output cell-output-stdout">
 <pre><code>   species height  mass birth_year
@@ -1158,11 +1298,11 @@ Mislav Sagovac
 </section>
 <section id="efficient-subsetting-with-.sd-cont.-3" class="slide level2 smaller">
 <h2>Efficient subsetting with .SD (cont.)</h2>
-<div class="sourceCode" id="cb63" data-code-line-numbers="3"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb63-1"><a href=""></a>starwars_dt[, </span>
-<span id="cb63-2"><a href=""></a>            <span class="fu">lapply</span>(.SD, mean, <span class="at">na.rm=</span>T), <span class="co">#&lt;&lt;</span></span>
-<span id="cb63-3"><a href=""></a>            .SDcols <span class="ot">=</span> <span class="fu">c</span>(<span class="st">"height"</span>, <span class="st">"mass"</span>, <span class="st">"birth_year"</span>),</span>
-<span id="cb63-4"><a href=""></a>            by <span class="ot">=</span> species] <span class="sc">%&gt;%</span></span>
-<span id="cb63-5"><a href=""></a>  <span class="fu">head</span>(<span class="dv">2</span>) <span class="do">## Just keep everything on the slide</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb77" data-code-line-numbers="3"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb77-1"><a href=""></a>starwars_dt[, </span>
+<span id="cb77-2"><a href=""></a>            <span class="fu">lapply</span>(.SD, mean, <span class="at">na.rm=</span>T), <span class="co">#&lt;&lt;</span></span>
+<span id="cb77-3"><a href=""></a>            .SDcols <span class="ot">=</span> <span class="fu">c</span>(<span class="st">"height"</span>, <span class="st">"mass"</span>, <span class="st">"birth_year"</span>),</span>
+<span id="cb77-4"><a href=""></a>            by <span class="ot">=</span> species] <span class="sc">%&gt;%</span></span>
+<span id="cb77-5"><a href=""></a>  <span class="fu">head</span>(<span class="dv">2</span>) <span class="do">## Just keep everything on the slide</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell">
 <div class="cell-output cell-output-stdout">
 <pre><code>   species height  mass birth_year
@@ -1181,7 +1321,7 @@ Mislav Sagovac
 <p>If we instead want to apply the same function on <em>all</em> the variables in our dataset, then <code>.SD</code> by itself will suffice.</p>
 <p>As a quick example, recall our earlier DT object that contains only numeric variables.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb65"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb65-1"><a href=""></a>DT</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb79"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb79-1"><a href=""></a>DT</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>       x     y     z  z_sq   xyz xyz_sq
    &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;num&gt; &lt;int&gt;  &lt;num&gt;
@@ -1191,7 +1331,7 @@ Mislav Sagovac
 </div>
 <p>We can obtain the mean for each variable as follows.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb67"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb67-1"><a href=""></a>DT[, <span class="fu">lapply</span>(.SD, mean)]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb81"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb81-1"><a href=""></a>DT[, <span class="fu">lapply</span>(.SD, mean)]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>       x     y     z  z_sq   xyz xyz_sq
    &lt;num&gt; &lt;num&gt; &lt;num&gt; &lt;num&gt; &lt;num&gt;  &lt;num&gt;
@@ -1259,23 +1399,23 @@ Mislav Sagovac
 <section id="example" class="slide level2 smaller">
 <h2>Example</h2>
 <div class="fragment">
-<p>Recall the <a href="#/fast">speed benchmark</a> that we saw at the very beginning of the lecture: data.table ended up being 10x faster than dplyr for a fairly standard summarising task.</p>
+<p>Recall the <a href="#/fast">speed benchmark</a> that we saw at the very beginning of the lecture: data.table ended up being 20x faster than dplyr for a fairly standard summarising task.</p>
 </div>
 <div class="fragment">
 <p>Let’s redo the benchmark, but this time include a version where we pre-assign a key. For optimal performance, the key should match the same variables that we’re grouping/subsetting on.</p>
 <ul>
 <li>Again, a key can be set on multiple variables, although the lead grouping variable (in the below case: “name”) is the most important.</li>
 </ul>
-<div class="sourceCode" id="cb69"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb69-1"><a href=""></a><span class="do">## First create a keyed version of the storms data.table.</span></span>
-<span id="cb69-2"><a href=""></a><span class="do">## Note that key variables match the 'by' grouping variables below.</span></span>
-<span id="cb69-3"><a href=""></a>storms_dt_key <span class="ot">=</span> <span class="fu">as.data.table</span>(storms, <span class="at">key =</span> <span class="fu">c</span>(<span class="st">"name"</span>, <span class="st">"year"</span>, <span class="st">"month"</span>, <span class="st">"day"</span>))</span>
-<span id="cb69-4"><a href=""></a><span class="do">## Collapse function for this keyed data.table. Everything else stays the same.</span></span>
-<span id="cb69-5"><a href=""></a>collapse_dt_key <span class="ot">=</span> <span class="cf">function</span>() {</span>
-<span id="cb69-6"><a href=""></a>  storms_dt_key[, .(<span class="at">wind =</span> <span class="fu">mean</span>(wind), <span class="at">pressure =</span> <span class="fu">mean</span>(pressure), <span class="at">category =</span> <span class="fu">first</span>(category)), </span>
-<span id="cb69-7"><a href=""></a>                by <span class="ot">=</span> .(name, year, month, day)]</span>
-<span id="cb69-8"><a href=""></a>}</span>
-<span id="cb69-9"><a href=""></a><span class="do">## Run the benchmark on all three functions.</span></span>
-<span id="cb69-10"><a href=""></a><span class="fu">microbenchmark</span>(<span class="fu">collapse_dplyr</span>(), <span class="fu">collapse_dt</span>(), <span class="fu">collapse_dt_key</span>(), <span class="at">times =</span> <span class="dv">1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb83"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb83-1"><a href=""></a><span class="do">## First create a keyed version of the storms data.table.</span></span>
+<span id="cb83-2"><a href=""></a><span class="do">## Note that key variables match the 'by' grouping variables below.</span></span>
+<span id="cb83-3"><a href=""></a>storms_dt_key <span class="ot">=</span> <span class="fu">as.data.table</span>(storms, <span class="at">key =</span> <span class="fu">c</span>(<span class="st">"name"</span>, <span class="st">"year"</span>, <span class="st">"month"</span>, <span class="st">"day"</span>))</span>
+<span id="cb83-4"><a href=""></a><span class="do">## Collapse function for this keyed data.table. Everything else stays the same.</span></span>
+<span id="cb83-5"><a href=""></a>collapse_dt_key <span class="ot">=</span> <span class="cf">function</span>() {</span>
+<span id="cb83-6"><a href=""></a>  storms_dt_key[, .(<span class="at">wind =</span> <span class="fu">mean</span>(wind), <span class="at">pressure =</span> <span class="fu">mean</span>(pressure), <span class="at">category =</span> <span class="fu">first</span>(category)), </span>
+<span id="cb83-7"><a href=""></a>                by <span class="ot">=</span> .(name, year, month, day)]</span>
+<span id="cb83-8"><a href=""></a>}</span>
+<span id="cb83-9"><a href=""></a><span class="do">## Run the benchmark on all three functions.</span></span>
+<span id="cb83-10"><a href=""></a><span class="fu">microbenchmark</span>(<span class="fu">collapse_dplyr</span>(), <span class="fu">collapse_dt</span>(), <span class="fu">collapse_dt_key</span>(), <span class="at">times =</span> <span class="dv">1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div style="text-align: right">
 <p><em>See next slide for results</em></p>
 </div>
@@ -1287,12 +1427,12 @@ Mislav Sagovac
 <div class="cell-output cell-output-stdout">
 <pre><code>Unit: milliseconds
               expr      min       lq     mean   median       uq      max neval
-  collapse_dplyr() 546.8766 546.8766 546.8766 546.8766 546.8766 546.8766     1
- collapse_dt_key()  11.9146  11.9146  11.9146  11.9146  11.9146  11.9146     1</code></pre>
+  collapse_dplyr() 208.5730 208.5730 208.5730 208.5730 208.5730 208.5730     1
+ collapse_dt_key()   6.6973   6.6973   6.6973   6.6973   6.6973   6.6973     1</code></pre>
 </div>
 </div>
 <div class="fragment">
-<p>The keyed data.table version is now <strong>50x</strong> (!!!) faster than dplyr.</p>
+<p>The keyed data.table version is now <strong>30x</strong> (!!!) faster than dplyr.</p>
 <ul>
 <li>That thing you feel… is your face melting.</li>
 </ul>
@@ -1324,9 +1464,9 @@ Mislav Sagovac
 <div class="fragment">
 <p>I’m going to keep things brief by simply showing you how to repeat the same left join that we <a href="https://raw.githack.com/uo-ec607/lectures/master/05-tidyverse/05-tidyverse.html#54">practiced</a> with dplyr in the last lecture, using data from the <strong>nycflights13</strong> package.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb71"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb71-1"><a href=""></a><span class="co"># library(nycflights13) ## Already loaded</span></span>
-<span id="cb71-2"><a href=""></a>flights_dt <span class="ot">=</span> <span class="fu">as.data.table</span>(flights) </span>
-<span id="cb71-3"><a href=""></a>planes_dt <span class="ot">=</span> <span class="fu">as.data.table</span>(planes)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb85"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb85-1"><a href=""></a><span class="co"># library(nycflights13) ## Already loaded</span></span>
+<span id="cb85-2"><a href=""></a>flights_dt <span class="ot">=</span> <span class="fu">as.data.table</span>(flights) </span>
+<span id="cb85-3"><a href=""></a>planes_dt <span class="ot">=</span> <span class="fu">as.data.table</span>(planes)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div>
 </section>
@@ -1337,47 +1477,47 @@ Mislav Sagovac
 <div class="collumns">
 <div class="column" style="width:50%;">
 <p><strong>dplyr</strong></p>
-<div class="sourceCode" id="cb72"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb72-1"><a href=""></a><span class="fu">left_join</span>(</span>
-<span id="cb72-2"><a href=""></a>  flights, </span>
-<span id="cb72-3"><a href=""></a>  planes, </span>
-<span id="cb72-4"><a href=""></a>  <span class="at">by =</span> <span class="st">"tailnum"</span></span>
-<span id="cb72-5"><a href=""></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb86"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb86-1"><a href=""></a><span class="fu">left_join</span>(</span>
+<span id="cb86-2"><a href=""></a>  flights, </span>
+<span id="cb86-3"><a href=""></a>  planes, </span>
+<span id="cb86-4"><a href=""></a>  <span class="at">by =</span> <span class="st">"tailnum"</span></span>
+<span id="cb86-5"><a href=""></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div><div class="column" style="width:50%;">
 <p><strong>data.table</strong></p>
-<div class="sourceCode" id="cb73"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb73-1"><a href=""></a><span class="fu">merge</span>(</span>
-<span id="cb73-2"><a href=""></a>  flights_dt, </span>
-<span id="cb73-3"><a href=""></a>  planes_dt, </span>
-<span id="cb73-4"><a href=""></a>  <span class="at">all.x =</span> <span class="cn">TRUE</span>, <span class="do">## omit for inner join</span></span>
-<span id="cb73-5"><a href=""></a>  <span class="at">by =</span> <span class="st">"tailnum"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb87"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb87-1"><a href=""></a><span class="fu">merge</span>(</span>
+<span id="cb87-2"><a href=""></a>  flights_dt, </span>
+<span id="cb87-3"><a href=""></a>  planes_dt, </span>
+<span id="cb87-4"><a href=""></a>  <span class="at">all.x =</span> <span class="cn">TRUE</span>, <span class="do">## omit for inner join</span></span>
+<span id="cb87-5"><a href=""></a>  <span class="at">by =</span> <span class="st">"tailnum"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div></div>
 </div>
 <div class="fragment">
 <p>If you run these, you’ll see that both methods handle the ambiguous “year” columns by creating “year.x” and “year.y” variants. We avoided this in dplyr by using <code>rename()</code>. How might you avoid the same thing in data.table? <b>Possible answer:</b> Use <code>setnames()</code>.</p>
 </div>
 <div class="fragment">
-<div class="sourceCode" id="cb74" data-code-line-numbers="3"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb74-1"><a href=""></a><span class="fu">merge</span>(</span>
-<span id="cb74-2"><a href=""></a>  flights_dt,</span>
-<span id="cb74-3"><a href=""></a>  <span class="fu">setnames</span>(planes_dt, <span class="at">old =</span> <span class="st">"year"</span>, <span class="at">new =</span> <span class="st">"year_built"</span>), <span class="co">#&lt;&lt; </span></span>
-<span id="cb74-4"><a href=""></a>  <span class="at">all.x =</span> <span class="cn">TRUE</span>, </span>
-<span id="cb74-5"><a href=""></a>  <span class="at">by =</span> <span class="st">"tailnum"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb88" data-code-line-numbers="3"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb88-1"><a href=""></a><span class="fu">merge</span>(</span>
+<span id="cb88-2"><a href=""></a>  flights_dt,</span>
+<span id="cb88-3"><a href=""></a>  <span class="fu">setnames</span>(planes_dt, <span class="at">old =</span> <span class="st">"year"</span>, <span class="at">new =</span> <span class="st">"year_built"</span>), <span class="co">#&lt;&lt; </span></span>
+<span id="cb88-4"><a href=""></a>  <span class="at">all.x =</span> <span class="cn">TRUE</span>, </span>
+<span id="cb88-5"><a href=""></a>  <span class="at">by =</span> <span class="st">"tailnum"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="use-keys-for-lightning-fast-joins" class="slide level2 smaller">
 <h2>Use keys for lightning fast joins</h2>
 <p>The only other thing I’ll point out is that setting <a href="#/keys">keys</a> can lead to dramatic speed-ups for merging data.tables. I’ll demonstrate using an inner join this time.</p>
-<div class="sourceCode" id="cb75"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb75-1"><a href=""></a>merge_dt <span class="ot">=</span> <span class="cf">function</span>() <span class="fu">merge</span>(flights_dt, planes_dt, <span class="at">by =</span> <span class="st">"tailnum"</span>)</span>
-<span id="cb75-2"><a href=""></a></span>
-<span id="cb75-3"><a href=""></a>flights_dt_key <span class="ot">=</span> <span class="fu">as.data.table</span>(flights, <span class="at">key =</span> <span class="st">"tailnum"</span>)</span>
-<span id="cb75-4"><a href=""></a>planes_dt_key <span class="ot">=</span> <span class="fu">as.data.table</span>(planes, <span class="at">key =</span> <span class="st">"tailnum"</span>)</span>
-<span id="cb75-5"><a href=""></a>merge_dt_key <span class="ot">=</span> <span class="cf">function</span>() <span class="fu">merge</span>(flights_dt_key, planes_dt_key, <span class="at">by =</span> <span class="st">"tailnum"</span>)</span>
-<span id="cb75-6"><a href=""></a></span>
-<span id="cb75-7"><a href=""></a><span class="fu">microbenchmark</span>(<span class="fu">merge_dt</span>(), <span class="fu">merge_dt_key</span>(), <span class="at">times =</span> <span class="dv">1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb89"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb89-1"><a href=""></a>merge_dt <span class="ot">=</span> <span class="cf">function</span>() <span class="fu">merge</span>(flights_dt, planes_dt, <span class="at">by =</span> <span class="st">"tailnum"</span>)</span>
+<span id="cb89-2"><a href=""></a></span>
+<span id="cb89-3"><a href=""></a>flights_dt_key <span class="ot">=</span> <span class="fu">as.data.table</span>(flights, <span class="at">key =</span> <span class="st">"tailnum"</span>)</span>
+<span id="cb89-4"><a href=""></a>planes_dt_key <span class="ot">=</span> <span class="fu">as.data.table</span>(planes, <span class="at">key =</span> <span class="st">"tailnum"</span>)</span>
+<span id="cb89-5"><a href=""></a>merge_dt_key <span class="ot">=</span> <span class="cf">function</span>() <span class="fu">merge</span>(flights_dt_key, planes_dt_key, <span class="at">by =</span> <span class="st">"tailnum"</span>)</span>
+<span id="cb89-6"><a href=""></a></span>
+<span id="cb89-7"><a href=""></a><span class="fu">microbenchmark</span>(<span class="fu">merge_dt</span>(), <span class="fu">merge_dt_key</span>(), <span class="at">times =</span> <span class="dv">1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell">
 <div class="cell-output cell-output-stdout">
 <pre><code>Unit: milliseconds
-           expr      min       lq     mean   median       uq      max neval
-     merge_dt() 166.7668 166.7668 166.7668 166.7668 166.7668 166.7668     1
- merge_dt_key() 101.5477 101.5477 101.5477 101.5477 101.5477 101.5477     1</code></pre>
+           expr     min      lq    mean  median      uq     max neval
+     merge_dt() 73.9207 73.9207 73.9207 73.9207 73.9207 73.9207     1
+ merge_dt_key() 46.0338 46.0338 46.0338 46.0338 46.0338 46.0338     1</code></pre>
 </div>
 </div>
 <p>So, we get about a <strong>0x</strong> speed-up for this simple case just by setting keys. More importantly, ordering your data by setting keys will make a huge difference once you start working with big datasets and making complicated joins. Trust me. (FWIW, the <a href="https://tysonbarrett.com//jekyll/update/2019/10/11/speed_of_joins/">same is true</a> for dplyr.)</p>
@@ -1399,10 +1539,10 @@ Mislav Sagovac
 <div class="fragment">
 <p>I’ll demonstrate reshaping with both options on the same fake “stocks” data that we created last time:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb77"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb77-1"><a href=""></a>stocks <span class="ot">=</span> <span class="fu">data.table</span>(<span class="at">time =</span> <span class="fu">as.Date</span>(<span class="st">'2009-01-01'</span>) <span class="sc">+</span> <span class="dv">0</span><span class="sc">:</span><span class="dv">1</span>,</span>
-<span id="cb77-2"><a href=""></a>                    <span class="at">X =</span> <span class="fu">rnorm</span>(<span class="dv">2</span>, <span class="dv">0</span>, <span class="dv">1</span>),</span>
-<span id="cb77-3"><a href=""></a>                    <span class="at">Y =</span> <span class="fu">rnorm</span>(<span class="dv">2</span>, <span class="dv">0</span>, <span class="dv">2</span>),</span>
-<span id="cb77-4"><a href=""></a>                    <span class="at">Z =</span> <span class="fu">rnorm</span>(<span class="dv">2</span>, <span class="dv">0</span>, <span class="dv">4</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb91"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb91-1"><a href=""></a>stocks <span class="ot">=</span> <span class="fu">data.table</span>(<span class="at">time =</span> <span class="fu">as.Date</span>(<span class="st">'2009-01-01'</span>) <span class="sc">+</span> <span class="dv">0</span><span class="sc">:</span><span class="dv">1</span>,</span>
+<span id="cb91-2"><a href=""></a>                    <span class="at">X =</span> <span class="fu">rnorm</span>(<span class="dv">2</span>, <span class="dv">0</span>, <span class="dv">1</span>),</span>
+<span id="cb91-3"><a href=""></a>                    <span class="at">Y =</span> <span class="fu">rnorm</span>(<span class="dv">2</span>, <span class="dv">0</span>, <span class="dv">2</span>),</span>
+<span id="cb91-4"><a href=""></a>                    <span class="at">Z =</span> <span class="fu">rnorm</span>(<span class="dv">2</span>, <span class="dv">0</span>, <span class="dv">4</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div>
 </section>
@@ -1410,44 +1550,44 @@ Mislav Sagovac
 <h2>Reshape from wide to long</h2>
 <p>Our data are currently in wide format.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb78"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb78-1"><a href=""></a>stocks</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb92"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb92-1"><a href=""></a>stocks</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>         time          X         Y         Z
        &lt;Date&gt;      &lt;num&gt;     &lt;num&gt;     &lt;num&gt;
-1: 2009-01-01  0.6255777  2.792861 -5.436091
-2: 2009-01-02 -0.7198150 -1.331890 -1.392955</code></pre>
+1: 2009-01-01  0.3327436  3.279936 -1.190156
+2: 2009-01-02 -0.6951476 -1.612638  3.898081</code></pre>
 </div>
 </div>
 <p>To convert this into long format, we could do either of the following:</p>
 <div class="columns">
 <div class="column" style="width:50%;">
 <div class="cell">
-<div class="sourceCode cell-code" id="cb80"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb80-1"><a href=""></a><span class="co"># See ?melt.data.table for options</span></span>
-<span id="cb80-2"><a href=""></a><span class="fu">melt</span>(stocks, <span class="at">id.vars =</span><span class="st">"time"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb94"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb94-1"><a href=""></a><span class="co"># See ?melt.data.table for options</span></span>
+<span id="cb94-2"><a href=""></a><span class="fu">melt</span>(stocks, <span class="at">id.vars =</span><span class="st">"time"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>         time variable      value
        &lt;Date&gt;   &lt;fctr&gt;      &lt;num&gt;
-1: 2009-01-01        X  0.6255777
-2: 2009-01-02        X -0.7198150
-3: 2009-01-01        Y  2.7928606
-4: 2009-01-02        Y -1.3318899
-5: 2009-01-01        Z -5.4360914
-6: 2009-01-02        Z -1.3929554</code></pre>
+1: 2009-01-01        X  0.3327436
+2: 2009-01-02        X -0.6951476
+3: 2009-01-01        Y  3.2799363
+4: 2009-01-02        Y -1.6126385
+5: 2009-01-01        Z -1.1901560
+6: 2009-01-02        Z  3.8980813</code></pre>
 </div>
 </div>
 </div><div class="column" style="width:50%;">
 <div class="cell">
-<div class="sourceCode cell-code" id="cb82"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb82-1"><a href=""></a>stocks <span class="sc">%&gt;%</span> </span>
-<span id="cb82-2"><a href=""></a>  <span class="fu">dt_pivot_longer</span>(X<span class="sc">:</span>Z, <span class="at">names_to=</span><span class="st">"stock"</span>, <span class="at">values_to=</span><span class="st">"price"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb96"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb96-1"><a href=""></a>stocks <span class="sc">%&gt;%</span> </span>
+<span id="cb96-2"><a href=""></a>  <span class="fu">dt_pivot_longer</span>(X<span class="sc">:</span>Z, <span class="at">names_to=</span><span class="st">"stock"</span>, <span class="at">values_to=</span><span class="st">"price"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>         time  stock      price
        &lt;Date&gt; &lt;char&gt;      &lt;num&gt;
-1: 2009-01-01      X  0.6255777
-2: 2009-01-02      X -0.7198150
-3: 2009-01-01      Y  2.7928606
-4: 2009-01-02      Y -1.3318899
-5: 2009-01-01      Z -5.4360914
-6: 2009-01-02      Z -1.3929554</code></pre>
+1: 2009-01-01      X  0.3327436
+2: 2009-01-02      X -0.6951476
+3: 2009-01-01      Y  3.2799363
+4: 2009-01-02      Y -1.6126385
+5: 2009-01-01      Z -1.1901560
+6: 2009-01-02      Z  3.8980813</code></pre>
 </div>
 </div>
 </div></div>
@@ -1457,18 +1597,18 @@ Mislav Sagovac
 <div class="fragment">
 <p>Let’s quickly save the long-format stocks data.table. I’ll use the <code>melt()</code> approach and also throw in some extra column-naming options, just so you can see those in action.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb84"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb84-1"><a href=""></a>stocks_long <span class="ot">=</span> <span class="fu">melt</span>(stocks, <span class="at">id.vars =</span><span class="st">"time"</span>, </span>
-<span id="cb84-2"><a href=""></a>                   <span class="at">variable.name =</span> <span class="st">"stock"</span>, <span class="at">value.name =</span> <span class="st">"price"</span>)</span>
-<span id="cb84-3"><a href=""></a>stocks_long</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb98"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb98-1"><a href=""></a>stocks_long <span class="ot">=</span> <span class="fu">melt</span>(stocks, <span class="at">id.vars =</span><span class="st">"time"</span>, </span>
+<span id="cb98-2"><a href=""></a>                   <span class="at">variable.name =</span> <span class="st">"stock"</span>, <span class="at">value.name =</span> <span class="st">"price"</span>)</span>
+<span id="cb98-3"><a href=""></a>stocks_long</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>         time  stock      price
        &lt;Date&gt; &lt;fctr&gt;      &lt;num&gt;
-1: 2009-01-01      X  0.6255777
-2: 2009-01-02      X -0.7198150
-3: 2009-01-01      Y  2.7928606
-4: 2009-01-02      Y -1.3318899
-5: 2009-01-01      Z -5.4360914
-6: 2009-01-02      Z -1.3929554</code></pre>
+1: 2009-01-01      X  0.3327436
+2: 2009-01-02      X -0.6951476
+3: 2009-01-01      Y  3.2799363
+4: 2009-01-02      Y -1.6126385
+5: 2009-01-01      Z -1.1901560
+6: 2009-01-02      Z  3.8980813</code></pre>
 </div>
 </div>
 </div>
@@ -1476,28 +1616,28 @@ Mislav Sagovac
 <div class="columns">
 <div class="column" style="width:50%;">
 <div class="cell">
-<div class="sourceCode cell-code" id="cb86"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb86-1"><a href=""></a><span class="fu">dcast</span>(stocks_long, </span>
-<span id="cb86-2"><a href=""></a>      time <span class="sc">~</span> stock, </span>
-<span id="cb86-3"><a href=""></a>      <span class="at">value.var =</span> <span class="st">"price"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb100"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb100-1"><a href=""></a><span class="fu">dcast</span>(stocks_long, </span>
+<span id="cb100-2"><a href=""></a>      time <span class="sc">~</span> stock, </span>
+<span id="cb100-3"><a href=""></a>      <span class="at">value.var =</span> <span class="st">"price"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Key: &lt;time&gt;
          time          X         Y         Z
        &lt;Date&gt;      &lt;num&gt;     &lt;num&gt;     &lt;num&gt;
-1: 2009-01-01  0.6255777  2.792861 -5.436091
-2: 2009-01-02 -0.7198150 -1.331890 -1.392955</code></pre>
+1: 2009-01-01  0.3327436  3.279936 -1.190156
+2: 2009-01-02 -0.6951476 -1.612638  3.898081</code></pre>
 </div>
 </div>
 </div><div class="column" style="width:50%;">
 <div class="cell">
-<div class="sourceCode cell-code" id="cb88"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb88-1"><a href=""></a>stocks_long <span class="sc">%&gt;%</span> </span>
-<span id="cb88-2"><a href=""></a>  <span class="fu">dt_pivot_wider</span>(<span class="at">names_from=</span>stock, </span>
-<span id="cb88-3"><a href=""></a>                 <span class="at">values_from=</span>price)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb102"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb102-1"><a href=""></a>stocks_long <span class="sc">%&gt;%</span> </span>
+<span id="cb102-2"><a href=""></a>  <span class="fu">dt_pivot_wider</span>(<span class="at">names_from=</span>stock, </span>
+<span id="cb102-3"><a href=""></a>                 <span class="at">values_from=</span>price)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Key: &lt;time&gt;
          time          X         Y         Z
        &lt;Date&gt;      &lt;num&gt;     &lt;num&gt;     &lt;num&gt;
-1: 2009-01-01  0.6255777  2.792861 -5.436091
-2: 2009-01-02 -0.7198150 -1.331890 -1.392955</code></pre>
+1: 2009-01-01  0.3327436  3.279936 -1.190156
+2: 2009-01-02 -0.6951476 -1.612638  3.898081</code></pre>
 </div>
 </div>
 </div></div>
@@ -1514,20 +1654,20 @@ Mislav Sagovac
 <p>Case in point: Almost every hardcore data.table user I know is a hardcore <strong>ggplot2</strong> user too.</p>
 <div class="columns">
 <div class="column" style="width:50%;">
-<div class="sourceCode" id="cb90"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb90-1"><a href=""></a><span class="do">## library(ggplot2) # already loaded</span></span>
-<span id="cb90-2"><a href=""></a>storms_dt[, .(<span class="at">wind =</span> <span class="fu">mean</span>(wind), </span>
-<span id="cb90-3"><a href=""></a>                  <span class="at">pressure =</span> <span class="fu">mean</span>(pressure), </span>
-<span id="cb90-4"><a href=""></a>                  <span class="at">category =</span> <span class="fu">first</span>(category)), </span>
-<span id="cb90-5"><a href=""></a>                by <span class="ot">=</span> .(name, year, month, day)] <span class="sc">%&gt;%</span></span>
-<span id="cb90-6"><a href=""></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> pressure, <span class="at">y =</span> wind, <span class="at">col=</span>category)) <span class="sc">+</span></span>
-<span id="cb90-7"><a href=""></a>  <span class="fu">geom_point</span>(<span class="at">alpha =</span> <span class="fl">0.3</span>) <span class="sc">+</span> </span>
-<span id="cb90-8"><a href=""></a>  <span class="fu">theme_minimal</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb104"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb104-1"><a href=""></a><span class="do">## library(ggplot2) # already loaded</span></span>
+<span id="cb104-2"><a href=""></a>storms_dt[, .(<span class="at">wind =</span> <span class="fu">mean</span>(wind), </span>
+<span id="cb104-3"><a href=""></a>                  <span class="at">pressure =</span> <span class="fu">mean</span>(pressure), </span>
+<span id="cb104-4"><a href=""></a>                  <span class="at">category =</span> <span class="fu">first</span>(category)), </span>
+<span id="cb104-5"><a href=""></a>                by <span class="ot">=</span> .(name, year, month, day)] <span class="sc">%&gt;%</span></span>
+<span id="cb104-6"><a href=""></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> pressure, <span class="at">y =</span> wind, <span class="at">col=</span>category)) <span class="sc">+</span></span>
+<span id="cb104-7"><a href=""></a>  <span class="fu">geom_point</span>(<span class="at">alpha =</span> <span class="fl">0.3</span>) <span class="sc">+</span> </span>
+<span id="cb104-8"><a href=""></a>  <span class="fu">theme_minimal</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div><div class="column" style="width:50%;">
 <div class="cell">
 <div class="cell-output-display">
 <div>
 <figure>
-<p><img data-src="CourseDataScience_files/figure-revealjs/unnamed-chunk-32-1.png" width="960"></p>
+<p><img data-src="CourseDataScience_files/figure-revealjs/unnamed-chunk-39-1.png" width="960"></p>
 </figure>
 </div>
 </div>
@@ -1549,11 +1689,11 @@ Mislav Sagovac
 <div class="cell-output cell-output-stdout">
 <pre><code>Unit: milliseconds
               expr      min       lq     mean   median       uq      max neval
-  collapse_dplyr() 730.8495 730.8495 730.8495 730.8495 730.8495 730.8495     1
- collapse_dtplyr()  37.0836  37.0836  37.0836  37.0836  37.0836  37.0836     1</code></pre>
+  collapse_dplyr() 212.9705 212.9705 212.9705 212.9705 212.9705 212.9705     1
+ collapse_dtplyr()  22.9604  22.9604  22.9604  22.9604  22.9604  22.9604     1</code></pre>
 </div>
 </div>
-<p>A <strong>20x</strong> speed-up for free? I’d take it!</p>
+<p>A <strong>10x</strong> speed-up for free? I’d take it!</p>
 </div>
 </section></section>
 <section id="thank-you" class="title-slide slide level1 center">
