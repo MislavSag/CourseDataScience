@@ -226,7 +226,7 @@ Tidyverse tends to break up operations step-by-step, data.table aims to do every
 
 ## A Quick Example {.smaller}
 
-:::{.fragment}
+::: fragment
 We'll dive into the details (and quirks) of `data.table` shortly.
 
 But first, a quick side-by-side comparison with `dplyr`, since that will help to orientate us for the rest of the lecture. Using our `starwars` dataset, say we want to know:
@@ -234,12 +234,12 @@ But first, a quick side-by-side comparison with `dplyr`, since that will help to
 > What is the average height of the human characters by gender?
 :::
 
-:::{.fragment}
+:::::: fragment
 ::::: columns
 ::: {.column width="50%"}
 dplyr
 
-``` {.r}
+``` r
 data(starwars, package = "dplyr")
 starwars %>%
   filter(species == "Human") %>% 
@@ -261,7 +261,7 @@ starwars %>%
 ::: {.column width="50%"}
 data.table
 
-``` {.r}
+``` r
 starwars_dt = as.data.table(starwars)
 starwars_dt[
   species == "Human",
@@ -280,7 +280,7 @@ starwars_dt[
 ```
 :::
 :::::
-:::
+::::::
 
 ## A Quick Example {.smaller}
 
@@ -336,7 +336,6 @@ starwars_dt[
 :::
 :::::
 
-
 ## A Quick Example {.smaller}
 
 We'll dive into the details (and quirks) of `data.table` shortly.
@@ -391,7 +390,6 @@ starwars_dt[
 :::
 :::::
 
-
 ## A Quick Example {.smaller}
 
 We'll dive into the details (and quirks) of `data.table` shortly.
@@ -445,7 +443,6 @@ starwars_dt[
 ```
 :::
 :::::
-
 
 # Working with rows: DT\[i, \]
 
@@ -659,10 +656,10 @@ DT %>%
 ```
 :::
 
-:::{.fragment}
+::: fragment
 You can also use base pipe operator:
 
-```{r}
+```{.r}
 DT |>
   _[, xyz := x+y+z] |>
   _[, xyz_sq := xyz^2] |>

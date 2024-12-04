@@ -1,0 +1,196 @@
+---
+title: "Data Science"
+subtitle: "Web scraping and web API's"
+author: 
+  - name: "Mislav Sagovac"
+    affiliation: "Catholic University of Croatia"
+    email: "mislav.sagovac@unicath.hr"
+format: html
+execute:
+  echo: true
+  eval: true
+---
+
+# Introduction
+
+## Terminology
+
+**Web scraping** is a technique used to extract information from websites. This tutorial demonstrates how to scrape web data in R using packages like `rvest` and `httr`.
+
+**Web APIs** are a way to access data from websites and online services. They allow you to interact with websites programmatically, rather than through a web browser. When a website or online service provides an API, it means that they have made it possible for developers to access their data in a structured and controlled way.
+
+## Web scraping vs. APIs
+
+Why does web scraping exist if APIs are so powerful and do exactly the same work?
+
+The main difference between web scraping and using APIs is that APIs are typically provided by the website or service to allow access to their data, while web scraping involves accessing data without the explicit permission of the website owner.
+
+This means that using APIs is generally considered more ethical than web scraping, as it is done with the explicit permission of the website or service.
+
+However, there are also some limitations to using APIs:
+
+- many APIs have rate limits, which means that they will only allow a certain number of requests to be made within a certain time period, i.e. you may not access large amounts of data;
+- not all websites or online services provide APIs, which means the only way to access their data is via web scraping.
+
+## Ethical and legal considerations
+
+It is important to note that web scraping can raise ethical concerns, as it involves accessing and using data from websites without the explicit permission of the website owner. It is a good practice to respect the terms of use for a website, and to seek written permission before scraping large amounts of data.
+
+Just because you *can* scrape it, doesn't mean you *should*. A computer can process commands much, much faster than we can ever type them up manually. It's pretty easy to write up a function or program that can overwhelm a host server or application through the sheer weight of requests. Or, just as likely, the host server has built-in safeguards that will block you in case of a suspected malicious [attack](https://en.wikipedia.org/wiki/Denial-of-service_attack).
+
+## Prerequisites
+
+Before starting, ensure you have the following R packages installed:
+
+```{.r}
+# Install required packages
+install.packages(c("httr", "rvest", "dplyr"))
+```
+
+# Web API's
+
+## What is an API?
+
+API stands for Application Programming Interface. It is a set of rules and protocols that allow one software application to communicate with another. APIs are used to define the methods for requesting and sending data between different software applications.
+
+APIs are commonly used to access data from online services, such as social media platforms, weather services, and financial services. They allow developers to access data from these services in a structured and controlled way, rather than through a web browser.
+
+## Types of APIs
+
+There are several types of APIs, including:
+
+- **Web APIs**: These are APIs that are accessed over the internet using HTTP requests. They are commonly used to access data from online services, such as social media platforms, weather services, and financial services.
+- **Library APIs**: These are APIs that are provided by software libraries to allow developers to access the functionality of the library in their own code.
+- **Operating System APIs**: These are APIs that are provided by operating systems to allow developers to access the functionality of the operating system in their own code.
+
+## How to use an API
+
+To use an API, you need to know the following:
+
+- The base URL of the API: This is the URL that you use to access the API.
+- The endpoints of the API: These are the URLs that you use to access specific resources or data from the API.
+- The methods of the API: These are the HTTP methods that you use to interact with the API, such as GET, POST, PUT, and DELETE.
+- The parameters of the API: These are the parameters that you use to specify the data that you want to access from the API.
+
+To use an API, you typically send an HTTP request to the API with the appropriate method, endpoint, and parameters, and the API will respond with the data that you requested.
+
+## Examples of APIs
+
+There are many APIs available that provide access to a wide range of data and services. Some examples of APIs include:
+
+- The Twitter API: This API allows you to access data from Twitter, such as tweets, users, and trends.
+- The OpenWeatherMap API: This API allows you to access weather data from around the world.
+- The Google Maps API: This API allows you to access maps and location data from Google Maps.
+
+## API keys
+
+Many APIs require you to use an API key to access the data. An API key is a unique identifier that is used to authenticate your requests to the API. You typically need to include your API key in the request to the API, either as a query parameter, a header, or in the request body.
+
+To get an API key, you usually need to sign up for an account with the service that provides the API, and then generate an API key in your account settings.
+
+## Court Registry (Sudski registar) API
+
+The docs for Court Registry API is available [here](https://sudreg-data.gov.hr/ords/r/srn_rep/vanjski-srn-rep/home). Here are [detaile desctiption](https://sudreg-data.gov.hr/ords/r/srn_rep/116/files/static/v11/Upute%20za%20razvojne%20in%C5%BEenjere%20-%20v3.0.0.pdf) for developers. Finally, [here](https://sudreg-data.gov.hr/api/javni/dokumentacija/open_api) you can see all available endpoints. These are all in Croatian, but you can easly translate it to English. Before you can use the API, you should register (enter name, e-mail and type of user) and get you API key.
+
+![Court Registry API forma png](figures/sudski-registar-api-forma.png)
+
+After you click on “Predaj zahtjev” the new page will show you the following:
+
+![Court Registry API podaci png](figures/sudski-registar-api-1.png)
+
+You can see the detail like `Client Id` and `Client Secret`. You will need thos to get the token and send request to Court Registry API.
+
+Before, you can use the API, you should confirm your e-mail. E-mail looks like this
+
+![Court Registry API email png](figures/sudski-registar-email.png)
+
+To finally finish the registration, you should click on activate. Here is how page looks like:
+
+![Court Registry activation png](figures/sudski-registar-email.png)
+
+Your credentials are now activated and you can use the API. Here are API data redy to use:
+
+![Court Registry API email png](figures/api-sudski-registar-podaci.png)
+
+Let's see how we can use the API in R.
+
+```{.r}
+library(httr)
+library(jsonlite)
+
+# Define the base URL of the API
+base_url <- "https://sudreg-data.gov.hr/api/javni"
+
+# Define the endpoint of the API
+endpoint <- "/dokumentacija/open_api"
+
+# Define the parameters of the API
+params <- list(
+  "client_id" = "your_client_id",
+  "client_secret" = "your_client_secret",
+  "grant_type" = "client_credentials"
+)
+
+```
+
+Let's check if everything is working 
+
+
+
+# Web scraping
+
+## Web pages
+
+Almost anyone is familiar with web pages (otherwise you would not be here), but what if we tell you that how you see a site is different from how Google or your browser does?
+
+In fact, when you type any site address in your browser, your browser will download and render the page for you, but for rendering the page it needs some instructions.
+
+There are 3 types of instructions:
+
+HTML: describes a web page’s infrastructure;
+CSS: defines the appearance of a site;
+JavaScript: decides the behavior of the page.
+Web scraping is the art of extracting information from the HTML, CSS and Javascript lines of code. The term usually refers to an automated process, which is less error-prone and faster than gathering data by hand.
+
+I want to forewarn you that webscraping typically involves a fair bit of detective work. You will often have to adjust your steps according to the type of data you want, and the steps that worked on one website may not work on another. (Or even work on the same website a few months later). All this is to say that *webscraping involves as much art as it does science*.
+
+The good news is that both server-side and client-side websites allow for webscraping.^[As we'll see during the next lecture, scraping a website or application that is built on a client-side (i.e. API) framework is often easier; particularly when it comes to downloading information *en masse*.] If you can see it in your browser, you can scrape it.
+
+## HTML and CSS
+
+Before starting it is important to have a basic knowledge of HTML and CSS. This section aims to briefly explain how HTML and CSS work
+
+Starting from HTML, an HTML file looks like the following piece of code.
+
+```{.html}
+<!DOCTYPE html>
+<html lang="en">
+<body>
+
+<h1 href="https://en.wikipedia.org/wiki/Carl_Friedrich_Gauss"> Carl Friedrich Gauss</h1>
+<h2> Biography </h2>
+<p> Johann Carl Friedrich Gauss was born on 30 April 1777 in Brunswick. </p>
+<h2> Profession </h2>
+<p> Gauss is considered as one of the greatest mathematician, statistician and physicist of all time. </p>
+
+</body>
+</html>
+Those instructions produce the following:
+```
+
+
+As you read above, HTML is used to describe the infrastructure of a web page, for example we may want to define the headings, the paragraphs, etc.
+
+This infrastructure is represented by what are called tags (for example <h1>...<\h1> or <p>...<\p> are tags). Tags are the core of an HTML document as they represent the nature of what is inside the tag (for example h1 stands for heading 1). It is important to observe that there are two types of tags:
+
+starting tags (e.g. <h1>)
+ending tags (e.g. <\h1>)
+This is what allows to nest different tags.
+
+Tags can also have attributes, for example in <h1 href="https://en.wikipedia.org/wiki/Carl_Friedrich_Gauss"Carl Friedrich Gauss</h1>, href is an attribute of the tag h1 that specifies an URL.
+
+As the output of the above HTML code is not super elegant, CSS is used to style the final website. For example CSS is used to define the font, the color, the size, the spacing and many more features of a website.
+
+What is important for this article are CSS selectors, which are patterns used to select elements. The most important is the .class selector, which selects all elements with the same class. For example the .xyz selector selects all elements with class="xyz".
+
+
