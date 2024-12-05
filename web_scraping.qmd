@@ -166,6 +166,7 @@ library(data.table)
 token_url = "https://sudreg-data.gov.hr/api/oauth/token"
 user_name = Sys.getenv("USER_SREG")
 pass = Sys.getenv("PASS_SREG")
+URL = "https://sudreg-data.gov.hr/api/javni/"
 
 # Get Token following the documentation
 token = POST(
@@ -177,9 +178,6 @@ token = POST(
 )
 token = content(token)
 print(token)
-
-# Save base url for future use
-URL = "https://sudreg-data.gov.hr/api/javni/"
 ```
 
 Now, let's finally get some data. List of endpoints is available [here](https://sudreg-data.gov.hr/api/javni/dokumentacija/open_api). 
@@ -285,12 +283,17 @@ short_names = get_sreg(tag = "evidencijske_djelatnosti")
 head(short_names)
 ```
 
+There can be a problem if output to API calls have many rows. One one side, API can restrict number of rows in output, on the other side, we can have a problem with memory. Or it can take long time and we will get timeout error.
+
+We can solve this by using a loop. Here is how we can do that/:
 
 ```{r}
 # Get data from court public registry in a loop
-get_sreg_loop = function(tag = "subjekti", by = 10000) {
+get_sreg_loop = function(tag = "subjekti", 
+                         by = 100, 
+                         total = 1000) {
   # Define offsets
-  offset_seq = seq(0, 360000, by = by)
+  offset_seq = seq(0, total, by = by)
   offset_seq = format(offset_seq, scientific = FALSE)
   offset_seq = gsub("\\s+", "", offset_seq)
   # Define urls
@@ -306,18 +309,18 @@ get_sreg_loop = function(tag = "subjekti", by = 10000) {
   })
   res_l = lapply(urls, get_sreg_url)
   res_l = res_l[!sapply(res_l, function(x) length(x) == 0)]
-  res_l = lapply(res_l, function(l) rbindlist(lapply(l, as.data.table), fill = TRUE))
+  res_l = lapply(res_l, function(l) {
+    rbindlist(lapply(l, as.data.table), fill = TRUE)
+  })
   rbindlist(res_l, fill = TRUE)
 }
 
-# # Business subjects
-# subjects = get_sreg_loop("subjekti")
-
+# Business subjects
+subjects_with_loop = get_sreg_loop("subjekti")
+head(subjects_with_loop)
 ```
 
-
-Let's check if everything is working
-
+The resulted `subjects_with_loop` object have `{r} nrow(subjects_with_loop)` nrows as we would expect.
 
 
 # Web scraping
@@ -364,19 +367,27 @@ As you read above, HTML is used to describe the infrastructure of a web page, fo
 
 This infrastructure is represented by what are called tags (for example
 
+```{.html}
 <h1>
 
-...\<\h1\> or
+...\<\h1\>
+```
 
+or
+
+```{.html}
 <p>
 
-...\<\p\> are tags). Tags are the core of an HTML document as they represent the nature of what is inside the tag (for example h1 stands for heading 1). It is important to observe that there are two types of tags:
+...\<\p\>
+```
+
+are tags). Tags are the core of an HTML document as they represent the nature of what is inside the tag (for example h1 stands for heading 1). It is important to observe that there are two types of tags:
 
 starting tags (e.g.
 
-<h1>
+`<h1>`
 
-) ending tags (e.g. \<\h1\>) This is what allows to nest different tags.
+) ending tags (e.g. `\<\h1\>`) This is what allows to nest different tags.
 
 Tags can also have attributes, for example in \<h1 href="https://en.wikipedia.org/wiki/Carl_Friedrich_Gauss"Carl Friedrich Gauss
 
@@ -387,3 +398,153 @@ Tags can also have attributes, for example in \<h1 href="https://en.wikipedia.or
 As the output of the above HTML code is not super elegant, CSS is used to style the final website. For example CSS is used to define the font, the color, the size, the spacing and many more features of a website.
 
 What is important for this article are CSS selectors, which are patterns used to select elements. The most important is the .class selector, which selects all elements with the same class. For example the .xyz selector selects all elements with class="xyz".
+
+## Usefull R packages for web scraping
+
+There are several packages for web scraping in R, every package has its strengths and limitations. Here is the list of most popular ones
+
+-   rvest: rvest is a part of the tidyverse and is designed to make scraping information from the web easier. It is a great package for beginners as it is easy to use and has a lot of documentation. We will use rvest in our examples.
+-   httr: httr is a package that allows you to send HTTP requests and work with web APIs. It is a more general package than rvest and can be used for a wide range of web-related tasks.
+-   RSelenium: RSelenium is a package that allows you to control a web browser from R. This can be useful for scraping websites.
+-   chromium: chromium is a package that allows you to run a headless version of the Chromium web browser from R. This can be useful for scraping websites that require JavaScript to render the page.
+-   jsonlite: jsonlite is a package for working with JSON data. It can be useful for parsing JSON responses from web APIs.
+-  xml2: xml2 is a package for working with XML and HTML documents. It can be useful for parsing web pages and extracting information.
+
+## Web scrapping process
+
+The web scraping process can be broken down into the following steps:
+
+1. Send GET or POST request to the website you want to scrape.
+2. Parse the HTML content of the website.
+3. Extract the information you want from the HTML content (getting HTML attributes).
+
+## Simple example
+
+Let's start with very simple example. We will replicate 3 steps above by sending request and scraping content of NT times website. We will use rvest package for this.
+
+Sending the request to the page is simple, `rvest` provides the `read_html` function, which returns an object of `html_document` type:
+
+```{r}
+library(rvest)
+
+# Send GET request to the website
+url = "https://www.nytimes.com/"
+page = read_html(url)
+
+# Print the page
+print(page)
+```
+Next step is parsing html content. As we saw in the last chunk of code, NYT_page contains the raw HTML code, which is not so easily readable.
+
+In order to make it readable from R it has to be parsed, which means generating a Document Object Model (DOM) from the raw HTML. DOM is what connects scripts and web pages by representing the structure of a document in memory. If you retrieve the HTTP request using Node.js, you can give the raw HTML response to R for parsing and further analysis.
+
+`rvest` provides 2 ways to select HTML elements:
+
+-   CSS selectors with following syntax
+
+```{r}
+# Select elements using CSS selectors
+elements = html_nodes(page, "h2")
+
+# Print the elements
+print(elements)
+```
+
+-   XPath with following syntax:
+
+```{r}
+# Select elements using CSS selectors
+elements = html_nodes(page, "h2")
+
+# Print the elements
+print(elements)
+```
+CSS selectors are more common and easier to use, so we will use them in rest of the notebook. CSS selectors are patterns used to select elements in an HTML document. They are ussually used to apply styles to elements, but they can also be used to select elements for scraping.
+
+The easiest way to obtain a CSS selector is opening the inspect mode, find the element you desire and right click on it. Then click on copy and copy selector.
+
+Alternatively, you can use external softwer for CSS selector generation. For example, you can use [SelectorGadget](https://selectorgadget.com/) in chrome. On Edge, you can use [CSS selector](https://microsoftedge.microsoft.com/addons/detail/css-selector/nloicnlfkohbekabfhgdfgmkdgghfhnh) extension.
+
+We can show one more example where we select element with css selector:
+
+```{r}
+# CSS selector
+page %>% 
+  html_elements(".css-1gg6cw2")  %>% 
+  html_text() %>% 
+  head()
+
+# XPath
+xpath_ = '//*[contains(concat( " ", @class, " " ), concat( " ", "css-1gg6cw2", " " ))]'
+page %>% 
+  html_elements(xpath = xpath_) %>%
+  html_text()
+```
+
+## Example 2 - Wikipedia
+
+Let's try to scrape some data from Wikipedia. We will try to get the list of all countries in the world. We will use the following [URL](https://en.wikipedia.org/wiki/List_of_countries_and_dependencies_and_their_capitals_in_native_languages). We will use rvest again.
+
+```{r}
+# Send GET request to the website
+url = "https://en.wikipedia.org/wiki/List_of_countries_and_dependencies_and_their_capitals_in_native_languages"
+page = read_html(url)
+
+# Select the table with countries
+countries_table = html_elements(page, "table")[[1]]
+
+# Extract the table
+countries = html_table(countries_table)
+
+# Print the table
+print(head(countries))
+```
+
+Another example is to scrape data from Formula 1 Wikipedia’s voice and create a CSV file containing the name, the nationality, the number of podiums and some other statistics for every pilot.
+
+The table we are going to scrape is avaialble [here]|(https://en.wikipedia.org/wiki/List_of_Formula_One_drivers). We will use the following code to scrape the data:
+
+Again we repeat what we did before with the NYT example:
+
+```{r}
+# Send GET request to the website
+url = "https://en.wikipedia.org/wiki/List_of_Formula_One_drivers"
+page = read_html(url)
+```
+
+Searching in the HTML code we find that the table is a table element with the sortable attribute:
+
+```{r}
+drivers_F1 = html_element(page, ".wikitable.sortable") %>%
+  html_table()
+```
+
+In the chunk of code above, the html_table function is used to render the HTML code into tables.
+
+To inspect it, we display the first and last observations, and the structure of the dataset:
+
+```{r}
+head(drivers_F1)
+```
+
+## Example 3 - Get text from vecernji
+
+```{r}
+url = "https://www.vecernji.hr/vijesti/snijeg-obilne-padaline-snazni-vjetrovi-stize-velika-zimska-oluja-swe-objavio-koje-ce-zemlje-biti-na-udaru-1821372"
+read_html(url) %>% 
+  html_elements(".single-article__content") %>% 
+  html_children() %>% 
+  html_elements("p") %>% 
+  html_text()
+
+
+```
+
+```{r}
+read_html("https://www.vecernji.hr/") %>% 
+  html_elements("a") %>%
+  html_attr("href")
+```
+
+
+

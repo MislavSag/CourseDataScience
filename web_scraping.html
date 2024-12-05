@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.5.47">
+<meta name="generator" content="quarto-1.5.57">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -254,28 +254,27 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>Since the first part of URL is always the same when sending requests, we wil save it in URL varaible.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(httr)</span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(data.table)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Warning: package 'data.table' was built under R version 4.4.2</code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Define </span></span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>token_url <span class="ot">=</span> <span class="st">"https://sudreg-data.gov.hr/api/oauth/token"</span></span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>user_name <span class="ot">=</span> <span class="fu">Sys.getenv</span>(<span class="st">"USER_SREG"</span>)</span>
-<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>pass <span class="ot">=</span> <span class="fu">Sys.getenv</span>(<span class="st">"PASS_SREG"</span>)</span>
-<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Get Token following the documentation</span></span>
-<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>token <span class="ot">=</span> <span class="fu">POST</span>(</span>
-<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>  token_url,</span>
-<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">authenticate</span>(user_name, pass),</span>
-<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">body =</span> <span class="fu">list</span>(<span class="at">grant_type =</span> <span class="st">"client_credentials"</span>),</span>
-<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>  <span class="at">encode =</span> <span class="st">"form"</span>,</span>
-<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>  httr<span class="sc">::</span><span class="fu">config</span>(<span class="at">ssl_verifypeer =</span> <span class="cn">FALSE</span>)</span>
-<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a>token <span class="ot">=</span> <span class="fu">content</span>(token)</span>
-<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(token)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(data.table)</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Define </span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>token_url <span class="ot">=</span> <span class="st">"https://sudreg-data.gov.hr/api/oauth/token"</span></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>user_name <span class="ot">=</span> <span class="fu">Sys.getenv</span>(<span class="st">"USER_SREG"</span>)</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>pass <span class="ot">=</span> <span class="fu">Sys.getenv</span>(<span class="st">"PASS_SREG"</span>)</span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>URL <span class="ot">=</span> <span class="st">"https://sudreg-data.gov.hr/api/javni/"</span></span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Get Token following the documentation</span></span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>token <span class="ot">=</span> <span class="fu">POST</span>(</span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>  token_url,</span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">authenticate</span>(user_name, pass),</span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a>  <span class="at">body =</span> <span class="fu">list</span>(<span class="at">grant_type =</span> <span class="st">"client_credentials"</span>),</span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a>  <span class="at">encode =</span> <span class="st">"form"</span>,</span>
+<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a>  httr<span class="sc">::</span><span class="fu">config</span>(<span class="at">ssl_verifypeer =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a>token <span class="ot">=</span> <span class="fu">content</span>(token)</span>
+<span id="cb4-19"><a href="#cb4-19" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(token)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>$access_token
-[1] "ZXK9dniY4_d0XnBg-5dWPw"
+[1] "Npjs4O-r5Q04mp7VF9RAMw"
 
 $token_type
 [1] "bearer"
@@ -283,21 +282,19 @@ $token_type
 $expires_in
 [1] 21600</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Save base url for future use</span></span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>URL <span class="ot">=</span> <span class="st">"https://sudreg-data.gov.hr/api/javni/"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Now, let’s finally get some data. List of endpoints is available <a href="https://sudreg-data.gov.hr/api/javni/dokumentacija/open_api">here</a>.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>res <span class="ot">=</span> <span class="fu">GET</span>(<span class="fu">paste0</span>(URL, <span class="st">"subjekti"</span>),</span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>          <span class="fu">add_headers</span>(</span>
-<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>            <span class="st">"Authorization"</span> <span class="ot">=</span> <span class="fu">paste0</span>(<span class="st">"Bearer "</span>, token<span class="sc">$</span>access_token),</span>
-<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>            <span class="st">"Content-Type"</span> <span class="ot">=</span> <span class="st">"application/json"</span></span>
-<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>          ),</span>
-<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>          <span class="at">query =</span> <span class="fu">list</span>(<span class="at">limit =</span> <span class="dv">100</span>, <span class="at">only_active =</span> <span class="cn">FALSE</span>)</span>
-<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>          )</span>
-<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>res <span class="ot">=</span> <span class="fu">content</span>(res)</span>
-<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">head</span>(res, <span class="dv">2</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>res <span class="ot">=</span> <span class="fu">GET</span>(<span class="fu">paste0</span>(URL, <span class="st">"subjekti"</span>),</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>          <span class="fu">add_headers</span>(</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>            <span class="st">"Authorization"</span> <span class="ot">=</span> <span class="fu">paste0</span>(<span class="st">"Bearer "</span>, token<span class="sc">$</span>access_token),</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>            <span class="st">"Content-Type"</span> <span class="ot">=</span> <span class="st">"application/json"</span></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>          ),</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>          <span class="at">query =</span> <span class="fu">list</span>(<span class="at">limit =</span> <span class="dv">100</span>, <span class="at">only_active =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>          )</span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>res <span class="ot">=</span> <span class="fu">content</span>(res)</span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">head</span>(res, <span class="dv">2</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[[1]]
 [[1]]$mbs
@@ -391,13 +388,13 @@ $expires_in
 </ul>
 <p>Now, we would like to clean the data. We want to have data.frame or data.table, not the lists. Here is how can we do tha very simepl using data.table package.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Convert all list elements to data.table</span></span>
-<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>res_clean <span class="ot">=</span> <span class="fu">lapply</span>(res, as.data.table)</span>
-<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Rbind all elements</span></span>
-<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>res_clean <span class="ot">=</span> <span class="fu">rbindlist</span>(res_clean, <span class="at">fill =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(res_clean)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Convert all list elements to data.table</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>res_clean <span class="ot">=</span> <span class="fu">lapply</span>(res, as.data.table)</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Rbind all elements</span></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>res_clean <span class="ot">=</span> <span class="fu">rbindlist</span>(res_clean, <span class="at">fill =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(res_clean)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>        mbs status sud_id_nadlezan sud_id_sluzba postupak ino_podruznica
       &lt;int&gt;  &lt;int&gt;           &lt;int&gt;         &lt;int&gt;    &lt;int&gt;          &lt;int&gt;
@@ -443,36 +440,36 @@ $expires_in
 </div>
 <p>We can write a function to make above steps easier. Here is how we can do that:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Wrap for GET request to court registry</span></span>
-<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>get_sreg_url <span class="ot">=</span> <span class="cf">function</span>(url) {</span>
-<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>  res <span class="ot">=</span> <span class="fu">GET</span>(url,</span>
-<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>            <span class="fu">add_headers</span>(<span class="st">"Authorization"</span> <span class="ot">=</span> <span class="fu">paste0</span>(<span class="st">"Bearer "</span>, token<span class="sc">$</span>access_token),</span>
-<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>                        <span class="st">"Content-Type"</span> <span class="ot">=</span> <span class="st">"application/json"</span>))</span>
-<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(<span class="fu">content</span>(res))</span>
-<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Wrap for GET request to court registry</span></span>
-<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a>get_sreg <span class="ot">=</span> <span class="cf">function</span>(tag, <span class="at">q =</span> <span class="fu">list</span>(<span class="at">limit =</span> <span class="dv">100</span>, <span class="at">only_active =</span> <span class="cn">TRUE</span>), <span class="at">clean =</span> <span class="cn">TRUE</span>) {</span>
-<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a>  url <span class="ot">=</span> <span class="fu">modify_url</span>(</span>
-<span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a>    <span class="fu">paste0</span>(URL, tag),</span>
-<span id="cb13-13"><a href="#cb13-13" aria-hidden="true" tabindex="-1"></a>    <span class="at">query =</span> q</span>
-<span id="cb13-14"><a href="#cb13-14" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb13-15"><a href="#cb13-15" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Make GET request</span></span>
-<span id="cb13-16"><a href="#cb13-16" aria-hidden="true" tabindex="-1"></a>  cont <span class="ot">=</span> <span class="fu">get_sreg_url</span>(url)</span>
-<span id="cb13-17"><a href="#cb13-17" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Clean if needed</span></span>
-<span id="cb13-18"><a href="#cb13-18" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (clean <span class="sc">==</span> <span class="cn">TRUE</span>) {</span>
-<span id="cb13-19"><a href="#cb13-19" aria-hidden="true" tabindex="-1"></a>    <span class="fu">return</span>(<span class="fu">rbindlist</span>(cont, <span class="at">fill =</span> <span class="cn">TRUE</span>))</span>
-<span id="cb13-20"><a href="#cb13-20" aria-hidden="true" tabindex="-1"></a>  } <span class="cf">else</span> {</span>
-<span id="cb13-21"><a href="#cb13-21" aria-hidden="true" tabindex="-1"></a>    <span class="fu">return</span>(cont)</span>
-<span id="cb13-22"><a href="#cb13-22" aria-hidden="true" tabindex="-1"></a>  }</span>
-<span id="cb13-23"><a href="#cb13-23" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Wrap for GET request to court registry</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>get_sreg_url <span class="ot">=</span> <span class="cf">function</span>(url) {</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>  res <span class="ot">=</span> <span class="fu">GET</span>(url,</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>            <span class="fu">add_headers</span>(<span class="st">"Authorization"</span> <span class="ot">=</span> <span class="fu">paste0</span>(<span class="st">"Bearer "</span>, token<span class="sc">$</span>access_token),</span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>                        <span class="st">"Content-Type"</span> <span class="ot">=</span> <span class="st">"application/json"</span>))</span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(<span class="fu">content</span>(res))</span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Wrap for GET request to court registry</span></span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a>get_sreg <span class="ot">=</span> <span class="cf">function</span>(tag, <span class="at">q =</span> <span class="fu">list</span>(<span class="at">limit =</span> <span class="dv">100</span>, <span class="at">only_active =</span> <span class="cn">TRUE</span>), <span class="at">clean =</span> <span class="cn">TRUE</span>) {</span>
+<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a>  url <span class="ot">=</span> <span class="fu">modify_url</span>(</span>
+<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a>    <span class="fu">paste0</span>(URL, tag),</span>
+<span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a>    <span class="at">query =</span> q</span>
+<span id="cb10-14"><a href="#cb10-14" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb10-15"><a href="#cb10-15" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Make GET request</span></span>
+<span id="cb10-16"><a href="#cb10-16" aria-hidden="true" tabindex="-1"></a>  cont <span class="ot">=</span> <span class="fu">get_sreg_url</span>(url)</span>
+<span id="cb10-17"><a href="#cb10-17" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Clean if needed</span></span>
+<span id="cb10-18"><a href="#cb10-18" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (clean <span class="sc">==</span> <span class="cn">TRUE</span>) {</span>
+<span id="cb10-19"><a href="#cb10-19" aria-hidden="true" tabindex="-1"></a>    <span class="fu">return</span>(<span class="fu">rbindlist</span>(cont, <span class="at">fill =</span> <span class="cn">TRUE</span>))</span>
+<span id="cb10-20"><a href="#cb10-20" aria-hidden="true" tabindex="-1"></a>  } <span class="cf">else</span> {</span>
+<span id="cb10-21"><a href="#cb10-21" aria-hidden="true" tabindex="-1"></a>    <span class="fu">return</span>(cont)</span>
+<span id="cb10-22"><a href="#cb10-22" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb10-23"><a href="#cb10-23" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Now, we can use this function to get data from Court Registry API. Here is how we can do that:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Get data from court public registry</span></span>
-<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>subjects <span class="ot">=</span> <span class="fu">get_sreg</span>(<span class="st">"subjekti"</span>)</span>
-<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(subjects)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Get data from court public registry</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>subjects <span class="ot">=</span> <span class="fu">get_sreg</span>(<span class="st">"subjekti"</span>)</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(subjects)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>        mbs status sud_id_nadlezan sud_id_sluzba postupak         oib      mb
       &lt;int&gt;  &lt;int&gt;           &lt;int&gt;         &lt;int&gt;    &lt;int&gt;       &lt;num&gt;   &lt;int&gt;
@@ -502,9 +499,9 @@ $expires_in
 </div>
 <p>Let’s try some other endpoints</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Headquarters</span></span>
-<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>headq <span class="ot">=</span> <span class="fu">get_sreg</span>(<span class="at">tag =</span> <span class="st">"sjedista"</span>)</span>
-<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(headq)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Headquarters</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>headq <span class="ot">=</span> <span class="fu">get_sreg</span>(<span class="at">tag =</span> <span class="st">"sjedista"</span>)</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(headq)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>        mbs sifra_zupanije                  naziv_zupanije sifra_opcine
       &lt;int&gt;          &lt;int&gt;                          &lt;char&gt;        &lt;int&gt;
@@ -533,9 +530,9 @@ $expires_in
 </div>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Core business</span></span>
-<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>cores <span class="ot">=</span> <span class="fu">get_sreg</span>(<span class="at">tag =</span> <span class="st">"pretezite_djelatnosti"</span>)</span>
-<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(cores)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Core business</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>cores <span class="ot">=</span> <span class="fu">get_sreg</span>(<span class="at">tag =</span> <span class="st">"pretezite_djelatnosti"</span>)</span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(cores)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>        mbs nacionalna_klasifikacija_djelatnosti_id
       &lt;int&gt;                                   &lt;int&gt;
@@ -548,9 +545,9 @@ $expires_in
 </div>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Industry</span></span>
-<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>industry <span class="ot">=</span> <span class="fu">get_sreg</span>(<span class="at">tag =</span> <span class="st">"predmeti_poslovanja"</span>)</span>
-<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(industry)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Industry</span></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>industry <span class="ot">=</span> <span class="fu">get_sreg</span>(<span class="at">tag =</span> <span class="st">"predmeti_poslovanja"</span>)</span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(industry)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>        mbs djelatnost_rbr
       &lt;int&gt;          &lt;int&gt;
@@ -579,9 +576,9 @@ $expires_in
 </div>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Evidence activities</span></span>
-<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>activities <span class="ot">=</span> <span class="fu">get_sreg</span>(<span class="at">tag =</span> <span class="st">"evidencijske_djelatnosti"</span>)</span>
-<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(activities)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Evidence activities</span></span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>activities <span class="ot">=</span> <span class="fu">get_sreg</span>(<span class="at">tag =</span> <span class="st">"evidencijske_djelatnosti"</span>)</span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(activities)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>        mbs djelatnost_rbr
       &lt;int&gt;          &lt;int&gt;
@@ -602,9 +599,9 @@ $expires_in
 </div>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Short name</span></span>
-<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>short_names <span class="ot">=</span> <span class="fu">get_sreg</span>(<span class="at">tag =</span> <span class="st">"evidencijske_djelatnosti"</span>)</span>
-<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(short_names)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Short name</span></span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>short_names <span class="ot">=</span> <span class="fu">get_sreg</span>(<span class="at">tag =</span> <span class="st">"evidencijske_djelatnosti"</span>)</span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(short_names)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>        mbs djelatnost_rbr
       &lt;int&gt;          &lt;int&gt;
@@ -624,34 +621,83 @@ $expires_in
 6: Trgovina na veliko i posredovanje u trgovini, osim trgovine motornim vozilima i motociklima</code></pre>
 </div>
 </div>
+<p>There can be a problem if output to API calls have many rows. One one side, API can restrict number of rows in output, on the other side, we can have a problem with memory. Or it can take long time and we will get timeout error.</p>
+<p>We can solve this by using a loop. Here is how we can do that/:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Get data from court public registry in a loop</span></span>
-<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>get_sreg_loop <span class="ot">=</span> <span class="cf">function</span>(<span class="at">tag =</span> <span class="st">"subjekti"</span>, <span class="at">by =</span> <span class="dv">10000</span>) {</span>
-<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Define offsets</span></span>
-<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a>  offset_seq <span class="ot">=</span> <span class="fu">seq</span>(<span class="dv">0</span>, <span class="dv">360000</span>, <span class="at">by =</span> by)</span>
-<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a>  offset_seq <span class="ot">=</span> <span class="fu">format</span>(offset_seq, <span class="at">scientific =</span> <span class="cn">FALSE</span>)</span>
-<span id="cb26-6"><a href="#cb26-6" aria-hidden="true" tabindex="-1"></a>  offset_seq <span class="ot">=</span> <span class="fu">gsub</span>(<span class="st">"</span><span class="sc">\\</span><span class="st">s+"</span>, <span class="st">""</span>, offset_seq)</span>
-<span id="cb26-7"><a href="#cb26-7" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Define urls</span></span>
-<span id="cb26-8"><a href="#cb26-8" aria-hidden="true" tabindex="-1"></a>  urls <span class="ot">=</span> <span class="fu">lapply</span>(offset_seq, <span class="cf">function</span>(x) {</span>
-<span id="cb26-9"><a href="#cb26-9" aria-hidden="true" tabindex="-1"></a>    <span class="fu">modify_url</span>(</span>
-<span id="cb26-10"><a href="#cb26-10" aria-hidden="true" tabindex="-1"></a>      <span class="fu">paste0</span>(URL, tag),</span>
-<span id="cb26-11"><a href="#cb26-11" aria-hidden="true" tabindex="-1"></a>      <span class="at">query =</span> <span class="fu">list</span>(</span>
-<span id="cb26-12"><a href="#cb26-12" aria-hidden="true" tabindex="-1"></a>        <span class="at">offset =</span> x,</span>
-<span id="cb26-13"><a href="#cb26-13" aria-hidden="true" tabindex="-1"></a>        <span class="at">limit =</span> <span class="fu">format</span>(by, <span class="at">scientific =</span> <span class="cn">FALSE</span>),</span>
-<span id="cb26-14"><a href="#cb26-14" aria-hidden="true" tabindex="-1"></a>        <span class="at">only_active =</span> <span class="cn">FALSE</span></span>
-<span id="cb26-15"><a href="#cb26-15" aria-hidden="true" tabindex="-1"></a>      )</span>
-<span id="cb26-16"><a href="#cb26-16" aria-hidden="true" tabindex="-1"></a>    )</span>
-<span id="cb26-17"><a href="#cb26-17" aria-hidden="true" tabindex="-1"></a>  })</span>
-<span id="cb26-18"><a href="#cb26-18" aria-hidden="true" tabindex="-1"></a>  res_l <span class="ot">=</span> <span class="fu">lapply</span>(urls, get_sreg_url)</span>
-<span id="cb26-19"><a href="#cb26-19" aria-hidden="true" tabindex="-1"></a>  res_l <span class="ot">=</span> res_l[<span class="sc">!</span><span class="fu">sapply</span>(res_l, <span class="cf">function</span>(x) <span class="fu">length</span>(x) <span class="sc">==</span> <span class="dv">0</span>)]</span>
-<span id="cb26-20"><a href="#cb26-20" aria-hidden="true" tabindex="-1"></a>  res_l <span class="ot">=</span> <span class="fu">lapply</span>(res_l, <span class="cf">function</span>(l) <span class="fu">rbindlist</span>(<span class="fu">lapply</span>(l, as.data.table), <span class="at">fill =</span> <span class="cn">TRUE</span>))</span>
-<span id="cb26-21"><a href="#cb26-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rbindlist</span>(res_l, <span class="at">fill =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb26-22"><a href="#cb26-22" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb26-23"><a href="#cb26-23" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb26-24"><a href="#cb26-24" aria-hidden="true" tabindex="-1"></a><span class="co"># # Business subjects</span></span>
-<span id="cb26-25"><a href="#cb26-25" aria-hidden="true" tabindex="-1"></a><span class="co"># subjects = get_sreg_loop("subjekti")</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Get data from court public registry in a loop</span></span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>get_sreg_loop <span class="ot">=</span> <span class="cf">function</span>(<span class="at">tag =</span> <span class="st">"subjekti"</span>, </span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>                         <span class="at">by =</span> <span class="dv">100</span>, </span>
+<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a>                         <span class="at">total =</span> <span class="dv">1000</span>) {</span>
+<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Define offsets</span></span>
+<span id="cb23-6"><a href="#cb23-6" aria-hidden="true" tabindex="-1"></a>  offset_seq <span class="ot">=</span> <span class="fu">seq</span>(<span class="dv">0</span>, total, <span class="at">by =</span> by)</span>
+<span id="cb23-7"><a href="#cb23-7" aria-hidden="true" tabindex="-1"></a>  offset_seq <span class="ot">=</span> <span class="fu">format</span>(offset_seq, <span class="at">scientific =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb23-8"><a href="#cb23-8" aria-hidden="true" tabindex="-1"></a>  offset_seq <span class="ot">=</span> <span class="fu">gsub</span>(<span class="st">"</span><span class="sc">\\</span><span class="st">s+"</span>, <span class="st">""</span>, offset_seq)</span>
+<span id="cb23-9"><a href="#cb23-9" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Define urls</span></span>
+<span id="cb23-10"><a href="#cb23-10" aria-hidden="true" tabindex="-1"></a>  urls <span class="ot">=</span> <span class="fu">lapply</span>(offset_seq, <span class="cf">function</span>(x) {</span>
+<span id="cb23-11"><a href="#cb23-11" aria-hidden="true" tabindex="-1"></a>    <span class="fu">modify_url</span>(</span>
+<span id="cb23-12"><a href="#cb23-12" aria-hidden="true" tabindex="-1"></a>      <span class="fu">paste0</span>(URL, tag),</span>
+<span id="cb23-13"><a href="#cb23-13" aria-hidden="true" tabindex="-1"></a>      <span class="at">query =</span> <span class="fu">list</span>(</span>
+<span id="cb23-14"><a href="#cb23-14" aria-hidden="true" tabindex="-1"></a>        <span class="at">offset =</span> x,</span>
+<span id="cb23-15"><a href="#cb23-15" aria-hidden="true" tabindex="-1"></a>        <span class="at">limit =</span> <span class="fu">format</span>(by, <span class="at">scientific =</span> <span class="cn">FALSE</span>),</span>
+<span id="cb23-16"><a href="#cb23-16" aria-hidden="true" tabindex="-1"></a>        <span class="at">only_active =</span> <span class="cn">FALSE</span></span>
+<span id="cb23-17"><a href="#cb23-17" aria-hidden="true" tabindex="-1"></a>      )</span>
+<span id="cb23-18"><a href="#cb23-18" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb23-19"><a href="#cb23-19" aria-hidden="true" tabindex="-1"></a>  })</span>
+<span id="cb23-20"><a href="#cb23-20" aria-hidden="true" tabindex="-1"></a>  res_l <span class="ot">=</span> <span class="fu">lapply</span>(urls, get_sreg_url)</span>
+<span id="cb23-21"><a href="#cb23-21" aria-hidden="true" tabindex="-1"></a>  res_l <span class="ot">=</span> res_l[<span class="sc">!</span><span class="fu">sapply</span>(res_l, <span class="cf">function</span>(x) <span class="fu">length</span>(x) <span class="sc">==</span> <span class="dv">0</span>)]</span>
+<span id="cb23-22"><a href="#cb23-22" aria-hidden="true" tabindex="-1"></a>  res_l <span class="ot">=</span> <span class="fu">lapply</span>(res_l, <span class="cf">function</span>(l) {</span>
+<span id="cb23-23"><a href="#cb23-23" aria-hidden="true" tabindex="-1"></a>    <span class="fu">rbindlist</span>(<span class="fu">lapply</span>(l, as.data.table), <span class="at">fill =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb23-24"><a href="#cb23-24" aria-hidden="true" tabindex="-1"></a>  })</span>
+<span id="cb23-25"><a href="#cb23-25" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rbindlist</span>(res_l, <span class="at">fill =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb23-26"><a href="#cb23-26" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb23-27"><a href="#cb23-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-28"><a href="#cb23-28" aria-hidden="true" tabindex="-1"></a><span class="co"># Business subjects</span></span>
+<span id="cb23-29"><a href="#cb23-29" aria-hidden="true" tabindex="-1"></a>subjects_with_loop <span class="ot">=</span> <span class="fu">get_sreg_loop</span>(<span class="st">"subjekti"</span>)</span>
+<span id="cb23-30"><a href="#cb23-30" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(subjects_with_loop)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>        mbs status sud_id_nadlezan sud_id_sluzba postupak ino_podruznica
+      &lt;int&gt;  &lt;int&gt;           &lt;int&gt;         &lt;int&gt;    &lt;int&gt;          &lt;int&gt;
+1: 10000015      0               1             1        1              0
+2: 10000023      0               1             1        1              0
+3: 10000031      0               1             1        1              0
+4: 10000040      0               1             1        1              0
+5: 10000058      0               1             1        1              0
+6: 10000066      0               1             1        1              0
+   stecajna_masa likvidacijska_masa     datum_osnivanja      datum_brisanja
+           &lt;int&gt;              &lt;int&gt;              &lt;char&gt;              &lt;char&gt;
+1:             0                  0 1995-05-10T00:00:00 2002-08-23T00:00:00
+2:             0                  0 1994-03-11T00:00:00 2002-07-02T00:00:00
+3:             0                  0 1995-05-12T00:00:00 2012-09-10T00:00:00
+4:             0                  0 1995-05-12T00:00:00 2012-09-10T00:00:00
+5:             0                  0 1995-05-12T00:00:00 2012-09-10T00:00:00
+6:             0                  0 1995-05-12T00:00:00 2002-09-09T00:00:00
+   sud_id_brisanja
+             &lt;int&gt;
+1:               1
+2:               1
+3:               1
+4:               1
+5:               1
+6:               1
+                                                 tvrtka_kod_brisanja
+                                                              &lt;char&gt;
+1:            DESANTI društvo s ograničenom odgovornošću za trgovinu
+2:                          CROMAX mesna industrija d.d. - u stečaju
+3:                  VELEPROMET d. o. o. za trgovinu na veliko i malo
+4:    PRELEC društvo s ograničenom odgovornošću za trgovinu i promet
+5:     EMINA društvo s ograničenom odgovornošću za trgovinu i usluge
+6: TRGOMEDIK društvo s ograničenom odgovornošču za trgovinu i usluge
+   poslovni_broj_brisanja         oib      mb glavna_djelatnost
+                   &lt;char&gt;       &lt;num&gt;   &lt;int&gt;             &lt;int&gt;
+1:            Tt-02/914-2          NA      NA                NA
+2:            Tt-02/596-1          NA      NA                NA
+3:            Tt-12/74-54 66580390814 1083333                NA
+4:            Tt-12/74-43 55543222548 1095315                NA
+5:            Tt-12/74-13 22763783463 1085484                NA
+6:           Tt-02/1029-2          NA      NA                NA</code></pre>
 </div>
-<p>Let’s check if everything is working</p>
+</div>
+<p>The resulted <code>subjects_with_loop</code> object have 1100 nrows as we would expect.</p>
 </section>
 </section>
 <section id="web-scraping" class="level1">
@@ -669,33 +715,211 @@ $expires_in
 <h2 class="anchored" data-anchor-id="html-and-css">HTML and CSS</h2>
 <p>Before starting it is important to have a basic knowledge of HTML and CSS. This section aims to briefly explain how HTML and CSS work</p>
 <p>Starting from HTML, an HTML file looks like the following piece of code.</p>
-<div class="sourceCode" id="cb27"><pre class="sourceCode html code-with-copy"><code class="sourceCode html"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;!DOCTYPE</span> html<span class="dt">&gt;</span></span>
-<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">html</span><span class="ot"> lang</span><span class="op">=</span><span class="st">"en"</span><span class="dt">&gt;</span></span>
-<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">body</span><span class="dt">&gt;</span></span>
-<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb27-5"><a href="#cb27-5" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">h1</span><span class="ot"> href</span><span class="op">=</span><span class="st">"https://en.wikipedia.org/wiki/Carl_Friedrich_Gauss"</span><span class="dt">&gt;</span> Carl Friedrich Gauss<span class="dt">&lt;/</span><span class="kw">h1</span><span class="dt">&gt;</span></span>
-<span id="cb27-6"><a href="#cb27-6" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">h2</span><span class="dt">&gt;</span> Biography <span class="dt">&lt;/</span><span class="kw">h2</span><span class="dt">&gt;</span></span>
-<span id="cb27-7"><a href="#cb27-7" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">p</span><span class="dt">&gt;</span> Johann Carl Friedrich Gauss was born on 30 April 1777 in Brunswick. <span class="dt">&lt;/</span><span class="kw">p</span><span class="dt">&gt;</span></span>
-<span id="cb27-8"><a href="#cb27-8" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">h2</span><span class="dt">&gt;</span> Profession <span class="dt">&lt;/</span><span class="kw">h2</span><span class="dt">&gt;</span></span>
-<span id="cb27-9"><a href="#cb27-9" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">p</span><span class="dt">&gt;</span> Gauss is considered as one of the greatest mathematician, statistician and physicist of all time. <span class="dt">&lt;/</span><span class="kw">p</span><span class="dt">&gt;</span></span>
-<span id="cb27-10"><a href="#cb27-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb27-11"><a href="#cb27-11" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;/</span><span class="kw">body</span><span class="dt">&gt;</span></span>
-<span id="cb27-12"><a href="#cb27-12" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;/</span><span class="kw">html</span><span class="dt">&gt;</span></span>
-<span id="cb27-13"><a href="#cb27-13" aria-hidden="true" tabindex="-1"></a>Those instructions produce the following:</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb25"><pre class="sourceCode html code-with-copy"><code class="sourceCode html"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;!DOCTYPE</span> html<span class="dt">&gt;</span></span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">html</span><span class="ot"> lang</span><span class="op">=</span><span class="st">"en"</span><span class="dt">&gt;</span></span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">body</span><span class="dt">&gt;</span></span>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">h1</span><span class="ot"> href</span><span class="op">=</span><span class="st">"https://en.wikipedia.org/wiki/Carl_Friedrich_Gauss"</span><span class="dt">&gt;</span> Carl Friedrich Gauss<span class="dt">&lt;/</span><span class="kw">h1</span><span class="dt">&gt;</span></span>
+<span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">h2</span><span class="dt">&gt;</span> Biography <span class="dt">&lt;/</span><span class="kw">h2</span><span class="dt">&gt;</span></span>
+<span id="cb25-7"><a href="#cb25-7" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">p</span><span class="dt">&gt;</span> Johann Carl Friedrich Gauss was born on 30 April 1777 in Brunswick. <span class="dt">&lt;/</span><span class="kw">p</span><span class="dt">&gt;</span></span>
+<span id="cb25-8"><a href="#cb25-8" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">h2</span><span class="dt">&gt;</span> Profession <span class="dt">&lt;/</span><span class="kw">h2</span><span class="dt">&gt;</span></span>
+<span id="cb25-9"><a href="#cb25-9" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">p</span><span class="dt">&gt;</span> Gauss is considered as one of the greatest mathematician, statistician and physicist of all time. <span class="dt">&lt;/</span><span class="kw">p</span><span class="dt">&gt;</span></span>
+<span id="cb25-10"><a href="#cb25-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-11"><a href="#cb25-11" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;/</span><span class="kw">body</span><span class="dt">&gt;</span></span>
+<span id="cb25-12"><a href="#cb25-12" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;/</span><span class="kw">html</span><span class="dt">&gt;</span></span>
+<span id="cb25-13"><a href="#cb25-13" aria-hidden="true" tabindex="-1"></a>Those instructions produce the following:</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>As you read above, HTML is used to describe the infrastructure of a web page, for example we may want to define the headings, the paragraphs, etc.</p>
 <p>This infrastructure is represented by what are called tags (for example</p>
-<h1>
-<p>…&lt;&gt; or</p>
-<p>
-</p><p>…&lt;&gt; are tags). Tags are the core of an HTML document as they represent the nature of what is inside the tag (for example h1 stands for heading 1). It is important to observe that there are two types of tags:</p>
+<div class="sourceCode" id="cb26"><pre class="sourceCode html code-with-copy"><code class="sourceCode html"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">h1</span><span class="dt">&gt;</span></span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a>...\<span class="er">&lt;</span>\h1\&gt;</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>or</p>
+<div class="sourceCode" id="cb27"><pre class="sourceCode html code-with-copy"><code class="sourceCode html"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">p</span><span class="dt">&gt;</span></span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>...\<span class="er">&lt;</span>\p\&gt;</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>are tags). Tags are the core of an HTML document as they represent the nature of what is inside the tag (for example h1 stands for heading 1). It is important to observe that there are two types of tags:</p>
 <p>starting tags (e.g.</p>
-</h1><h1>
-<p>) ending tags (e.g.&nbsp;&lt;&gt;) This is what allows to nest different tags.</p>
+<p><code>&lt;h1&gt;</code></p>
+<p>) ending tags (e.g.&nbsp;<code>\&lt;\h1\&gt;</code>) This is what allows to nest different tags.</p>
 <p>Tags can also have attributes, for example in &lt;h1 href=“https://en.wikipedia.org/wiki/Carl_Friedrich_Gauss”Carl Friedrich Gauss</p>
-</h1>
+
 <p>, href is an attribute of the tag h1 that specifies an URL.</p>
 <p>As the output of the above HTML code is not super elegant, CSS is used to style the final website. For example CSS is used to define the font, the color, the size, the spacing and many more features of a website.</p>
 <p>What is important for this article are CSS selectors, which are patterns used to select elements. The most important is the .class selector, which selects all elements with the same class. For example the .xyz selector selects all elements with class=“xyz”.</p>
+</section>
+<section id="usefull-r-packages-for-web-scraping" class="level2">
+<h2 class="anchored" data-anchor-id="usefull-r-packages-for-web-scraping">Usefull R packages for web scraping</h2>
+<p>There are several packages for web scraping in R, every package has its strengths and limitations. Here is the list of most popular ones</p>
+<ul>
+<li>rvest: rvest is a part of the tidyverse and is designed to make scraping information from the web easier. It is a great package for beginners as it is easy to use and has a lot of documentation. We will use rvest in our examples.</li>
+<li>httr: httr is a package that allows you to send HTTP requests and work with web APIs. It is a more general package than rvest and can be used for a wide range of web-related tasks.</li>
+<li>RSelenium: RSelenium is a package that allows you to control a web browser from R. This can be useful for scraping websites.</li>
+<li>chromium: chromium is a package that allows you to run a headless version of the Chromium web browser from R. This can be useful for scraping websites that require JavaScript to render the page.</li>
+<li>jsonlite: jsonlite is a package for working with JSON data. It can be useful for parsing JSON responses from web APIs.</li>
+<li>xml2: xml2 is a package for working with XML and HTML documents. It can be useful for parsing web pages and extracting information.</li>
+</ul>
+</section>
+<section id="web-scrapping-process" class="level2">
+<h2 class="anchored" data-anchor-id="web-scrapping-process">Web scrapping process</h2>
+<p>The web scraping process can be broken down into the following steps:</p>
+<ol type="1">
+<li>Send GET or POST request to the website you want to scrape.</li>
+<li>Parse the HTML content of the website.</li>
+<li>Extract the information you want from the HTML content (getting HTML attributes).</li>
+</ol>
+</section>
+<section id="simple-example" class="level2">
+<h2 class="anchored" data-anchor-id="simple-example">Simple example</h2>
+<p>Let’s start with very simple example. We will replicate 3 steps above by sending request and scraping content of NT times website. We will use rvest package for this.</p>
+<p>Sending the request to the page is simple, <code>rvest</code> provides the <code>read_html</code> function, which returns an object of <code>html_document</code> type:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(rvest)</span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Send GET request to the website</span></span>
+<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a>url <span class="ot">=</span> <span class="st">"https://www.nytimes.com/"</span></span>
+<span id="cb28-5"><a href="#cb28-5" aria-hidden="true" tabindex="-1"></a>page <span class="ot">=</span> <span class="fu">read_html</span>(url)</span>
+<span id="cb28-6"><a href="#cb28-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-7"><a href="#cb28-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Print the page</span></span>
+<span id="cb28-8"><a href="#cb28-8" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(page)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>{html_document}
+&lt;html lang="en" class=" nytapp-vi-homepage " xmlns:og="http://opengraphprotocol.org/schema/"&gt;
+[1] &lt;head&gt;\n&lt;meta http-equiv="Content-Type" content="text/html; charset=UTF-8 ...
+[2] &lt;body&gt;\n    &lt;div id="app"&gt;\n&lt;a class="css-kgn7zc" href="#site-content"&gt;Sk ...</code></pre>
+</div>
+</div>
+<p>Next step is parsing html content. As we saw in the last chunk of code, NYT_page contains the raw HTML code, which is not so easily readable.</p>
+<p>In order to make it readable from R it has to be parsed, which means generating a Document Object Model (DOM) from the raw HTML. DOM is what connects scripts and web pages by representing the structure of a document in memory. If you retrieve the HTTP request using Node.js, you can give the raw HTML response to R for parsing and further analysis.</p>
+<p><code>rvest</code> provides 2 ways to select HTML elements:</p>
+<ul>
+<li>CSS selectors with following syntax</li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Select elements using CSS selectors</span></span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>elements <span class="ot">=</span> <span class="fu">html_nodes</span>(page, <span class="st">"h2"</span>)</span>
+<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Print the elements</span></span>
+<span id="cb30-5"><a href="#cb30-5" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(elements)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>{xml_nodeset (10)}
+ [1] &lt;h2 id="hp-live-band-container-heading" class="css-1dv1kvn"&gt;Live&lt;/h2&gt;\n
+ [2] &lt;h2 class="css-1dv1kvn"&gt;Top Stories&lt;/h2&gt;
+ [3] &lt;h2&gt;&lt;div class="css-v7w2uh"&gt;&lt;span&gt;More News&lt;/span&gt;&lt;/div&gt;&lt;/h2&gt;
+ [4] &lt;h2&gt;&lt;a class="css-9mylee" href="https://www.nytimes.com/athletic/" data- ...
+ [5] &lt;h2&gt;&lt;div class="css-v7w2uh"&gt;&lt;span&gt;Well&lt;/span&gt;&lt;/div&gt;&lt;/h2&gt;
+ [6] &lt;h2&gt;&lt;div class="css-v7w2uh"&gt;&lt;span&gt;Culture and Lifestyle&lt;/span&gt;&lt;/div&gt;&lt;/h2&gt;
+ [7] &lt;h2&gt;&lt;div class="css-1lel406"&gt;\n&lt;p class="css-2z4gz0"&gt;&lt;span&gt;Audio&lt;/span&gt;&lt; ...
+ [8] &lt;h2&gt;&lt;div class="css-1lel406"&gt;\n&lt;p class="css-2z4gz0"&gt;&lt;span&gt;Games&lt;/span&gt;&lt; ...
+ [9] &lt;h2 class="css-1dv1kvn" id="site-index-label"&gt;Site Index&lt;/h2&gt;\n
+[10] &lt;h2 class="css-1dv1kvn"&gt;Site Information Navigation&lt;/h2&gt;\n</code></pre>
+</div>
+</div>
+<ul>
+<li>XPath with following syntax:</li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Select elements using CSS selectors</span></span>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a>elements <span class="ot">=</span> <span class="fu">html_nodes</span>(page, <span class="st">"h2"</span>)</span>
+<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-4"><a href="#cb32-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Print the elements</span></span>
+<span id="cb32-5"><a href="#cb32-5" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(elements)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>{xml_nodeset (10)}
+ [1] &lt;h2 id="hp-live-band-container-heading" class="css-1dv1kvn"&gt;Live&lt;/h2&gt;\n
+ [2] &lt;h2 class="css-1dv1kvn"&gt;Top Stories&lt;/h2&gt;
+ [3] &lt;h2&gt;&lt;div class="css-v7w2uh"&gt;&lt;span&gt;More News&lt;/span&gt;&lt;/div&gt;&lt;/h2&gt;
+ [4] &lt;h2&gt;&lt;a class="css-9mylee" href="https://www.nytimes.com/athletic/" data- ...
+ [5] &lt;h2&gt;&lt;div class="css-v7w2uh"&gt;&lt;span&gt;Well&lt;/span&gt;&lt;/div&gt;&lt;/h2&gt;
+ [6] &lt;h2&gt;&lt;div class="css-v7w2uh"&gt;&lt;span&gt;Culture and Lifestyle&lt;/span&gt;&lt;/div&gt;&lt;/h2&gt;
+ [7] &lt;h2&gt;&lt;div class="css-1lel406"&gt;\n&lt;p class="css-2z4gz0"&gt;&lt;span&gt;Audio&lt;/span&gt;&lt; ...
+ [8] &lt;h2&gt;&lt;div class="css-1lel406"&gt;\n&lt;p class="css-2z4gz0"&gt;&lt;span&gt;Games&lt;/span&gt;&lt; ...
+ [9] &lt;h2 class="css-1dv1kvn" id="site-index-label"&gt;Site Index&lt;/h2&gt;\n
+[10] &lt;h2 class="css-1dv1kvn"&gt;Site Information Navigation&lt;/h2&gt;\n</code></pre>
+</div>
+</div>
+<p>CSS selectors are more common and easier to use, so we will use them in rest of the notebook. CSS selectors are patterns used to select elements in an HTML document. They are ussually used to apply styles to elements, but they can also be used to select elements for scraping.</p>
+<p>The easiest way to obtain a CSS selector is opening the inspect mode, find the element you desire and right click on it. Then click on copy and copy selector.</p>
+<p>Alternatively, you can use external softwer for CSS selector generation. For example, you can use <a href="https://selectorgadget.com/">SelectorGadget</a> in chrome. On Edge, you can use <a href="https://microsoftedge.microsoft.com/addons/detail/css-selector/nloicnlfkohbekabfhgdfgmkdgghfhnh">CSS selector</a> extension.</p>
+<p>We can show one more example where we select element with css selector:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="co"># CSS selector</span></span>
+<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a>page <span class="sc">%&gt;%</span> </span>
+<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">html_elements</span>(<span class="st">".css-1gg6cw2"</span>)  <span class="sc">%&gt;%</span> </span>
+<span id="cb34-4"><a href="#cb34-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">html_text</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb34-5"><a href="#cb34-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">head</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "Police Release Photos Showing Face of Man Sought in Killing of Insurance C.E.O."</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="co"># XPath</span></span>
+<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a>xpath_ <span class="ot">=</span> <span class="st">'//*[contains(concat( " ", @class, " " ), concat( " ", "css-1gg6cw2", " " ))]'</span></span>
+<span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a>page <span class="sc">%&gt;%</span> </span>
+<span id="cb36-4"><a href="#cb36-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">html_elements</span>(<span class="at">xpath =</span> xpath_) <span class="sc">%&gt;%</span></span>
+<span id="cb36-5"><a href="#cb36-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">html_text</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "Police Release Photos Showing Face of Man Sought in Killing of Insurance C.E.O."</code></pre>
+</div>
+</div>
+</section>
+<section id="example-2---wikipedia" class="level2">
+<h2 class="anchored" data-anchor-id="example-2---wikipedia">Example 2 - Wikipedia</h2>
+<p>Let’s try to scrape some data from Wikipedia. We will try to get the list of all countries in the world. We will use the following <a href="https://en.wikipedia.org/wiki/List_of_countries_and_dependencies_and_their_capitals_in_native_languages">URL</a>. We will use rvest again.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Send GET request to the website</span></span>
+<span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a>url <span class="ot">=</span> <span class="st">"https://en.wikipedia.org/wiki/List_of_countries_and_dependencies_and_their_capitals_in_native_languages"</span></span>
+<span id="cb38-3"><a href="#cb38-3" aria-hidden="true" tabindex="-1"></a>page <span class="ot">=</span> <span class="fu">read_html</span>(url)</span>
+<span id="cb38-4"><a href="#cb38-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb38-5"><a href="#cb38-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Select the table with countries</span></span>
+<span id="cb38-6"><a href="#cb38-6" aria-hidden="true" tabindex="-1"></a>countries_table <span class="ot">=</span> <span class="fu">html_elements</span>(page, <span class="st">"table"</span>)[[<span class="dv">1</span>]]</span>
+<span id="cb38-7"><a href="#cb38-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb38-8"><a href="#cb38-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Extract the table</span></span>
+<span id="cb38-9"><a href="#cb38-9" aria-hidden="true" tabindex="-1"></a>countries <span class="ot">=</span> <span class="fu">html_table</span>(countries_table)</span>
+<span id="cb38-10"><a href="#cb38-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb38-11"><a href="#cb38-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Print the table</span></span>
+<span id="cb38-12"><a href="#cb38-12" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">head</span>(countries))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 3 × 6
+  X1    X2                                               X3    X4    X5    X6   
+  &lt;lgl&gt; &lt;chr&gt;                                            &lt;lgl&gt; &lt;chr&gt; &lt;lgl&gt; &lt;chr&gt;
+1 NA    "This article has multiple issues. Please help … NA    This… NA    This…
+2 NA    "This article possibly contains original resear… NA    &lt;NA&gt;  NA    &lt;NA&gt; 
+3 NA    "This article should specify the language of it… NA    &lt;NA&gt;  NA    &lt;NA&gt; </code></pre>
+</div>
+</div>
+<p>Another example is to scrape data from Formula 1 Wikipedia’s voice and create a CSV file containing the name, the nationality, the number of podiums and some other statistics for every pilot.</p>
+<p>The table we are going to scrape is avaialble [here]|(https://en.wikipedia.org/wiki/List_of_Formula_One_drivers). We will use the following code to scrape the data:</p>
+<p>Again we repeat what we did before with the NYT example:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb40"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Send GET request to the website</span></span>
+<span id="cb40-2"><a href="#cb40-2" aria-hidden="true" tabindex="-1"></a>url <span class="ot">=</span> <span class="st">"https://en.wikipedia.org/wiki/List_of_Formula_One_drivers"</span></span>
+<span id="cb40-3"><a href="#cb40-3" aria-hidden="true" tabindex="-1"></a>page <span class="ot">=</span> <span class="fu">read_html</span>(url)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Searching in the HTML code we find that the table is a table element with the sortable attribute:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb41"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a>drivers_F1 <span class="ot">=</span> <span class="fu">html_element</span>(page, <span class="st">".wikitable.sortable"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb41-2"><a href="#cb41-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">html_table</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>In the chunk of code above, the html_table function is used to render the HTML code into tables.</p>
+<p>To inspect it, we display the first and last observations, and the structure of the dataset:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb42"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(drivers_F1)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 6 × 11
+  `Driver name`     Nationality    `Seasons competed` `Drivers' Championships`
+  &lt;chr&gt;             &lt;chr&gt;          &lt;chr&gt;              &lt;chr&gt;                   
+1 Carlo Abate       Italy          1962–1963          0                       
+2 George Abecassis  United Kingdom 1951–1952          0                       
+3 Kenny Acheson     United Kingdom 1983, 1985         0                       
+4 Andrea de Adamich Italy          1968, 1970–1973    0                       
+5 Philippe Adams    Belgium        1994               0                       
+6 Walt Ader         United States  1950               0                       
+# ℹ 7 more variables: `Race entries` &lt;chr&gt;, `Race starts` &lt;chr&gt;,
+#   `Pole positions` &lt;chr&gt;, `Race wins` &lt;chr&gt;, Podiums &lt;chr&gt;,
+#   `Fastest laps` &lt;chr&gt;, `Points[a]` &lt;chr&gt;</code></pre>
+</div>
+</div>
+</section>
+<section id="example-3--" class="level2">
+<h2 class="anchored" data-anchor-id="example-3--">Example 3 -</h2>
 </section>
 </section>
 
