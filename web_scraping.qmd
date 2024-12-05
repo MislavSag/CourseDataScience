@@ -15,7 +15,7 @@ execute:
 
 ## Terminology
 
-**Web scraping** is a technique used to extract information from websites. This tutorial demonstrates how to scrape web data in R using packages like `rvest` and `httr`.
+**Web scraping** is a technique used to extract information from websites. This tutorial demonstrates how to scrape web data in R using packages like `rvest` and `httr`. There is some difference between web crawling and web scraping. Web crawling is the process of automatically collecting information from the web, while web scraping is the process of extracting specific information from websites. but this distinctions is not always clear and not important for us right now.
 
 **Web APIs** are a way to access data from websites and online services. They allow you to interact with websites programmatically, rather than through a web browser. When a website or online service provides an API, it means that they have made it possible for developers to access their data in a structured and controlled way.
 
@@ -29,8 +29,8 @@ This means that using APIs is generally considered more ethical than web scrapin
 
 However, there are also some limitations to using APIs:
 
-- many APIs have rate limits, which means that they will only allow a certain number of requests to be made within a certain time period, i.e. you may not access large amounts of data;
-- not all websites or online services provide APIs, which means the only way to access their data is via web scraping.
+-   many APIs have rate limits, which means that they will only allow a certain number of requests to be made within a certain time period, i.e. you may not access large amounts of data;
+-   not all websites or online services provide APIs, which means the only way to access their data is via web scraping.
 
 ## Ethical and legal considerations
 
@@ -42,18 +42,48 @@ Just because you *can* scrape it, doesn't mean you *should*. A computer can proc
 
 Before starting, ensure you have the following R packages installed:
 
-```{.r}
+``` r
 # Install required packages
-install.packages(c("httr", "rvest", "dplyr"))
+install.packages(c("httr", "rvest", "dplyr", "data.table"))
 ```
+
+## Environment variables
+
+Environment variables are useful for keeping sensitive information out of your scripts and code files, promoting better security and portability. These variables are often used to store:
+
+-   API keys or tokens for accessing external services.
+-   File paths or directory locations.
+-   Configuration settings for R packages.
+
+The `.Renviron` file is a plain text file where you can define environment variables. It is loaded when R starts, and any variables defined in it are available throughout the R session.
+
+Benefits of .Renviron:
+
+- Keeps sensitive information like API keys secure.
+- Prevents hardcoding sensitive values into scripts.
+- Enables consistent environment variable settings across sessions.
+
+Here is example of `.Renviron` file:
+
+```{.r}
+# Define environment variables
+API_KEY="your_api_key"
+```
+
+Once defined in .Renviron, you can access them in R using the Sys.getenv() function:
+
+```{.r}
+# Accessing the API_KEY environment variable
+api_key <- Sys.getenv("API_KEY")
+```
+
+The last important thing is to add `.Renviron` file to your `.gitignore` file. This will prevent you from accidentally committing sensitive information to your repository.
 
 # Web API's
 
 ## What is an API?
 
-API stands for Application Programming Interface. It is a set of rules and protocols that allow one software application to communicate with another. APIs are used to define the methods for requesting and sending data between different software applications.
-
-APIs are commonly used to access data from online services, such as social media platforms, weather services, and financial services. They allow developers to access data from these services in a structured and controlled way, rather than through a web browser.
+In nutshell, API is really just a collection of rules and methods that allow different software applications to interact and share information. This includes not only web servers and browsers, but also software packages like the R libraries
 
 ## Types of APIs
 
@@ -78,15 +108,25 @@ To use an API, you typically send an HTTP request to the API with the appropriat
 
 There are many APIs available that provide access to a wide range of data and services. Some examples of APIs include:
 
-- The Twitter API: This API allows you to access data from Twitter, such as tweets, users, and trends.
-- The OpenWeatherMap API: This API allows you to access weather data from around the world.
-- The Google Maps API: This API allows you to access maps and location data from Google Maps.
+-   The Twitter API: This API allows you to access data from Twitter, such as tweets, users, and trends.
+-   The OpenWeatherMap API: This API allows you to access weather data from around the world.
+-   The Google Maps API: This API allows you to access maps and location data from Google Maps.
 
 ## API keys
 
 Many APIs require you to use an API key to access the data. An API key is a unique identifier that is used to authenticate your requests to the API. You typically need to include your API key in the request to the API, either as a query parameter, a header, or in the request body.
 
 To get an API key, you usually need to sign up for an account with the service that provides the API, and then generate an API key in your account settings.
+
+## A bit more about API endpoints
+
+A key point in all of this is that, in the case of web APIs, we can access information *directly* from the API database if we can specify the correct URL(s). These URLs are known as an **API endpoints**. 
+
+API endpoints are in many ways similar to the normal website URLs that we're all used to visiting. For starters, you can navigate to them in your web browser. However, whereas normal websites display information in rich HTML content --- pictures, cat videos, nice formatting, etc. --- an API endpoint is much less visually appealing. Navigate your browser to an API endpoint and you'll just see a load of seemingly unformatted text. In truth, what you're really seeing is (probably) either [JSON](https://en.wikipedia.org/wiki/JSON) (**J**ava**S**cript **O**bject **No**tation) or [XML](https://en.wikipedia.org/wiki/XML) (E**x**tensible **M**arkup **L**anguage). 
+
+You don't need to worry too much about the syntax of JSON and XML. The important thing is that the object in your browser --- that load of seemingly unformatted text --- is actually very precisely structured and formatted. Moreover, it contains valuable information that we can easily read into R (or Python, Julia, etc.) We just need to know the right API endpoint for the data that we want.
+
+Let's practice doing this through a few example applications. I'll start with the simplest case (no API key required, explicit API endpoint) and then work through some more complicated examples. 
 
 ## Court Registry (Sudski registar) API
 
@@ -114,26 +154,169 @@ Your credentials are now activated and you can use the API. Here are API data re
 
 Let's see how we can use the API in R.
 
-```{.r}
+First. we sill need to import the package we sill use and get API token we will use later in our requests. You will have to use token url and some creditential data. It is best to save thin in `.Renviron` file as we explained in the introduction. 
+
+Since the first part of URL is always the same when sending requests, we wil save it in URL varaible.
+
+```{r}
 library(httr)
-library(jsonlite)
+library(data.table)
 
-# Define the base URL of the API
-base_url <- "https://sudreg-data.gov.hr/api/javni"
+# Define 
+token_url = "https://sudreg-data.gov.hr/api/oauth/token"
+user_name = Sys.getenv("USER_SREG")
+pass = Sys.getenv("PASS_SREG")
 
-# Define the endpoint of the API
-endpoint <- "/dokumentacija/open_api"
-
-# Define the parameters of the API
-params <- list(
-  "client_id" = "your_client_id",
-  "client_secret" = "your_client_secret",
-  "grant_type" = "client_credentials"
+# Get Token following the documentation
+token = POST(
+  token_url,
+  authenticate(user_name, pass),
+  body = list(grant_type = "client_credentials"),
+  encode = "form",
+  httr::config(ssl_verifypeer = FALSE)
 )
+token = content(token)
+print(token)
+
+# Save base url for future use
+URL = "https://sudreg-data.gov.hr/api/javni/"
+```
+
+Now, let's finally get some data. List of endpoints is available [here](https://sudreg-data.gov.hr/api/javni/dokumentacija/open_api). 
+
+```{r}
+res = GET(paste0(URL, "subjekti"),
+          add_headers(
+            "Authorization" = paste0("Bearer ", token$access_token),
+            "Content-Type" = "application/json"
+          ),
+          query = list(limit = 100, only_active = FALSE)
+          )
+res = content(res)
+
+print(head(res, 2))
+```
+
+Lets explain above code:
+
+-   `GET` function is used to send a GET request to the API endpoint. The first argument is the URL of the endpoint we want to access. 
+- The `add_headers` function is used to add the Authorization header to the request, which includes the access token we received when we authenticated with the API. 
+- The `Content-Type` header specifies that the content type of the request is JSON. 
+- The `query` argument is used to specify the query parameters of the request, which in this case include the limit and only_active parameters.
+- `content` function is used to extract the content of the response, which is the data that the API returns.
+
+Now, we would like to clean the data. We want to have data.frame or data.table, not the lists. Here is how can we do tha very simepl using data.table package.
+
+```{r}
+# Convert all list elements to data.table
+res_clean = lapply(res, as.data.table)
+
+# Rbind all elements
+res_clean = rbindlist(res_clean, fill = TRUE)
+
+head(res_clean)
+```
+We can write a function to make above steps easier. Here is how we can do that:
+
+```{r}
+# Wrap for GET request to court registry
+get_sreg_url = function(url) {
+  res = GET(url,
+            add_headers("Authorization" = paste0("Bearer ", token$access_token),
+                        "Content-Type" = "application/json"))
+  return(content(res))
+}
+
+# Wrap for GET request to court registry
+get_sreg = function(tag, q = list(limit = 100, only_active = TRUE), clean = TRUE) {
+  url = modify_url(
+    paste0(URL, tag),
+    query = q
+  )
+  # Make GET request
+  cont = get_sreg_url(url)
+  # Clean if needed
+  if (clean == TRUE) {
+    return(rbindlist(cont, fill = TRUE))
+  } else {
+    return(cont)
+  }
+}
+```
+
+Now, we can use this function to get data from Court Registry API. Here is how we can do that:
+
+```{r}
+# Get data from court public registry
+subjects = get_sreg("subjekti")
+
+head(subjects)
+```
+
+Let's try some other endpoints
+
+```{r}
+# Headquarters
+headq = get_sreg(tag = "sjedista")
+head(headq)
+```
+
+```{r}
+# Core business
+cores = get_sreg(tag = "pretezite_djelatnosti")
+head(cores)
+```
+
+```{r}
+# Industry
+industry = get_sreg(tag = "predmeti_poslovanja")
+head(industry)
+```
+
+```{r}
+# Evidence activities
+activities = get_sreg(tag = "evidencijske_djelatnosti")
+head(activities)
+```
+
+```{r}
+# Short name
+short_names = get_sreg(tag = "evidencijske_djelatnosti")
+head(short_names)
+```
+
+
+```{r}
+# Get data from court public registry in a loop
+get_sreg_loop = function(tag = "subjekti", by = 10000) {
+  # Define offsets
+  offset_seq = seq(0, 360000, by = by)
+  offset_seq = format(offset_seq, scientific = FALSE)
+  offset_seq = gsub("\\s+", "", offset_seq)
+  # Define urls
+  urls = lapply(offset_seq, function(x) {
+    modify_url(
+      paste0(URL, tag),
+      query = list(
+        offset = x,
+        limit = format(by, scientific = FALSE),
+        only_active = FALSE
+      )
+    )
+  })
+  res_l = lapply(urls, get_sreg_url)
+  res_l = res_l[!sapply(res_l, function(x) length(x) == 0)]
+  res_l = lapply(res_l, function(l) rbindlist(lapply(l, as.data.table), fill = TRUE))
+  rbindlist(res_l, fill = TRUE)
+}
+
+# # Business subjects
+# subjects = get_sreg_loop("subjekti")
 
 ```
 
-Let's check if everything is working 
+
+Let's check if everything is working
 
 
 
@@ -147,14 +330,13 @@ In fact, when you type any site address in your browser, your browser will downl
 
 There are 3 types of instructions:
 
-HTML: describes a web page’s infrastructure;
-CSS: defines the appearance of a site;
-JavaScript: decides the behavior of the page.
-Web scraping is the art of extracting information from the HTML, CSS and Javascript lines of code. The term usually refers to an automated process, which is less error-prone and faster than gathering data by hand.
+HTML: describes a web page’s infrastructure; CSS: defines the appearance of a site; JavaScript: decides the behavior of the page. Web scraping is the art of extracting information from the HTML, CSS and Javascript lines of code. The term usually refers to an automated process, which is less error-prone and faster than gathering data by hand.
 
 I want to forewarn you that webscraping typically involves a fair bit of detective work. You will often have to adjust your steps according to the type of data you want, and the steps that worked on one website may not work on another. (Or even work on the same website a few months later). All this is to say that *webscraping involves as much art as it does science*.
 
-The good news is that both server-side and client-side websites allow for webscraping.^[As we'll see during the next lecture, scraping a website or application that is built on a client-side (i.e. API) framework is often easier; particularly when it comes to downloading information *en masse*.] If you can see it in your browser, you can scrape it.
+The good news is that both server-side and client-side websites allow for webscraping.[^1] If you can see it in your browser, you can scrape it.
+
+[^1]: As we'll see during the next lecture, scraping a website or application that is built on a client-side (i.e. API) framework is often easier; particularly when it comes to downloading information *en masse*.
 
 ## HTML and CSS
 
@@ -162,7 +344,7 @@ Before starting it is important to have a basic knowledge of HTML and CSS. This 
 
 Starting from HTML, an HTML file looks like the following piece of code.
 
-```{.html}
+``` html
 <!DOCTYPE html>
 <html lang="en">
 <body>
@@ -178,19 +360,30 @@ Starting from HTML, an HTML file looks like the following piece of code.
 Those instructions produce the following:
 ```
 
-
 As you read above, HTML is used to describe the infrastructure of a web page, for example we may want to define the headings, the paragraphs, etc.
 
-This infrastructure is represented by what are called tags (for example <h1>...<\h1> or <p>...<\p> are tags). Tags are the core of an HTML document as they represent the nature of what is inside the tag (for example h1 stands for heading 1). It is important to observe that there are two types of tags:
+This infrastructure is represented by what are called tags (for example
 
-starting tags (e.g. <h1>)
-ending tags (e.g. <\h1>)
-This is what allows to nest different tags.
+<h1>
 
-Tags can also have attributes, for example in <h1 href="https://en.wikipedia.org/wiki/Carl_Friedrich_Gauss"Carl Friedrich Gauss</h1>, href is an attribute of the tag h1 that specifies an URL.
+...\<\h1\> or
+
+<p>
+
+...\<\p\> are tags). Tags are the core of an HTML document as they represent the nature of what is inside the tag (for example h1 stands for heading 1). It is important to observe that there are two types of tags:
+
+starting tags (e.g.
+
+<h1>
+
+) ending tags (e.g. \<\h1\>) This is what allows to nest different tags.
+
+Tags can also have attributes, for example in \<h1 href="https://en.wikipedia.org/wiki/Carl_Friedrich_Gauss"Carl Friedrich Gauss
+
+</h1>
+
+, href is an attribute of the tag h1 that specifies an URL.
 
 As the output of the above HTML code is not super elegant, CSS is used to style the final website. For example CSS is used to define the font, the color, the size, the spacing and many more features of a website.
 
 What is important for this article are CSS selectors, which are patterns used to select elements. The most important is the .class selector, which selects all elements with the same class. For example the .xyz selector selects all elements with class="xyz".
-
-

@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.5.57">
+<meta name="generator" content="quarto-1.5.47">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -115,7 +115,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <h1>Introduction</h1>
 <section id="terminology" class="level2">
 <h2 class="anchored" data-anchor-id="terminology">Terminology</h2>
-<p><strong>Web scraping</strong> is a technique used to extract information from websites. This tutorial demonstrates how to scrape web data in R using packages like <code>rvest</code> and <code>httr</code>.</p>
+<p><strong>Web scraping</strong> is a technique used to extract information from websites. This tutorial demonstrates how to scrape web data in R using packages like <code>rvest</code> and <code>httr</code>. There is some difference between web crawling and web scraping. Web crawling is the process of automatically collecting information from the web, while web scraping is the process of extracting specific information from websites. but this distinctions is not always clear and not important for us right now.</p>
 <p><strong>Web APIs</strong> are a way to access data from websites and online services. They allow you to interact with websites programmatically, rather than through a web browser. When a website or online service provides an API, it means that they have made it possible for developers to access their data in a structured and controlled way.</p>
 </section>
 <section id="web-scraping-vs.-apis" class="level2">
@@ -134,65 +134,568 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>It is important to note that web scraping can raise ethical concerns, as it involves accessing and using data from websites without the explicit permission of the website owner. It is a good practice to respect the terms of use for a website, and to seek written permission before scraping large amounts of data.</p>
 <p>Just because you <em>can</em> scrape it, doesn’t mean you <em>should</em>. A computer can process commands much, much faster than we can ever type them up manually. It’s pretty easy to write up a function or program that can overwhelm a host server or application through the sheer weight of requests. Or, just as likely, the host server has built-in safeguards that will block you in case of a suspected malicious <a href="https://en.wikipedia.org/wiki/Denial-of-service_attack">attack</a>.</p>
 </section>
-</section>
-<section id="web-pages" class="level1">
-<h1>Web pages</h1>
-</section>
-<section id="prerequisites" class="level1">
-<h1>Prerequisites</h1>
+<section id="prerequisites" class="level2">
+<h2 class="anchored" data-anchor-id="prerequisites">Prerequisites</h2>
 <p>Before starting, ensure you have the following R packages installed:</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Install required packages</span></span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="fu">c</span>(<span class="st">"httr"</span>, <span class="st">"rvest"</span>, <span class="st">"dplyr"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="fu">c</span>(<span class="st">"httr"</span>, <span class="st">"rvest"</span>, <span class="st">"dplyr"</span>, <span class="st">"data.table"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section>
-<section id="web-pages-1" class="level1">
-<h1>Web pages</h1>
+<section id="environment-variables" class="level2">
+<h2 class="anchored" data-anchor-id="environment-variables">Environment variables</h2>
+<p>Environment variables are useful for keeping sensitive information out of your scripts and code files, promoting better security and portability. These variables are often used to store:</p>
+<ul>
+<li>API keys or tokens for accessing external services.</li>
+<li>File paths or directory locations.</li>
+<li>Configuration settings for R packages.</li>
+</ul>
+<p>The <code>.Renviron</code> file is a plain text file where you can define environment variables. It is loaded when R starts, and any variables defined in it are available throughout the R session.</p>
+<p>Benefits of .Renviron:</p>
+<ul>
+<li>Keeps sensitive information like API keys secure.</li>
+<li>Prevents hardcoding sensitive values into scripts.</li>
+<li>Enables consistent environment variable settings across sessions.</li>
+</ul>
+<p>Here is example of <code>.Renviron</code> file:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Define environment variables</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>API_KEY<span class="ot">=</span><span class="st">"your_api_key"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Once defined in .Renviron, you can access them in R using the Sys.getenv() function:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Accessing the API_KEY environment variable</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>api_key <span class="ot">&lt;-</span> <span class="fu">Sys.getenv</span>(<span class="st">"API_KEY"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>The last important thing is to add <code>.Renviron</code> file to your <code>.gitignore</code> file. This will prevent you from accidentally committing sensitive information to your repository.</p>
+</section>
+</section>
+<section id="web-apis" class="level1">
+<h1>Web API’s</h1>
+<section id="what-is-an-api" class="level2">
+<h2 class="anchored" data-anchor-id="what-is-an-api">What is an API?</h2>
+<p>In nutshell, API is really just a collection of rules and methods that allow different software applications to interact and share information. This includes not only web servers and browsers, but also software packages like the R libraries</p>
+</section>
+<section id="types-of-apis" class="level2">
+<h2 class="anchored" data-anchor-id="types-of-apis">Types of APIs</h2>
+<p>There are several types of APIs, including:</p>
+<ul>
+<li><strong>Web APIs</strong>: These are APIs that are accessed over the internet using HTTP requests. They are commonly used to access data from online services, such as social media platforms, weather services, and financial services.</li>
+<li><strong>Library APIs</strong>: These are APIs that are provided by software libraries to allow developers to access the functionality of the library in their own code.</li>
+<li><strong>Operating System APIs</strong>: These are APIs that are provided by operating systems to allow developers to access the functionality of the operating system in their own code.</li>
+</ul>
+</section>
+<section id="how-to-use-an-api" class="level2">
+<h2 class="anchored" data-anchor-id="how-to-use-an-api">How to use an API</h2>
+<p>To use an API, you need to know the following:</p>
+<ul>
+<li>The base URL of the API: This is the URL that you use to access the API.</li>
+<li>The endpoints of the API: These are the URLs that you use to access specific resources or data from the API.</li>
+<li>The methods of the API: These are the HTTP methods that you use to interact with the API, such as GET, POST, PUT, and DELETE.</li>
+<li>The parameters of the API: These are the parameters that you use to specify the data that you want to access from the API.</li>
+</ul>
+<p>To use an API, you typically send an HTTP request to the API with the appropriate method, endpoint, and parameters, and the API will respond with the data that you requested.</p>
+</section>
+<section id="examples-of-apis" class="level2">
+<h2 class="anchored" data-anchor-id="examples-of-apis">Examples of APIs</h2>
+<p>There are many APIs available that provide access to a wide range of data and services. Some examples of APIs include:</p>
+<ul>
+<li>The Twitter API: This API allows you to access data from Twitter, such as tweets, users, and trends.</li>
+<li>The OpenWeatherMap API: This API allows you to access weather data from around the world.</li>
+<li>The Google Maps API: This API allows you to access maps and location data from Google Maps.</li>
+</ul>
+</section>
+<section id="api-keys" class="level2">
+<h2 class="anchored" data-anchor-id="api-keys">API keys</h2>
+<p>Many APIs require you to use an API key to access the data. An API key is a unique identifier that is used to authenticate your requests to the API. You typically need to include your API key in the request to the API, either as a query parameter, a header, or in the request body.</p>
+<p>To get an API key, you usually need to sign up for an account with the service that provides the API, and then generate an API key in your account settings.</p>
+</section>
+<section id="a-bit-more-about-api-endpoints" class="level2">
+<h2 class="anchored" data-anchor-id="a-bit-more-about-api-endpoints">A bit more about API endpoints</h2>
+<p>A key point in all of this is that, in the case of web APIs, we can access information <em>directly</em> from the API database if we can specify the correct URL(s). These URLs are known as an <strong>API endpoints</strong>.</p>
+<p>API endpoints are in many ways similar to the normal website URLs that we’re all used to visiting. For starters, you can navigate to them in your web browser. However, whereas normal websites display information in rich HTML content — pictures, cat videos, nice formatting, etc. — an API endpoint is much less visually appealing. Navigate your browser to an API endpoint and you’ll just see a load of seemingly unformatted text. In truth, what you’re really seeing is (probably) either <a href="https://en.wikipedia.org/wiki/JSON">JSON</a> (<strong>J</strong>ava<strong>S</strong>cript <strong>O</strong>bject <strong>No</strong>tation) or <a href="https://en.wikipedia.org/wiki/XML">XML</a> (E<strong>x</strong>tensible <strong>M</strong>arkup <strong>L</strong>anguage).</p>
+<p>You don’t need to worry too much about the syntax of JSON and XML. The important thing is that the object in your browser — that load of seemingly unformatted text — is actually very precisely structured and formatted. Moreover, it contains valuable information that we can easily read into R (or Python, Julia, etc.) We just need to know the right API endpoint for the data that we want.</p>
+<p>Let’s practice doing this through a few example applications. I’ll start with the simplest case (no API key required, explicit API endpoint) and then work through some more complicated examples.</p>
+</section>
+<section id="court-registry-sudski-registar-api" class="level2">
+<h2 class="anchored" data-anchor-id="court-registry-sudski-registar-api">Court Registry (Sudski registar) API</h2>
+<p>The docs for Court Registry API is available <a href="https://sudreg-data.gov.hr/ords/r/srn_rep/vanjski-srn-rep/home">here</a>. Here are <a href="https://sudreg-data.gov.hr/ords/r/srn_rep/116/files/static/v11/Upute%20za%20razvojne%20in%C5%BEenjere%20-%20v3.0.0.pdf">detaile desctiption</a> for developers. Finally, <a href="https://sudreg-data.gov.hr/api/javni/dokumentacija/open_api">here</a> you can see all available endpoints. These are all in Croatian, but you can easly translate it to English. Before you can use the API, you should register (enter name, e-mail and type of user) and get you API key.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="figures/sudski-registar-api-forma.png" class="img-fluid figure-img"></p>
+<figcaption>Court Registry API forma png</figcaption>
+</figure>
+</div>
+<p>After you click on “Predaj zahtjev” the new page will show you the following:</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="figures/sudski-registar-api-1.png" class="img-fluid figure-img"></p>
+<figcaption>Court Registry API podaci png</figcaption>
+</figure>
+</div>
+<p>You can see the detail like <code>Client Id</code> and <code>Client Secret</code>. You will need thos to get the token and send request to Court Registry API.</p>
+<p>Before, you can use the API, you should confirm your e-mail. E-mail looks like this</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="figures/sudski-registar-email.png" class="img-fluid figure-img"></p>
+<figcaption>Court Registry API email png</figcaption>
+</figure>
+</div>
+<p>To finally finish the registration, you should click on activate. Here is how page looks like:</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="figures/sudski-registar-email.png" class="img-fluid figure-img"></p>
+<figcaption>Court Registry activation png</figcaption>
+</figure>
+</div>
+<p>Your credentials are now activated and you can use the API. Here are API data redy to use:</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="figures/api-sudski-registar-podaci.png" class="img-fluid figure-img"></p>
+<figcaption>Court Registry API email png</figcaption>
+</figure>
+</div>
+<p>Let’s see how we can use the API in R.</p>
+<p>First. we sill need to import the package we sill use and get API token we will use later in our requests. You will have to use token url and some creditential data. It is best to save thin in <code>.Renviron</code> file as we explained in the introduction.</p>
+<p>Since the first part of URL is always the same when sending requests, we wil save it in URL varaible.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(httr)</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(data.table)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: package 'data.table' was built under R version 4.4.2</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Define </span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>token_url <span class="ot">=</span> <span class="st">"https://sudreg-data.gov.hr/api/oauth/token"</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>user_name <span class="ot">=</span> <span class="fu">Sys.getenv</span>(<span class="st">"USER_SREG"</span>)</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>pass <span class="ot">=</span> <span class="fu">Sys.getenv</span>(<span class="st">"PASS_SREG"</span>)</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Get Token following the documentation</span></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>token <span class="ot">=</span> <span class="fu">POST</span>(</span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>  token_url,</span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">authenticate</span>(user_name, pass),</span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">body =</span> <span class="fu">list</span>(<span class="at">grant_type =</span> <span class="st">"client_credentials"</span>),</span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>  <span class="at">encode =</span> <span class="st">"form"</span>,</span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>  httr<span class="sc">::</span><span class="fu">config</span>(<span class="at">ssl_verifypeer =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a>token <span class="ot">=</span> <span class="fu">content</span>(token)</span>
+<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(token)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>$access_token
+[1] "ZXK9dniY4_d0XnBg-5dWPw"
+
+$token_type
+[1] "bearer"
+
+$expires_in
+[1] 21600</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Save base url for future use</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>URL <span class="ot">=</span> <span class="st">"https://sudreg-data.gov.hr/api/javni/"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Now, let’s finally get some data. List of endpoints is available <a href="https://sudreg-data.gov.hr/api/javni/dokumentacija/open_api">here</a>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>res <span class="ot">=</span> <span class="fu">GET</span>(<span class="fu">paste0</span>(URL, <span class="st">"subjekti"</span>),</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>          <span class="fu">add_headers</span>(</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>            <span class="st">"Authorization"</span> <span class="ot">=</span> <span class="fu">paste0</span>(<span class="st">"Bearer "</span>, token<span class="sc">$</span>access_token),</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>            <span class="st">"Content-Type"</span> <span class="ot">=</span> <span class="st">"application/json"</span></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>          ),</span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>          <span class="at">query =</span> <span class="fu">list</span>(<span class="at">limit =</span> <span class="dv">100</span>, <span class="at">only_active =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>          )</span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>res <span class="ot">=</span> <span class="fu">content</span>(res)</span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">head</span>(res, <span class="dv">2</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[[1]]
+[[1]]$mbs
+[1] 10000015
+
+[[1]]$status
+[1] 0
+
+[[1]]$sud_id_nadlezan
+[1] 1
+
+[[1]]$sud_id_sluzba
+[1] 1
+
+[[1]]$postupak
+[1] 1
+
+[[1]]$ino_podruznica
+[1] 0
+
+[[1]]$stecajna_masa
+[1] 0
+
+[[1]]$likvidacijska_masa
+[1] 0
+
+[[1]]$datum_osnivanja
+[1] "1995-05-10T00:00:00"
+
+[[1]]$datum_brisanja
+[1] "2002-08-23T00:00:00"
+
+[[1]]$sud_id_brisanja
+[1] 1
+
+[[1]]$tvrtka_kod_brisanja
+[1] "DESANTI društvo s ograničenom odgovornošću za trgovinu"
+
+[[1]]$poslovni_broj_brisanja
+[1] "Tt-02/914-2"
+
+
+[[2]]
+[[2]]$mbs
+[1] 10000023
+
+[[2]]$status
+[1] 0
+
+[[2]]$sud_id_nadlezan
+[1] 1
+
+[[2]]$sud_id_sluzba
+[1] 1
+
+[[2]]$postupak
+[1] 1
+
+[[2]]$ino_podruznica
+[1] 0
+
+[[2]]$stecajna_masa
+[1] 0
+
+[[2]]$likvidacijska_masa
+[1] 0
+
+[[2]]$datum_osnivanja
+[1] "1994-03-11T00:00:00"
+
+[[2]]$datum_brisanja
+[1] "2002-07-02T00:00:00"
+
+[[2]]$sud_id_brisanja
+[1] 1
+
+[[2]]$tvrtka_kod_brisanja
+[1] "CROMAX mesna industrija d.d. - u stečaju"
+
+[[2]]$poslovni_broj_brisanja
+[1] "Tt-02/596-1"</code></pre>
+</div>
+</div>
+<p>Lets explain above code:</p>
+<ul>
+<li><code>GET</code> function is used to send a GET request to the API endpoint. The first argument is the URL of the endpoint we want to access.</li>
+<li>The <code>add_headers</code> function is used to add the Authorization header to the request, which includes the access token we received when we authenticated with the API.</li>
+<li>The <code>Content-Type</code> header specifies that the content type of the request is JSON.</li>
+<li>The <code>query</code> argument is used to specify the query parameters of the request, which in this case include the limit and only_active parameters.</li>
+<li><code>content</code> function is used to extract the content of the response, which is the data that the API returns.</li>
+</ul>
+<p>Now, we would like to clean the data. We want to have data.frame or data.table, not the lists. Here is how can we do tha very simepl using data.table package.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Convert all list elements to data.table</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>res_clean <span class="ot">=</span> <span class="fu">lapply</span>(res, as.data.table)</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Rbind all elements</span></span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>res_clean <span class="ot">=</span> <span class="fu">rbindlist</span>(res_clean, <span class="at">fill =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(res_clean)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>        mbs status sud_id_nadlezan sud_id_sluzba postupak ino_podruznica
+      &lt;int&gt;  &lt;int&gt;           &lt;int&gt;         &lt;int&gt;    &lt;int&gt;          &lt;int&gt;
+1: 10000015      0               1             1        1              0
+2: 10000023      0               1             1        1              0
+3: 10000031      0               1             1        1              0
+4: 10000040      0               1             1        1              0
+5: 10000058      0               1             1        1              0
+6: 10000066      0               1             1        1              0
+   stecajna_masa likvidacijska_masa     datum_osnivanja      datum_brisanja
+           &lt;int&gt;              &lt;int&gt;              &lt;char&gt;              &lt;char&gt;
+1:             0                  0 1995-05-10T00:00:00 2002-08-23T00:00:00
+2:             0                  0 1994-03-11T00:00:00 2002-07-02T00:00:00
+3:             0                  0 1995-05-12T00:00:00 2012-09-10T00:00:00
+4:             0                  0 1995-05-12T00:00:00 2012-09-10T00:00:00
+5:             0                  0 1995-05-12T00:00:00 2012-09-10T00:00:00
+6:             0                  0 1995-05-12T00:00:00 2002-09-09T00:00:00
+   sud_id_brisanja
+             &lt;int&gt;
+1:               1
+2:               1
+3:               1
+4:               1
+5:               1
+6:               1
+                                                 tvrtka_kod_brisanja
+                                                              &lt;char&gt;
+1:            DESANTI društvo s ograničenom odgovornošću za trgovinu
+2:                          CROMAX mesna industrija d.d. - u stečaju
+3:                  VELEPROMET d. o. o. za trgovinu na veliko i malo
+4:    PRELEC društvo s ograničenom odgovornošću za trgovinu i promet
+5:     EMINA društvo s ograničenom odgovornošću za trgovinu i usluge
+6: TRGOMEDIK društvo s ograničenom odgovornošču za trgovinu i usluge
+   poslovni_broj_brisanja         oib      mb glavna_djelatnost
+                   &lt;char&gt;       &lt;num&gt;   &lt;int&gt;             &lt;int&gt;
+1:            Tt-02/914-2          NA      NA                NA
+2:            Tt-02/596-1          NA      NA                NA
+3:            Tt-12/74-54 66580390814 1083333                NA
+4:            Tt-12/74-43 55543222548 1095315                NA
+5:            Tt-12/74-13 22763783463 1085484                NA
+6:           Tt-02/1029-2          NA      NA                NA</code></pre>
+</div>
+</div>
+<p>We can write a function to make above steps easier. Here is how we can do that:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Wrap for GET request to court registry</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>get_sreg_url <span class="ot">=</span> <span class="cf">function</span>(url) {</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>  res <span class="ot">=</span> <span class="fu">GET</span>(url,</span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>            <span class="fu">add_headers</span>(<span class="st">"Authorization"</span> <span class="ot">=</span> <span class="fu">paste0</span>(<span class="st">"Bearer "</span>, token<span class="sc">$</span>access_token),</span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>                        <span class="st">"Content-Type"</span> <span class="ot">=</span> <span class="st">"application/json"</span>))</span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(<span class="fu">content</span>(res))</span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Wrap for GET request to court registry</span></span>
+<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a>get_sreg <span class="ot">=</span> <span class="cf">function</span>(tag, <span class="at">q =</span> <span class="fu">list</span>(<span class="at">limit =</span> <span class="dv">100</span>, <span class="at">only_active =</span> <span class="cn">TRUE</span>), <span class="at">clean =</span> <span class="cn">TRUE</span>) {</span>
+<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a>  url <span class="ot">=</span> <span class="fu">modify_url</span>(</span>
+<span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a>    <span class="fu">paste0</span>(URL, tag),</span>
+<span id="cb13-13"><a href="#cb13-13" aria-hidden="true" tabindex="-1"></a>    <span class="at">query =</span> q</span>
+<span id="cb13-14"><a href="#cb13-14" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb13-15"><a href="#cb13-15" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Make GET request</span></span>
+<span id="cb13-16"><a href="#cb13-16" aria-hidden="true" tabindex="-1"></a>  cont <span class="ot">=</span> <span class="fu">get_sreg_url</span>(url)</span>
+<span id="cb13-17"><a href="#cb13-17" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Clean if needed</span></span>
+<span id="cb13-18"><a href="#cb13-18" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (clean <span class="sc">==</span> <span class="cn">TRUE</span>) {</span>
+<span id="cb13-19"><a href="#cb13-19" aria-hidden="true" tabindex="-1"></a>    <span class="fu">return</span>(<span class="fu">rbindlist</span>(cont, <span class="at">fill =</span> <span class="cn">TRUE</span>))</span>
+<span id="cb13-20"><a href="#cb13-20" aria-hidden="true" tabindex="-1"></a>  } <span class="cf">else</span> {</span>
+<span id="cb13-21"><a href="#cb13-21" aria-hidden="true" tabindex="-1"></a>    <span class="fu">return</span>(cont)</span>
+<span id="cb13-22"><a href="#cb13-22" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb13-23"><a href="#cb13-23" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Now, we can use this function to get data from Court Registry API. Here is how we can do that:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Get data from court public registry</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>subjects <span class="ot">=</span> <span class="fu">get_sreg</span>(<span class="st">"subjekti"</span>)</span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(subjects)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>        mbs status sud_id_nadlezan sud_id_sluzba postupak         oib      mb
+      &lt;int&gt;  &lt;int&gt;           &lt;int&gt;         &lt;int&gt;    &lt;int&gt;       &lt;num&gt;   &lt;int&gt;
+1: 10000074      1               1             1        1 76860791838 1080300
+2: 10000162      1               1             1        1 92803032010 3038203
+3: 10000283      1               1             1        1 91853331754 1104730
+4: 10000339      1               1             1        1 92861896581 1120735
+5: 10000347      1               1             1        1 21271747339 1137565
+6: 10000363      1               1             1        1 74446112734 3866360
+   ino_podruznica stecajna_masa likvidacijska_masa     datum_osnivanja
+            &lt;int&gt;         &lt;int&gt;              &lt;int&gt;              &lt;char&gt;
+1:              0             0                  0 1995-05-11T00:00:00
+2:              0             0                  0 1992-12-31T00:00:00
+3:              0             0                  0 1995-06-09T00:00:00
+4:              0             0                  0 1995-06-14T00:00:00
+5:              0             0                  0 1995-06-14T00:00:00
+6:              0             0                  0 1992-04-21T00:00:00
+   glavna_djelatnost
+               &lt;int&gt;
+1:                NA
+2:              1072
+3:              6010
+4:                NA
+5:                NA
+6:                NA</code></pre>
+</div>
+</div>
+<p>Let’s try some other endpoints</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Headquarters</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>headq <span class="ot">=</span> <span class="fu">get_sreg</span>(<span class="at">tag =</span> <span class="st">"sjedista"</span>)</span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(headq)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>        mbs sifra_zupanije                  naziv_zupanije sifra_opcine
+      &lt;int&gt;          &lt;int&gt;                          &lt;char&gt;        &lt;int&gt;
+1: 10000074             10  Virovitičko-podravska županija         4910
+2: 10000162              7 Bjelovarsko-bilogorska županija          248
+3: 10000283              6 Koprivničko-križevačka županija         2143
+4: 10000339              7 Bjelovarsko-bilogorska županija          671
+5: 10000347              7 Bjelovarsko-bilogorska županija         1198
+6: 10000363              7 Bjelovarsko-bilogorska županija          248
+   naziv_opcine sifra_naselja naziv_naselja sifra_ulice
+         &lt;char&gt;         &lt;int&gt;        &lt;char&gt;       &lt;int&gt;
+1:   Virovitica         69361    Virovitica   693610023
+2:     Bjelovar          3239      Bjelovar    32390164
+3:     Križevci         32379      Križevci   323790071
+4:      Daruvar         10375       Daruvar   103750098
+5:    Garešnica         17531     Garešnica   175310013
+6:     Bjelovar          3239      Bjelovar    32390267
+                         ulica kucni_broj kucni_podbroj drzava_id
+                        &lt;char&gt;      &lt;int&gt;        &lt;char&gt;     &lt;int&gt;
+1:        Ulica Ljudevita Gaja         21          &lt;NA&gt;        NA
+2:             Slavonska cesta          2             a        NA
+3: Ulica Antuna Gustava Matoša          3          &lt;NA&gt;        NA
+4:      Trg Dr. Franje Tuđmana          7          &lt;NA&gt;        NA
+5:            Vladimira Nazora         25          &lt;NA&gt;        NA
+6:          Hrvatskog proljeća         10          &lt;NA&gt;        NA</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Core business</span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>cores <span class="ot">=</span> <span class="fu">get_sreg</span>(<span class="at">tag =</span> <span class="st">"pretezite_djelatnosti"</span>)</span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(cores)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>        mbs nacionalna_klasifikacija_djelatnosti_id
+      &lt;int&gt;                                   &lt;int&gt;
+1: 10002640                                    4701
+2: 10003152                                    4263
+3: 10003370                                    4340
+4: 10004303                                    4322
+5: 10004514                                    4568
+6: 10004555                                    3867</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Industry</span></span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>industry <span class="ot">=</span> <span class="fu">get_sreg</span>(<span class="at">tag =</span> <span class="st">"predmeti_poslovanja"</span>)</span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(industry)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>        mbs djelatnost_rbr
+      &lt;int&gt;          &lt;int&gt;
+1: 10000074             20
+2: 10000074             21
+3: 10000074             22
+4: 10000074             24
+5: 10000074             25
+6: 10000074             26
+                                                                                                                                                                                           djelatnost_tekst
+                                                                                                                                                                                                     &lt;char&gt;
+1:                                                               Provodi specifičnu preventivnu zdravstvenu zaštitu djece i mladeži, osobito u osnovnim i srednjim školama, te fakultetima na svom području
+2:                                         Prati, proučava, evaluira i izvješćuje o zdravstvenim potrebama i funkcionalnoj onesposobljenosti starijih ljudi te predlaže zdravstvene mjere za svoje područje
+3:                              Prikuplja, kontrolira i analizira statistička izvješća iz područja zdravstva uključujući bolesti ovisnosti, na svom području za potrebe Hrvatskog zavoda za javno zdravstvo
+4: Kontinuirano provodi mjere higijensko-epidemiološke zaštite s epidemiološkom analizom stanja na području županije i po potrebi provodi protuepidemijske mjere te nadzire provođenje obveznih imunizacija
+5:                                            Analizira epidemiološko stanje, planira, predlaže i sudjeluje u provođenju mjera i aktivnosti za sprječavanje, rano otkrivanje i suzbijanje bolesti ovisnosti
+6:                           Surađuje sa zdravstvenim i drugim ustanovama i zdravstvenim radnicima u provedbi dijagnostike i liječenja bolesti ovisnosti te rehabilitacije i društvene integracije ovisnika
+   nacionalna_klasifikacija_djelatnosti_id
+                                     &lt;int&gt;
+1:                                      NA
+2:                                      NA
+3:                                      NA
+4:                                      NA
+5:                                      NA
+6:                                      NA</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Evidence activities</span></span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>activities <span class="ot">=</span> <span class="fu">get_sreg</span>(<span class="at">tag =</span> <span class="st">"evidencijske_djelatnosti"</span>)</span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(activities)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>        mbs djelatnost_rbr
+      &lt;int&gt;          &lt;int&gt;
+1: 10000363              1
+2: 10000363              2
+3: 10000363              3
+4: 10000363              4
+5: 10000363              5
+6: 10000363              6
+                                                                              djelatnost_tekst
+                                                                                        &lt;char&gt;
+1:                                                               Umnožavanje snimljenih zapisa
+2:                                                            Proizvodnja aparata za kućanstvo
+3:                                                    Proizvodnja uredskih strojeva i računala
+4:                                                  Proizvodnja električnih strojeva i aparata
+5:                                            Trgovina motornim vozilima; popravak mot. vozila
+6: Trgovina na veliko i posredovanje u trgovini, osim trgovine motornim vozilima i motociklima</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Short name</span></span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>short_names <span class="ot">=</span> <span class="fu">get_sreg</span>(<span class="at">tag =</span> <span class="st">"evidencijske_djelatnosti"</span>)</span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(short_names)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>        mbs djelatnost_rbr
+      &lt;int&gt;          &lt;int&gt;
+1: 10000363              1
+2: 10000363              2
+3: 10000363              3
+4: 10000363              4
+5: 10000363              5
+6: 10000363              6
+                                                                              djelatnost_tekst
+                                                                                        &lt;char&gt;
+1:                                                               Umnožavanje snimljenih zapisa
+2:                                                            Proizvodnja aparata za kućanstvo
+3:                                                    Proizvodnja uredskih strojeva i računala
+4:                                                  Proizvodnja električnih strojeva i aparata
+5:                                            Trgovina motornim vozilima; popravak mot. vozila
+6: Trgovina na veliko i posredovanje u trgovini, osim trgovine motornim vozilima i motociklima</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Get data from court public registry in a loop</span></span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>get_sreg_loop <span class="ot">=</span> <span class="cf">function</span>(<span class="at">tag =</span> <span class="st">"subjekti"</span>, <span class="at">by =</span> <span class="dv">10000</span>) {</span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Define offsets</span></span>
+<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a>  offset_seq <span class="ot">=</span> <span class="fu">seq</span>(<span class="dv">0</span>, <span class="dv">360000</span>, <span class="at">by =</span> by)</span>
+<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a>  offset_seq <span class="ot">=</span> <span class="fu">format</span>(offset_seq, <span class="at">scientific =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb26-6"><a href="#cb26-6" aria-hidden="true" tabindex="-1"></a>  offset_seq <span class="ot">=</span> <span class="fu">gsub</span>(<span class="st">"</span><span class="sc">\\</span><span class="st">s+"</span>, <span class="st">""</span>, offset_seq)</span>
+<span id="cb26-7"><a href="#cb26-7" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Define urls</span></span>
+<span id="cb26-8"><a href="#cb26-8" aria-hidden="true" tabindex="-1"></a>  urls <span class="ot">=</span> <span class="fu">lapply</span>(offset_seq, <span class="cf">function</span>(x) {</span>
+<span id="cb26-9"><a href="#cb26-9" aria-hidden="true" tabindex="-1"></a>    <span class="fu">modify_url</span>(</span>
+<span id="cb26-10"><a href="#cb26-10" aria-hidden="true" tabindex="-1"></a>      <span class="fu">paste0</span>(URL, tag),</span>
+<span id="cb26-11"><a href="#cb26-11" aria-hidden="true" tabindex="-1"></a>      <span class="at">query =</span> <span class="fu">list</span>(</span>
+<span id="cb26-12"><a href="#cb26-12" aria-hidden="true" tabindex="-1"></a>        <span class="at">offset =</span> x,</span>
+<span id="cb26-13"><a href="#cb26-13" aria-hidden="true" tabindex="-1"></a>        <span class="at">limit =</span> <span class="fu">format</span>(by, <span class="at">scientific =</span> <span class="cn">FALSE</span>),</span>
+<span id="cb26-14"><a href="#cb26-14" aria-hidden="true" tabindex="-1"></a>        <span class="at">only_active =</span> <span class="cn">FALSE</span></span>
+<span id="cb26-15"><a href="#cb26-15" aria-hidden="true" tabindex="-1"></a>      )</span>
+<span id="cb26-16"><a href="#cb26-16" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb26-17"><a href="#cb26-17" aria-hidden="true" tabindex="-1"></a>  })</span>
+<span id="cb26-18"><a href="#cb26-18" aria-hidden="true" tabindex="-1"></a>  res_l <span class="ot">=</span> <span class="fu">lapply</span>(urls, get_sreg_url)</span>
+<span id="cb26-19"><a href="#cb26-19" aria-hidden="true" tabindex="-1"></a>  res_l <span class="ot">=</span> res_l[<span class="sc">!</span><span class="fu">sapply</span>(res_l, <span class="cf">function</span>(x) <span class="fu">length</span>(x) <span class="sc">==</span> <span class="dv">0</span>)]</span>
+<span id="cb26-20"><a href="#cb26-20" aria-hidden="true" tabindex="-1"></a>  res_l <span class="ot">=</span> <span class="fu">lapply</span>(res_l, <span class="cf">function</span>(l) <span class="fu">rbindlist</span>(<span class="fu">lapply</span>(l, as.data.table), <span class="at">fill =</span> <span class="cn">TRUE</span>))</span>
+<span id="cb26-21"><a href="#cb26-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rbindlist</span>(res_l, <span class="at">fill =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb26-22"><a href="#cb26-22" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb26-23"><a href="#cb26-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-24"><a href="#cb26-24" aria-hidden="true" tabindex="-1"></a><span class="co"># # Business subjects</span></span>
+<span id="cb26-25"><a href="#cb26-25" aria-hidden="true" tabindex="-1"></a><span class="co"># subjects = get_sreg_loop("subjekti")</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Let’s check if everything is working</p>
+</section>
+</section>
+<section id="web-scraping" class="level1">
+<h1>Web scraping</h1>
+<section id="web-pages" class="level2">
+<h2 class="anchored" data-anchor-id="web-pages">Web pages</h2>
 <p>Almost anyone is familiar with web pages (otherwise you would not be here), but what if we tell you that how you see a site is different from how Google or your browser does?</p>
 <p>In fact, when you type any site address in your browser, your browser will download and render the page for you, but for rendering the page it needs some instructions.</p>
 <p>There are 3 types of instructions:</p>
 <p>HTML: describes a web page’s infrastructure; CSS: defines the appearance of a site; JavaScript: decides the behavior of the page. Web scraping is the art of extracting information from the HTML, CSS and Javascript lines of code. The term usually refers to an automated process, which is less error-prone and faster than gathering data by hand.</p>
 <p>I want to forewarn you that webscraping typically involves a fair bit of detective work. You will often have to adjust your steps according to the type of data you want, and the steps that worked on one website may not work on another. (Or even work on the same website a few months later). All this is to say that <em>webscraping involves as much art as it does science</em>.</p>
 <p>The good news is that both server-side and client-side websites allow for webscraping.<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> If you can see it in your browser, you can scrape it.</p>
+</section>
 <section id="html-and-css" class="level2">
 <h2 class="anchored" data-anchor-id="html-and-css">HTML and CSS</h2>
 <p>Before starting it is important to have a basic knowledge of HTML and CSS. This section aims to briefly explain how HTML and CSS work</p>
 <p>Starting from HTML, an HTML file looks like the following piece of code.</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode html code-with-copy"><code class="sourceCode html"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;!DOCTYPE</span> html<span class="dt">&gt;</span></span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">html</span><span class="ot"> lang</span><span class="op">=</span><span class="st">"en"</span><span class="dt">&gt;</span></span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">body</span><span class="dt">&gt;</span></span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">h1</span><span class="ot"> href</span><span class="op">=</span><span class="st">"https://en.wikipedia.org/wiki/Carl_Friedrich_Gauss"</span><span class="dt">&gt;</span> Carl Friedrich Gauss<span class="dt">&lt;/</span><span class="kw">h1</span><span class="dt">&gt;</span></span>
-<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">h2</span><span class="dt">&gt;</span> Biography <span class="dt">&lt;/</span><span class="kw">h2</span><span class="dt">&gt;</span></span>
-<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">p</span><span class="dt">&gt;</span> Johann Carl Friedrich Gauss was born on 30 April 1777 in Brunswick. <span class="dt">&lt;/</span><span class="kw">p</span><span class="dt">&gt;</span></span>
-<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">h2</span><span class="dt">&gt;</span> Profession <span class="dt">&lt;/</span><span class="kw">h2</span><span class="dt">&gt;</span></span>
-<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">p</span><span class="dt">&gt;</span> Gauss is considered as one of the greatest mathematician, statistician and physicist of all time. <span class="dt">&lt;/</span><span class="kw">p</span><span class="dt">&gt;</span></span>
-<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;/</span><span class="kw">body</span><span class="dt">&gt;</span></span>
-<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;/</span><span class="kw">html</span><span class="dt">&gt;</span></span>
-<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>Those instructions produce the following:</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb27"><pre class="sourceCode html code-with-copy"><code class="sourceCode html"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;!DOCTYPE</span> html<span class="dt">&gt;</span></span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">html</span><span class="ot"> lang</span><span class="op">=</span><span class="st">"en"</span><span class="dt">&gt;</span></span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">body</span><span class="dt">&gt;</span></span>
+<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-5"><a href="#cb27-5" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">h1</span><span class="ot"> href</span><span class="op">=</span><span class="st">"https://en.wikipedia.org/wiki/Carl_Friedrich_Gauss"</span><span class="dt">&gt;</span> Carl Friedrich Gauss<span class="dt">&lt;/</span><span class="kw">h1</span><span class="dt">&gt;</span></span>
+<span id="cb27-6"><a href="#cb27-6" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">h2</span><span class="dt">&gt;</span> Biography <span class="dt">&lt;/</span><span class="kw">h2</span><span class="dt">&gt;</span></span>
+<span id="cb27-7"><a href="#cb27-7" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">p</span><span class="dt">&gt;</span> Johann Carl Friedrich Gauss was born on 30 April 1777 in Brunswick. <span class="dt">&lt;/</span><span class="kw">p</span><span class="dt">&gt;</span></span>
+<span id="cb27-8"><a href="#cb27-8" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">h2</span><span class="dt">&gt;</span> Profession <span class="dt">&lt;/</span><span class="kw">h2</span><span class="dt">&gt;</span></span>
+<span id="cb27-9"><a href="#cb27-9" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">p</span><span class="dt">&gt;</span> Gauss is considered as one of the greatest mathematician, statistician and physicist of all time. <span class="dt">&lt;/</span><span class="kw">p</span><span class="dt">&gt;</span></span>
+<span id="cb27-10"><a href="#cb27-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-11"><a href="#cb27-11" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;/</span><span class="kw">body</span><span class="dt">&gt;</span></span>
+<span id="cb27-12"><a href="#cb27-12" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;/</span><span class="kw">html</span><span class="dt">&gt;</span></span>
+<span id="cb27-13"><a href="#cb27-13" aria-hidden="true" tabindex="-1"></a>Those instructions produce the following:</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>As you read above, HTML is used to describe the infrastructure of a web page, for example we may want to define the headings, the paragraphs, etc.</p>
-This infrastructure is represented by what are called tags (for example
+<p>This infrastructure is represented by what are called tags (for example</p>
 <h1>
-…&lt;&gt; or
+<p>…&lt;&gt; or</p>
 <p>
 </p><p>…&lt;&gt; are tags). Tags are the core of an HTML document as they represent the nature of what is inside the tag (for example h1 stands for heading 1). It is important to observe that there are two types of tags:</p>
-starting tags (e.g.&nbsp;
+<p>starting tags (e.g.</p>
 </h1><h1>
 <p>) ending tags (e.g.&nbsp;&lt;&gt;) This is what allows to nest different tags.</p>
-Tags can also have attributes, for example in &lt;h1 href=“https://en.wikipedia.org/wiki/Carl_Friedrich_Gauss”Carl Friedrich Gauss
+<p>Tags can also have attributes, for example in &lt;h1 href=“https://en.wikipedia.org/wiki/Carl_Friedrich_Gauss”Carl Friedrich Gauss</p>
 </h1>
 <p>, href is an attribute of the tag h1 that specifies an URL.</p>
 <p>As the output of the above HTML code is not super elegant, CSS is used to style the final website. For example CSS is used to define the font, the color, the size, the spacing and many more features of a website.</p>
 <p>What is important for this article are CSS selectors, which are patterns used to select elements. The most important is the .class selector, which selects all elements with the same class. For example the .xyz selector selects all elements with class=“xyz”.</p>
-</section>
-<section id="sudski-registar-api" class="level2">
-<h2 class="anchored" data-anchor-id="sudski-registar-api">Sudski registar API</h2>
-<p>The docs for API is available <a href="https://sudreg-data.gov.hr/ords/r/srn_rep/vanjski-srn-rep/home">here</a>. Here are <a href="https://sudreg-data.gov.hr/ords/r/srn_rep/116/files/static/v11/Upute%20za%20razvojne%20in%C5%BEenjere%20-%20v3.0.0.pdf">detaile desctiption</a> for developers. Finnally, <a href="https://sudreg-data.gov.hr/api/javni/dokumentacija/open_api">here</a> you can see all available endpoints. These are all in Croatia, but you can easly translate it to English. Before you can use the API, you should register (enter name, e-mail and type of user) and get you API key.</p>
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure">
-<p><img src="figures/sudski-registar-api-forma.png" class="img-fluid figure-img"></p>
-<figcaption>API forma png</figcaption>
-</figure>
-</div>
 </section>
 </section>
 
